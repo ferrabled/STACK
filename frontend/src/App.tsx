@@ -1,9 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
+
+//import theme from "config/theme.config.json";  
 import './App.css';
+import { AppFooter, AppHeader } from './pages';
+import { AppRoutes } from './routes';
 
 function App() {
   return (
+    <div className="App"> 
+      <AppHeader />
+      <AppRoutes />
+      <AppFooter />
+
+    </div>
+  )
+  /* return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
@@ -23,7 +34,7 @@ function App() {
         <div className='h-10'>HOLA</div>
       </body>
     </div>
-  );
+  ); */
 }
 
 export default App;
