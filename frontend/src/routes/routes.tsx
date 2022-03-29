@@ -8,8 +8,10 @@ import {
 
 import { Loader } from "components/atoms";
 import {
+  HomePage,
   LandingPage, LogInPage, NewOrganizationPage
 } from "pages";
+import AssetsPage from "pages/assets";
 
 const AppRoutes = () => {
   return (
@@ -23,10 +25,12 @@ const AppRoutes = () => {
       <main className="my-[60px] min-h-[calc(100vh-120px)]">
         <Router>
           <Routes>
-            <Route path="/home" element={<LandingPage />} />
+            <Route path="/landing" element={<LandingPage />} />
             <Route path="/login" element={<LogInPage />} />
             <Route path="/organization/new" element={<NewOrganizationPage />} />
+            <Route path="/home" element={<HomePage></HomePage>} /> 
             <Route path="*" element={<Navigate to="/home" />} />
+            <Route path="/assets" element={<AssetsPage/>}/>
           </Routes>
         </Router>
       </main>

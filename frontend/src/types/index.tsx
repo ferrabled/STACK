@@ -12,3 +12,10 @@ export type OrganizationFormValues = {
     address: string;
     telephoneO?: number;
   };
+
+export type AssetsList = {
+  asset: string;
+  creationDate: Date;
+  type: string;
+  department?: string;
+}

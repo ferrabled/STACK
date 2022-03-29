@@ -3,7 +3,7 @@ import { NewOrganization } from "components/templates";
 
 const NewOrganizationPage = () => {
   return (
-    <Page title="Nuevo Evento">
+    <Page title="">
       <NewOrganization />
     </Page>
   );

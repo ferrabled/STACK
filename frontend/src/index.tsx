@@ -5,10 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { DAppProvider } from "@usedapp/core";
 
+//const EtherContext = React.createContext(ethers);
+
+
 ReactDOM.render(
   <React.StrictMode>
      <DAppProvider config={{}}>
-        <App />
+       {/* <EtherContext.Provider value={ethers}></EtherContext.Provider></EtherContext.Provider></EtherContext.Provider> */}
+         <App />
+{/*        </EtherContext.Provider>*/}        
       </DAppProvider>
   </React.StrictMode>,
   document.getElementById('root')

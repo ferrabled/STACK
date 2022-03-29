@@ -16,13 +16,11 @@ const LogInCard = () => {
   return (
     <Card className="m-5 flex animate-fade-in-top flex-col gap-5 p-10 justify-center items-center">
         <div className='h-44'></div>
-        <ConnectButton></ConnectButton>
+        
         <Button className='w-80 h-24' variant="contained" color="primary" onClick={onContactClick}>
             <Typography variant="h6">Registrar una organización</Typography>
         </Button>        
-        <Button className='w-80 h-24' variant="outlined" color="primary" onClick={onContactClick}>
-                <Typography variant="h6">Ya tengo cuenta</Typography>
-        </Button>
+        <ConnectButton></ConnectButton>
     </Card>
   );
 };
