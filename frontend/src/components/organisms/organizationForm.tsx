@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { TextField, Button, Checkbox, Typography } from "@mui/material";
 import { AdminFormValues } from "types";
+import { Field, FieldAttributes, Form, Formik } from "formik";
+import * as Yup from "yup";
+import ButtonSOrganization from "components/atoms/Buttons/submitOrgButton";
 
-export interface EventFormProps {
-  initialValues?: Partial<AdminFormValues>;
-  onSubmit: (values: AdminFormValues) => void;
-}
 
 //formik
 // const OrganizationSchema = yup.schema({
@@ -13,258 +12,246 @@ export interface EventFormProps {
 //   telephone: Yup.number().minLength(20)
 // });
 
-const OrganizationForm = (props: EventFormProps) => {
-  const { initialValues, onSubmit } = props;
-  const required = [{ required: true, message: "Campo Obligatorio" }];
+const OrganizationForm = () => {
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [email, setEmail] = useState("");
-  const [checkEmail, setCheckEmail] = useState(false);
-  const [telephone, setTelephone] = useState("");
+  const validationSchema = Yup.object({
+    firstName: Yup.string().required("El nombre es obligatorio").max(20),
+    lastName: Yup.string().required("El apellido es obligatorio").max(40),
+    email: Yup.string()
+      .email("Introduce un correo válido")
+      .max(50)
+      .required("El correo es obligatorio"),
+    telephoneA: Yup.string()
+      .matches(phoneRegExp, "Introduce un teléfono válido")
+      .min(9, "Introduce un teléfono válido")
+      .max(9, "Introduce un teléfono válido"),
+    orgName: Yup.string().required("El nombre de la organización es obligatorio").max(20),
+    address: Yup.string().required("La dirección es obligatoria").max(70),
+    telephoneOrg: Yup.string()
+      .matches(phoneRegExp, "Introduce un teléfono válido")
+      .min(9, "Introduce un teléfono válido")
+      .max(9, "Introduce un teléfono válido"),
+  });
 
-  const [nameError, setNameError] = useState(false);
-  const [surnameError, setSurnameError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [checkEmailError, setCheckEmailError] = useState(false);
-  const [telephoneError, setTelephoneError] = useState(false);
-
+  /* const CreateTextField: React.FC<FieldAttributes<{}>> = (
+    placeholder, ...props
+  )} => {
+    const [field, meta]
+  } */
   const [formIndex, setFormIndex] = useState(0);
 
-const validate = () => {
-  setNameError(false);
-  setSurnameError(false);
-  setEmailError(false);
-  setTelephoneError(false);
-  setCheckEmailError(false);
-
-  if (name == "") {
-    setNameError(true);
-  }
-  if (surname == "") {
-    setSurnameError(true);
-  }
-  if (email == "") {
-    setEmailError(true);
-  }
-  let reg = new RegExp(/^\d*$/).test(telephone);
-  if (!reg && telephone != "") {
-    setTelephoneError(true);
-  }
-  if (name && surname && email) {
-    console.log(name, email, telephone);
-    const Org2: AdminFormValues = {
-      name: name,
-      surname: surname,
-      email: email,
-      checkemail: checkEmail,
-      telephone: parseInt(telephone),
-    };
-    return Org2;
-  }
-}
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    validate();
-    const finalObject = {
-      name,
-      surname,
-      address,
-      telephone
-    };
-  };
-
-  //FORM 2
-  const [nameOrg, setNameOrg] = useState('')
-  const [address, setAddress] = useState('')
-  const [telephoneO, setTelephoneO] = useState('')
-
-  const [nameOrgError, setNameOrgError] = useState(false)
-  const [addressError, setAddressError] = useState(false)
-  const [telephoneOError, setTelephoneOError] = useState(false)
-
-  const hasAnErrorInFormOne = nameError || surnameError || emailError || checkEmailError || telephoneError;
-  const hasAnErrorInFormTwo = nameOrgError || addressError || telephoneOError;
-
-  // Para el form 1
-  useEffect(() => {
-    validate();
-  }, [name, surname, email, checkEmail, telephone]);
-  
-  // const handleSubmit2 = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-  //   setNameError(false);
-  //   setAddressError(false);
-  //   setTelephoneError(false);
-
-  //   if (name == '') {
-  //     setNameError(true)
-  //   }
-  //   if (address == '') {
-  //     setAddressError(true)
-  //   }
-  //   let reg = new RegExp(/^\d*$/).test(telephone);
-  //   if (!reg && telephone != '') {
-  //     setTelephoneError(true)
-  //   }
-  //   if (name && address) {
-  //     console.log(name, address, telephone)
-  //     const Org2: OrganizationFormValues = {
-  //       nameO: name,
-  //       address: address,
-  //       telephoneO: parseInt(telephone)
-  //     }
-//}
-
   return (
-    <div className="flex flex-col m-12">
-      <form noValidate onSubmit={handleSubmit}>
-        {formIndex === 0 && (
-          <>
-            <div className="mb-5">
-              <TextField
-                autoComplete="off"
-                label="Nombre del Administrador"
-                inputProps={{ maxLength: 255 }}
-                onChange={(e) => setName(e.target.value)}
-                required
-                fullWidth
-                error={nameError}
-                /* helperText={"Introduce un nombre de la organización"} */
-                variant="outlined"
-              />
-            </div>
- 
-            <div className="mb-5">
-              <TextField
-                autoComplete="off"
-                label="Apellido del Administrador"
-                inputProps={{ maxLength: 255 }}
-                onChange={(e) => setSurname(e.target.value)}
-                required
-                fullWidth
-                error={surnameError}
-                /* helperText={"Introduce un nombre de la organización"} */
-                variant="outlined"
-              />
-            </div>
-
-            <div className="mb-5 lg:flex flex-row items-center">
-              <div className="lg:w-1/2 min-w-1/2">
-                <TextField
-                  id="email"
-                  autoComplete="off"
-                  label="Correo Electrónico"
-                  inputProps={{ maxLength: 255 }}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
+    <div className="flex flex-col m-6">
+      <Formik
+        initialValues={{
+          firstName: "",
+          lastName: "",
+          email: "",
+          isEmail: false,
+          telephoneA: undefined,
+          orgName: "",
+          address: "",
+          telephoneOrg: undefined,
+        }}
+        validationSchema={validationSchema}
+        onSubmit={(data, { setSubmitting }) => {
+          setSubmitting(true);
+          console.log(data);
+          //make async call
+          setFormIndex(formIndex + 1)
+        }}
+      >
+        {({ values, isSubmitting, errors }) => (
+          <Form>
+            {formIndex === 0 && (
+              <>
+                <div className="mb-6">
+                  <Typography variant="h5">Datos del administrador</Typography>
+                </div>
+                <div className="mb-6">
+                  <Field
+                    name="firstName"
+                    value={values.firstName}
+                    label="Nombre del Administrador"
+                    inputProps={{ maxLength: 255 }}
+                    fullWidth
+                    required
+                    error={Boolean(errors.firstName)}
+                    helperText={errors.firstName ? errors.firstName : " "}
+                    as={TextField}
+                  />
+                </div>
+                <div className="mb-6">
+                  <Field
+                    name="lastName"
+                    label="Apellidos del Administrador"
+                    inputProps={{ maxLength: 255 }}
+                    required
+                    fullWidth
+                    helperText={errors.lastName ? errors.lastName : " "}
+                    error={Boolean(errors.lastName)}
+                    as={TextField}
+                  />
+                </div>
+                <div className="mb-5 lg:flex flex-row items-center">
+                  <div className="lg:w-1/2 min-w-1/2">
+                    <Field
+                      name="email"
+                      label="Correo Electrónico"
+                      inputProps={{ maxLength: 255 }}
+                      required
+                      fullWidth
+                      helperText={errors.email ? errors.email : " "}
+                      error={Boolean(errors.email)}
+                      as={TextField}
+                    />
+                  </div>
+                  <div className="flex flex-row items-center mt-3 lg:pl-6 lg:mt-0 ">
+                    <Field type="checkbox" name="isEmail" as={Checkbox} />
+                    <Typography variant="body2">
+                      Deseo recibir actualizaciones sobre los activos de mi
+                      organización
+                    </Typography>
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <Field
+                    name="telephoneA"
+                    label="Teléfono"
+                    inputProps={{ maxLength: 255 }}
+                    fullWidth
+                    error={Boolean(errors.telephoneA)}
+                    helperText={errors.telephoneA ? errors.telephoneA : " "}
+                    as={TextField}
+                  />
+                </div>
+                <Button
                   fullWidth
-                  error={emailError}
-                  /* helperText={"Introduce una dirección de la organización"} */
-                  variant="outlined"
-                />
-              </div>
-              <div className="flex flex-row items-center mt-3 lg:pl-6 lg:mt-0 ">
-                <Checkbox onChange={(e) => setCheckEmail(e.target.checked)} />
-                <Typography variant="body2">
-                  Deseo recibir actualizaciones sobre los activos de mi
-                  organización
-                </Typography>
-              </div>
-            </div>
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (
+                      values.firstName == "" ||
+                      values.lastName == "" ||
+                      values.email == "" ||
+                      errors == undefined
+                    ) {
+                      alert("Comprueba todos los campos");
+                    } else {
+                      setFormIndex(formIndex + 1);
+                    }
+                  }}
+                  variant="contained"
+                  color="primary"
+                >
+                  Siguiente
+                </Button>
+              </>
+            )}
+            {formIndex === 1 && (
+              <>
+                <div className="mb-6">
+                  <Typography variant="h5">Datos de la organización</Typography>
+                </div>
+                <div className="mb-6">
+                  <Field
+                    name="orgName"
+                    value={values.orgName}
+                    label="Nombre de la Organización"
+                    inputProps={{ maxLength: 255 }}
+                    fullWidth
+                    required
+                    error={Boolean(errors.orgName)}
+                    helperText={errors.orgName ? errors.orgName : " "}
+                    as={TextField}
+                  />
+                </div>
+                <div className="mb-6">
+                  <Field
+                    name="address"
+                    label="Dirección de la Organización"
+                    inputProps={{ maxLength: 255 }}
+                    value={values.address}
+                    required
+                    fullWidth
+                    helperText={errors.address ? errors.address : " "}
+                    error={Boolean(errors.address)}
+                    as={TextField}
+                  />
+                </div>
+                <div className="mb-6">
+                  <Field
+                    name="telephoneOrg"
+                    label="Teléfono"
+                    inputProps={{ maxLength: 255 }}
+                    value={values.telephoneOrg}
+                    fullWidth
+                    error={Boolean(errors.telephoneOrg)}
+                    helperText={errors.telephoneOrg ? errors.telephoneOrg : " "}
+                    as={TextField}
+                  />
+                </div>
+                <div className="lg:mx-56 xl:mx-64 2xl:mx-80 2xl:gap-40 flex flex-row gap-24 items-center justify-center childre">
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setFormIndex(formIndex - 1);
+                    }}
+                  >
+                    Atrás
+                  </Button>
 
-            <div className="mb-5">
-              <TextField
-                id="telephoneO"
-                autoComplete="off"
-                label="Número de Teléfono"
-                fullWidth
-                inputProps={{ maxLength: 255 }}
-                onChange={(e) => setTelephone(e.target.value)}
-                error={telephoneError}
-                /* helperText={"Solo se permiten números"} */
-                variant="outlined"
-              />
-            </div>
-
-            <Button
-              onClick={(e) => {
-                e.preventDefault();
-                if (hasAnErrorInFormOne)
-                  alert("Cuidado tienes errors")
-                else 
-                  setFormIndex(formIndex + 1);
-              }}
-              variant="contained"
-              color="primary"
-            >
-              Siguiente
-            </Button>
-          </>
+                  <Button
+                    fullWidth
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                  >
+                    Continuar
+                  </Button>
+                </div>
+              </>
+            )}
+            {formIndex === 2 && (
+              <>
+                <div className="flex flex-col items-center">
+                <div className="mb-6">
+                  <Typography variant="h5">Guardar datos</Typography>
+                </div>
+                  <Typography>
+                    Para finalizar debes conectar tu cartera Metamask, e interactuar con la blockchain.
+                    De esta manera asociamos los datos de tu organización a tu billetera
+                    y guardamos la información de una manera segura en la
+                    Blockchain.
+                  </Typography>
+                  <img
+                    className="h-44 w-44 my-5"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png"
+                  />
+                  
+                  <ButtonSOrganization data={values}></ButtonSOrganization>
+                  <a
+                    className="mt-5"
+                    href="https://metamask.io/"
+                    target="_blank"
+                  >
+                    <Typography
+                      sx={{ textDecoration: "underline" }}
+                      variant="body2"
+                    >
+                      No sé como conectar Metamask
+                    </Typography>
+                  </a>
+                </div>
+              </>
+            )}
+          </Form>
         )}
-        {formIndex === 1 && (
-          <>
-            <div className="mb-5">
-              <TextField
-                id="outlined-basic"
-                autoComplete="off"
-                label="Nombre de la Organización"
-                inputProps={{ maxLength: 255 }}
-                onChange={(e) => setName(e.target.value)}
-                required
-                fullWidth
-                error={nameError}
-                /* helperText={"Introduce un nombre de la organización"} */
-                variant="outlined"
-              />
-            </div>
-
-            <div className="mb-5">
-              <TextField
-                className="py-9"
-                id="address"
-                autoComplete="off"
-                label="Dirección"
-                inputProps={{ maxLength: 255 }}
-                onChange={(e) => setAddress(e.target.value)}
-                required
-                fullWidth
-                error={addressError}
-                /* helperText={"Introduce una dirección de la organización"} */
-                variant="outlined"
-              />
-            </div>
-
-            <div className="mb-5">
-              <TextField
-                id="telephoneO"
-                autoComplete="off"
-                label="Número de Teléfono"
-                fullWidth
-                inputProps={{ maxLength: 255 }}
-                onChange={(e) => setTelephone(e.target.value)}
-                error={telephoneError}
-                /* helperText={"Solo se permiten números"} */
-                variant="outlined"
-              />
-            </div>
-
-            <Button type="submit" variant="contained" color="primary">
-              GUARDAR
-            </Button>
-            <p>Segunda pagina</p>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setFormIndex(formIndex - 1);
-              }}
-            >
-              atras
-            </button>
-          </>
-        )}
-      </form>
+      </Formik>
     </div>
   );
 };

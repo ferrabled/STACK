@@ -43,17 +43,16 @@ const NewOrganization = () => {
   return (
     <div >
       <Card className="my-3">
-      <OrganizationForm onSubmit={handleSubmit} />
-      {error && <Error error={error} />}
+      <OrganizationForm/>
       </Card>
-      <Card>
+      {/* <Card>
       <OrganizationForm2 onSubmit={handleSubmit2} />
       {error && <Error error={error} />}
       </Card>
       <Card className="my-3">
         <OrganizationForm3></OrganizationForm3>
-      </Card>
-      <ButtonSOrganization></ButtonSOrganization>
+      </Card> */}
+      {/* <ButtonSOrganization></ButtonSOrganization> */}
       
     </div>
   );

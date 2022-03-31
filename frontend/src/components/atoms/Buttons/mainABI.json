@@ -53,11 +53,79 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "addressToOrganizationIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "admin",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "lastname",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "email",
+        "type": "string"
+      },
+      {
+        "internalType": "uint32",
+        "name": "adTelephone",
+        "type": "uint32"
+      },
+      {
+        "internalType": "string",
+        "name": "orgName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "orgAddress",
+        "type": "string"
+      },
+      {
+        "internalType": "uint32",
+        "name": "orgTelephone",
+        "type": "uint32"
+      }
+    ],
+    "name": "insertOrgAndAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "userAddress",
         "type": "address"
       }
     ],
-    "name": "isUser",
+    "name": "isAdministrator",
     "outputs": [
       {
         "internalType": "bool",
@@ -72,42 +140,8 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "userAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "name",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "addressO",
-        "type": "string"
-      },
-      {
-        "internalType": "uint32",
-        "name": "telephone",
-        "type": "uint32"
-      }
-    ],
-    "name": "insertUser",
-    "outputs": [
-      {
         "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_memberId",
+        "name": "_orgId",
         "type": "uint256"
       }
     ],
@@ -143,6 +177,73 @@
         ],
         "internalType": "struct Main.Organization",
         "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "userAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getAdminToOrg",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "userid",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "userAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getOrgFromAddress",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "admin",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "addressO",
+            "type": "string"
+          },
+          {
+            "internalType": "uint32",
+            "name": "telephone",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Main.Organization",
+        "name": "org",
         "type": "tuple"
       }
     ],
