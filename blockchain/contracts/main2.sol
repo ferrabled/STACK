@@ -140,13 +140,39 @@ contract Main {
     //uint256 orgCount;
     
 
-
-    //INNECESARY MAPPING
-    mapping(uint256 => uint256) private assetToOrg;
+    //UNNECESARY MAPPING
+    //mapping(uint256 => uint256) private assetToOrg;
 
     
-    //CREAR UNA LISTA DE ID (ORG) A ASSETS?
+
+
+    //CREAR UN MAPPING DE ORGANIZACIÓN (ID) A LISTA DE ASSETS (ID)?
     mapping(uint256 => uint256[]) private assetsFromOrg;
+
+
+
+    //ASSET EDITED INTRODUCES A BOOL DELETED
+    struct AssetEdited {
+        string name;
+        uint256 organziationId;
+        uint256 adquireDate;
+        uint256 creationDate;
+        string assetType;
+        bool deleted;
+        uint256 index;
+    
+    }
+   
+
+    AssetEdited[] private assetsEditedList;
+    //uint256 orgCount;
+    mapping(uint256 => uint256) private assetEditedToAsset;
+
+
+
+
+    //ASSETS ORIGINAL TO LIST OF ASSETS EDITED
+    mapping(uint256 => uint256[]) private originalAssetsToEditedList;
   
 
     function insertAsset(
@@ -166,6 +192,9 @@ contract Main {
         );
         //adminsCount++;
         assetsFromOrg[organizationId].push(assetsList.length-1);
+        assetBoolEditedAndDeleted[assetsList.length-1].push(false);
+        assetBoolEditedAndDeleted[assetsList.length-1].push(false);
+        originalAssetsToEditedList[assetsList.length-1];
     }
 
     function getAsset (uint id) public view returns(Asset memory){
@@ -173,46 +202,50 @@ contract Main {
     }
 
 
-    function getAllAssetsFromOrg (uint _orgId) public view returns(Asset[] memory) {
+    function getAllAssetsFromOrg (uint _orgId) public view returns(Asset[] memory, AssetEdited[] memory) {
         uint cont = assetsFromOrg[_orgId].length;
-        Asset[] memory listOrgAssets = new Asset[](cont);  
+        Asset[] memory listOrgAssets = new Asset[](cont);
+        AssetEdited[] memory listOrgAssetsEdited = new AssetEdited[](cont);  
         for(uint i=0; i<cont; i++){
-            uint assetId = assetsFromOrg[_orgId][i];
-            listOrgAssets[i] = assetsList[assetId];
+            //First check if that asset has been deleted 
+            //so we don't retrieve it
+            if(assetBoolEditedAndDeleted[i][1]) {
+                continue;
+            }
+            //Check if asset has been edited in order
+            //to retrieve last edited asset
+            if(assetBoolEditedAndDeleted[i][0] == true){
+                uint lastItem = originalAssetsToEditedList[i].length - 1 ;
+                uint256 assetEditedId = originalAssetsToEditedList[i][lastItem];
+                listOrgAssetsEdited[i] = assetsEditedList[assetEditedId];
+            //Last case the asset hasn't been edited
+            } else {
+                uint assetId = assetsFromOrg[_orgId][i];
+                listOrgAssets[i] = assetsList[assetId];
+            }
+            
         }
-        return listOrgAssets;
+        return (listOrgAssets, listOrgAssetsEdited);
     }
 
 
-    struct AssetEdited {
-        string name;
-        uint256 organziationId;
-        uint256 adquireDate;
-        uint256 creationDate;
-        string assetType;
-        bool deleted;
-        uint256 index;
-    
-    }
-
-    AssetEdited[] private assetsEditedList;
-    //uint256 orgCount;
-    mapping(uint256 => uint256) private assetEditedToAsset;
-
-
-    uint256[] private assetsDeleted;
-
-
-    //ASSETS ORIGINAL TO LIST OF ASSETS EDITED
-    mapping(uint256 => uint256[]) private originalAssetsToEditedList;
 
 
     //CREAMOS UNA LISTA QUE RECOGE LOS id de los ASSETS ORIGINALES QUE TIENEN ALGUNA EDICIÓN
-    uint256[] private assetsOriginalEdited;
+    //uint256[] private assetsOriginalEdited;
 
-    //CREAR MAPPING DE ID ORIGINAL A BOOLEAN QUE DICE SI EL ID ESTÁ EDITADO O NO
-    mapping(uint256 => bool) private assetBoolEdited;
-    //DE ESTA MANERA PODEMOS VER EN CADA CASO EL ID SI ESTÁ EDITADO O COMO
+    //CREAR MAPPING DE ID ORIGINAL A LIST OF BOOLEAN
+    // QUE INDICA SI EL ID ESTÁ EDITADO EN EL PRIMER VALOR
+    // EN EL SEGUNDO VALOR INDICA SI ESTÁ ELIMINADO
+    mapping(uint256 => bool[]) private assetBoolEditedAndDeleted;
+    //DE ESTA MANERA PODEMOS VER EN CADA CASO EL ID SI ESTÁ EDITADO O ELIMINADO
+
+    //mapping que relaciona la org con los assets que tiene eliminados
+    mapping(uint256 => uint256[]) private assetsFromOrgDeleted;
+
+
+
+
 
 
     function insertEditedAsset(
@@ -225,8 +258,8 @@ contract Main {
         string memory assetType
     ) public {
         //CHECK IF THE ASSET IS ALREADY IN ASSETS EDITED LIST
-        if(!assetBoolEdited[originalAssetId]){
-            assetsOriginalEdited.push(originalAssetId);
+        if(!assetBoolEditedAndDeleted[originalAssetId][0]){
+            assetBoolEditedAndDeleted[originalAssetId][0]=true;
         }
         assetsEditedList.push(
                 (AssetEdited(name,
@@ -235,11 +268,40 @@ contract Main {
                     creationDate,
                     assetType,
                     deleted,
-                    assetsList.length)));
-
-
-
+                    assetsEditedList.length)));
+        originalAssetsToEditedList[originalAssetId].push(assetsEditedList.length-1);
+        
+        if (deleted == true){
+            assetsFromOrgDeleted[organizationId].push(assetsEditedList.length-1);
+            assetBoolEditedAndDeleted[originalAssetId][1]=true;
+            
+        }
     }
+
+
+    function getAssetsDeleted(uint orgId) public view returns (AssetEdited[] memory){
+        uint cont = assetsFromOrgDeleted[orgId].length;
+        AssetEdited[] memory listAssetsDeleted = new AssetEdited[](cont);  
+        for(uint i=0; i<cont; i++){
+            uint id = assetsFromOrgDeleted[orgId][i];
+            listAssetsDeleted[i]= assetsEditedList[id];
+        }
+        return listAssetsDeleted;
+    }
+
+
+
+    function getIsAssetEdited(uint256 idAsset) public view returns (bool result){
+        return assetBoolEditedAndDeleted[idAsset][0];
+    }
+
+    function getIsAssetDeleted(uint256 idAsset) public view returns (bool result){
+        return assetBoolEditedAndDeleted[idAsset][1];
+    }
+
+
+
+
 /* 
     //asset
     [1,2,3]
