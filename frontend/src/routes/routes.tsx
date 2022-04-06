@@ -9,10 +9,9 @@ import {
 import { Loader } from "components/atoms";
 import {
   HomePage,
-  LandingPage, LogInPage, NewOrganizationPage
+  LandingPage, LogInPage, NewOrganizationPage,
+  AssetsPage, NewAssetPage, AssetDetailPage
 } from "pages";
-import AssetsPage from "pages/assets";
-
 const AppRoutes = () => {
   return (
     <Suspense
@@ -32,6 +31,8 @@ const AppRoutes = () => {
             <Route path="/home" element={<HomePage></HomePage>} /> 
             <Route path="*" element={<Navigate to="/home" />} />
             <Route path="/assets" element={<AssetsPage/>}/>
+            <Route path="/assets/new" element={<NewAssetPage />} />
+            <Route path="/asset/" element={<AssetDetailPage />} />
           </Routes>
         </Router>
       </main>

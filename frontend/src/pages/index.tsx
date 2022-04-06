@@ -4,6 +4,8 @@ import LandingPage from "./landing";
 import LogInPage from "./login";
 import NewOrganizationPage from "./organization/newOrg";
 import HomePage from "./home";
+import { AssetsPage, AssetDetailPage, NewAssetPage } from "./assets";
+
 
 
 export {
@@ -12,5 +14,8 @@ export {
     LogInPage,
     AppFooter,
     NewOrganizationPage,
-    HomePage
+    HomePage,
+    AssetsPage,
+    AssetDetailPage,
+    NewAssetPage
 };
