@@ -10,6 +10,7 @@ import { Loader } from "components/atoms";
 import {
   HomePage,
   LandingPage, LogInPage, NewOrganizationPage,
+  MyOrganizationPage,
   AssetsPage, NewAssetPage, AssetDetailPage
 } from "pages";
 const AppRoutes = () => {
@@ -27,7 +28,7 @@ const AppRoutes = () => {
             <Route path="/landing" element={<LandingPage />} />
             <Route path="/login" element={<LogInPage />} />
             <Route path="/organization/new" element={<NewOrganizationPage />} />
-            <Route path="/organization"/>
+            <Route path="/organization" element={<MyOrganizationPage/>} />
             <Route path="/home" element={<HomePage></HomePage>} /> 
             <Route path="*" element={<Navigate to="/home" />} />
             <Route path="/assets" element={<AssetsPage/>}/>
