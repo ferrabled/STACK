@@ -1,12 +1,42 @@
-import React, { useState } from "react";
-import { Card, Button, Typography, Table } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Card, Button, Typography, Table, CircularProgress } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { AssetsList } from "types";
+import { useNavigate } from "react-router-dom";
 
-const AssetsCard = () => {
+const AssetsCard = (props:any) => {
+  const navigate = useNavigate();
+  const [rows, setRows] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  useEffect(() => {
+
+    const FormatData = () => {
+      const listAssets = props.props;
+      console.log("Recibimos los datos");
+      console.log(listAssets);
+
+      console.log(listAssets.length);
+      const cont = listAssets.length;
+      const tempRow: any[] = []; 
+      for (var i = 0; i < cont; i++) {
+        console.log(listAssets[i]);
+        listAssets[i].id = i;
+        //console.log("AAA")
+        tempRow.push(listAssets[i]);
+      }
+      console.log("ROWWWWWWWWW");
+      console.log(rows);
+      setRows(tempRow);
+    }
+    FormatData();
+    setIsLoading(false)
+  }, [])
+
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "firstName", headerName: "First name", width: 130 },
+    { field: "name", headerName: "First name", width: 130 },
     { field: "lastName", headerName: "Last name", width: 130 },
     {
       field: "age",
@@ -25,7 +55,7 @@ const AssetsCard = () => {
     },
   ];
 
-  const rows = [
+  /* const rows = [
     { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
     { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
     { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
@@ -35,9 +65,10 @@ const AssetsCard = () => {
     { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
     { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
     { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-  ];
+  ]; */
 
-  const [users, setUsers] = useState([
+    console.log(rows);
+  /* const [users, setUsers] = useState([
     {
       id: 1,
       firstName: "Frank",
@@ -73,9 +104,9 @@ const AssetsCard = () => {
       email: "jay.bilzerian@test.com",
       role: "User",
     },
-  ]);
-
-  return (
+  ]); */
+  if (isLoading) return <CircularProgress />
+  else return (
     <Card className="gap-7 p-10 flex flex-col items-center h-full">
       <DataGrid
         className="w-full h-full"
@@ -85,6 +116,11 @@ const AssetsCard = () => {
         rowsPerPageOptions={[5]}
         autoHeight
       ></DataGrid>
+      <div className="w-full flex flex-row justify-evenly">
+        <Button color="primary" variant="contained" onClick={() => window.history.back()}> Atrás </Button>
+        <Button color="primary" variant="contained" onClick={() => navigate("/assets/new")}> Nuevo Activo </Button>
+      </div>
+      
     </Card>
   );
 };

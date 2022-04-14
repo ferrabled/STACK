@@ -50,10 +50,11 @@ const OrganizationForm = () => {
           lastName: "",
           email: "",
           isEmail: false,
-          telephoneA: undefined,
+          telephoneA: "",
           orgName: "",
           address: "",
-          telephoneOrg: undefined,
+          telephoneOrg: "",
+          
         }}
         validationSchema={validationSchema}
         onSubmit={(data, { setSubmitting }) => {

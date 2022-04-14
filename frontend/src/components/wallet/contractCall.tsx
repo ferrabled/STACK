@@ -10,8 +10,37 @@ const contract = new ethers.Contract(
         mainABI,
         provider.getSigner());
 
+
+export async function CallInsertOrg(props: any) {
+    const signer = provider.getSigner();
+    let signerAddress = await signer.getAddress();
+
+    const input = props.data;
+    console.log(signerAddress, input.firstName, input.lastName, input.email, input.telephoneA,
+        input.orgName, input.address, input.telephoneOrg);
+
+    contract.insertOrgAndAdmin(
+        signerAddress, input.firstName, input.lastName, input.email, input.telephoneA,
+        input.orgName, input.address, input.telephoneOrg);
+}
+
+
+export async function CallIsAdministrator(props: number) {
+    console.log("Is administrator " + props);
+    const isAdmin: Boolean = contract.isAdministrator(props)
+    return isAdmin;
+}
+
+
+export async function CallGetAdminToOrg(props: number) {
+    const orgId = contract.getAdminToOrg(props)
+    return orgId;
+}
+
+
+
+
 export async function CallInsertAsset(props: any) {
-    //const contractAddress = "0xa931baD6cec3f4546c0C5695008Db85e663C36EF";
     console.log(props);
     const input = props;
     //const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -51,7 +80,30 @@ export async function CallGetAsset(props: Number) {
     return asset;
 }
 
+export async function CallGetOrganizationData(props: Number) {
+    const organization = contract.getOrg(props);
+    return organization;
+}
 
-//export default { CallInsertAsset, CallGetOrganizationAssets};
+export async function CallGetAdminData(props: Number) {
+    const admin = contract.getAdmin(props);
+    return admin;
+}
+
+
+export async function CallInsertEditedAsset(props: any) {
+    console.log(props);
+    const input = props;
+    const signer = provider.getSigner();
+    let signerAddress = await signer.getAddress();
+    console.log("HOLA");
+    input.originalAssetId=3;
+    console.log(input);
+    input.organizationId=2;
+
+    contract.insertEditedAsset(input.originalAssetId, input.name, input.organizationId, input.adquireDate, 
+       input.creationDate, input.deleted, input.assetType);
+}
+
 
 

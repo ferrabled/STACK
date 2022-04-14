@@ -1,12 +1,9 @@
 // ConnectButton.tsx
 import { Button, Card, Typography } from "@mui/material";
-import { useEthers, useEtherBalance } from "@usedapp/core";
-import { formatEther } from "@ethersproject/units";
-import { useWeb3React } from "@web3-react/core";
-import { useCallback, useEffect, useState } from "react";
-import { injected } from "components/wallet/connector";
 import { ethers } from "ethers";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { CallGetAdminToOrg, CallIsAdministrator } from "components/wallet/contractCall";
+
 
 const ConnectButton = () => {
   const navigate = useNavigate();
@@ -23,47 +20,70 @@ const ConnectButton = () => {
   //     })
   // }, [])
 
-  // // Check when App is Connected or Disconnected to MetaMask
-  // const handleIsActive = useCallback(() => {
-  //     console.log('App is connected with MetaMask ', active)
-  //     setIsActive(active)
-  // }, [active])
+  const FlushLocalStorage = () => {
+    window.localStorage.removeItem('orgId');
+    window.localStorage.removeItem('userAddress');
+  }
 
-  // useEffect(() => {
-  //     handleIsActive()
-  // }, [handleIsActive])
+  const GetData = async (provider: any) => {
+    console.log("User Wallet: ");
+    const signer:any = provider.getSigner();
+    signer.getAddress().then((addr: any) => {
+      console.log(addr);
+      
+      //Retrieve if user has organization
+      try {
+        CallIsAdministrator(addr).then(isAdmin =>{
+          if(isAdmin === true) {
+            console.log("User is an administrator");
+            CallGetAdminToOrg(addr).then(response => {
+              const orgId = Number(ethers.BigNumber.from(response));
+              console.log(orgId);
+              
+              
+              //STORE DATA INTO LOCALSTORE
+              window.localStorage.setItem('orgId', String(orgId));
+              window.localStorage.setItem('userAddress', String(addr));
+              
+              navigate("/home");
+            });
+          }
+          else {
+            console.log("user is not an administrator");
+          
+            window.localStorage.setItem('userAddress', String(addr));
+            navigate("/home");
+          }   
+          
+        
+
+      });
+      } catch {
+        //Could not connect / User reverted
+      }
+    });
+  };
+
+
+  // // Check when App is Connected or Disconnected to MetaMask
 
   // Connect to MetaMask wallet
-  const connect = async () => {
-    // console.log('Connecting to MetaMask...')
-    // setShouldDisable(true)
-    // try {
-    //     await activate(injected).then(() => {
-    //         setShouldDisable(false)
-    //     })
-    // } catch(error) {
-    //     console.log('Error on connecting: ', error)
-    // }
+  const connect = () => {
+    FlushLocalStorage();
     //@ts-ignore
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     provider
       .send("eth_requestAccounts", [])
       .then(() => {
         console.log("Connect success");
-        navigate("/home");
+        console.log("Retrieving Data from user");
+        GetData(provider);
       })
       .catch(() => {
-        console.log("adsdsadsasda");
+        console.log("Error conectando la billetera");
       });
   };
 
-  /*  const {activateBrowserWallet, account } = useEthers();
-  const etherBalance = useEtherBalance(account);
-
-
-  function handleConnectWallet() {
-    activateBrowserWallet();
-  } */
 
   return (
     <Button
@@ -75,17 +95,6 @@ const ConnectButton = () => {
       <Typography variant="h6">Ya tengo cuenta</Typography>
     </Button>
   );
-  // return account ? (
-  //   <div>
-  //       {/* {etherBalance && parseFloat(formatEther(etherBalance)).toFixed(3)} ETH */}
-  //       {account && `${account.slice(0, 6)}...${account.slice(
-  //             account.length - 4,
-  //             account.length
-  //           )}`}
-  //   </div>
-  // ) : (
-  //   <Button className='w-80 h-24' variant="contained" color="primary" onClick={connect}><Typography variant="h6">Ya tengo cuenta</Typography></Button>
-  // );
 };
 
 export default ConnectButton;

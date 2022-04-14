@@ -21,33 +21,31 @@ const AssetDetailPage = () => {
 
 
   //TODO ASK IF THIS WOULD NEED TO BE INSIDE A USEEFFECT 
-  if (isLoading === true){
-      
-    //TODO CHECK ID OF THE ASSET
-    const assetId = 2;
-
-    CallGetAsset(assetId).then((response) => {
-        console.log("Obtenemos el asset");
-
-        
-        console.log(Number(ethers.BigNumber.from(response["adquireDate"])));
-
-        //Create asset object for assetCard 
-        const asset: Asset = {
-            name: response["name"],
-            adquireDate: new Date(Number(ethers.BigNumber.from(response["adquireDate"]))),
-            creationDate: new Date (Number(ethers.BigNumber.from(response["creationDate"]))),
-            assetType: response["assetType"]
-        };
-        console.log(asset)
-        setAsset(asset);
-    });
-    setIsLoading(false);
-  }
+  
 
   useEffect(() => {
-    
-  });
+      
+      //TODO CHECK ID OF THE ASSET
+      const assetId = 3;
+  
+      CallGetAsset(assetId).then((response) => {
+          console.log("Obtenemos el asset");
+  
+          
+          console.log(Number(ethers.BigNumber.from(response["adquireDate"])));
+  
+          //Create asset object for assetCard 
+          const asset: Asset = {
+              name: response["name"],
+              adquireDate: new Date(Number(ethers.BigNumber.from(response["adquireDate"]))),
+              creationDate: new Date (Number(ethers.BigNumber.from(response["creationDate"]))),
+              assetType: response["assetType"]
+          };
+          console.log(asset)
+          setAsset(asset);
+      });
+      setIsLoading(false);
+  },[]);
 
   return <AssetCard props={asset}></AssetCard>;
 };

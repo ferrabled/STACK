@@ -3,7 +3,7 @@ import { HomeCard } from "components/atoms";
 import { ethers } from "ethers";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Page from "./page";
+import PageLoged from "./pageCheckLogin";
 
 declare var window: any
 
@@ -45,10 +45,10 @@ const HomePage = () => {
 
   return signer ? (
     <div>
-        <Page title="">
+        <PageLoged>
         {/* <Typography>Conectado</Typography> */}
         <HomeCard></HomeCard>
-        </Page>
+        </PageLoged>
     </div> 
   ) : (
     <Button className='w-80 h-24' variant="contained" color="primary" /* onClick={handleConnectWallet} */><Typography variant="h6">Conectar Billetera</Typography></Button>

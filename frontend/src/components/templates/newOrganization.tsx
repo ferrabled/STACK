@@ -43,7 +43,7 @@ const NewOrganization = () => {
   return (
     <div >
       <Card className="my-3">
-      <OrganizationForm/>
+        <OrganizationForm/>
       </Card>
       {/* <Card>
       <OrganizationForm2 onSubmit={handleSubmit2} />
