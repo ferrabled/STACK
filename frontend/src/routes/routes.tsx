@@ -13,6 +13,7 @@ import {
   MyOrganizationPage,
   AssetsPage, NewAssetPage, AssetDetailPage
 } from "pages";
+import { EditAssetPage } from "pages/assets";
 const AppRoutes = () => {
   return (
     <Suspense
@@ -34,6 +35,7 @@ const AppRoutes = () => {
             <Route path="/assets" element={<AssetsPage/>}/>
             <Route path="/assets/new" element={<NewAssetPage />} />
             <Route path="/asset/" element={<AssetDetailPage />} />
+            <Route path="/asset/edit" element={<EditAssetPage />} />
           </Routes>
         </Router>
       </main>

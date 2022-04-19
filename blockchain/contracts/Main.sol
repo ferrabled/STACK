@@ -39,7 +39,7 @@ contract Main {
     //List of users with a org created (administrators)
     address[] private administrators;
 
-    mapping(address => uint) public addressToOrganizationIndex;
+    mapping(address => uint256) public addressToOrganizationIndex;
 
     //FUNCTIONS
 
@@ -89,41 +89,225 @@ contract Main {
             )
         );
         orgCount++;
-        addressToOrganizationIndex[userAddress] = organizations.length -1;
+        addressToOrganizationIndex[userAddress] = organizations.length - 1;
     }
 
     // Check if the address has created a org, == is an administrator.
-    function isAdministrator(address userAddress) public view returns (bool isIndeed) {
+    function isAdministrator(address userAddress)
+        public
+        view
+        returns (bool isIndeed)
+    {
         if (administrators.length == 0) return false;
         return (administrators[addressToOrganizationIndex[userAddress]] ==
             userAddress);
     }
 
-    function getOrg(uint256 _orgId)
-        public
-        view
-        returns (Organization memory)
-    {
+    function getOrg(uint256 _orgId) public view returns (Organization memory) {
         return organizations[_orgId];
     }
 
     function getAdminToOrg(address userAddress)
         public
         view
-        returns (uint userid)
+        returns (uint256 userid)
     {
         return addressToOrganizationIndex[userAddress];
     }
 
     //Get the organization if there is an address that created it
-    function getOrgFromAddress(address userAddress) public view returns (Organization memory org) {
+    function getOrgFromAddress(address userAddress)
+        public
+        view
+        returns (Organization memory org)
+    {
         if (isAdministrator(userAddress)) revert();
-        uint orgId = getAdminToOrg(userAddress);
+        uint256 orgId = getAdminToOrg(userAddress);
         Organization memory organ = getOrg(orgId);
         return organ;
     }
 
-/* 
+    //ASSETS TYPE AND FUNCTIONS
+    struct Asset {
+        string name;
+        uint256 organziationId;
+        uint256 adquireDate;
+        uint256 creationDate;
+        string assetType;
+        uint256 index;
+    }
+
+    Asset[] private assetsList;
+    //uint256 orgCount;
+
+    //UNNECESARY MAPPING
+    //mapping(uint256 => uint256) private assetToOrg;
+
+    //CREAR UN MAPPING DE ORGANIZACIÓN (ID) A LISTA DE ASSETS (ID)?
+    mapping(uint256 => uint256[]) private assetsFromOrg;
+
+    //ASSET EDITED INTRODUCES A BOOL DELETED
+    struct AssetEdited {
+        string name;
+        uint256 organziationId;
+        uint256 adquireDate;
+        uint256 creationDate;
+        string assetType;
+        bool deleted;
+        uint256 index;
+    }
+
+    AssetEdited[] private assetsEditedList;
+    //uint256 orgCount;
+    mapping(uint256 => uint256) private assetEditedToAsset;
+
+    //ASSETS ORIGINAL TO LIST OF ASSETS EDITED
+    mapping(uint256 => uint256[]) private originalAssetsToEditedList;
+
+    function insertAsset(
+        string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        string memory assetType
+    ) public {
+        assetsList.push(
+            (
+                Asset(
+                    name,
+                    organizationId,
+                    adquireDate,
+                    creationDate,
+                    assetType,
+                    assetsList.length
+                )
+            )
+        );
+        //adminsCount++;
+        assetsFromOrg[organizationId].push(assetsList.length - 1);
+        assetBoolEditedAndDeleted[assetsList.length - 1].push(false);
+        assetBoolEditedAndDeleted[assetsList.length - 1].push(false);
+        originalAssetsToEditedList[assetsList.length - 1];
+    }
+
+    function getAsset(uint256 id) public view returns (Asset memory) {
+        return assetsList[id];
+    }
+
+    function getAdmin(uint256 _adminId) public view returns (Admin memory) {
+        return admins[_adminId];
+    }
+
+    function getAllAssetsFromOrg(uint256 _orgId)
+        public
+        view
+        returns (Asset[] memory, AssetEdited[] memory)
+    {
+        uint256 cont = assetsFromOrg[_orgId].length;
+        Asset[] memory listOrgAssets = new Asset[](cont);
+        AssetEdited[] memory listOrgAssetsEdited = new AssetEdited[](cont);
+        for (uint256 i = 0; i < cont; i++) {
+            //First check if that asset has been deleted
+            //so we don't retrieve it
+            if (assetBoolEditedAndDeleted[i][1]) {
+                continue;
+            }
+            //Check if asset has been edited in order
+            //to retrieve last edited asset
+            if (assetBoolEditedAndDeleted[i][0] == true) {
+                uint256 lastItem = originalAssetsToEditedList[i].length - 1;
+                uint256 assetEditedId = originalAssetsToEditedList[i][lastItem];
+                listOrgAssetsEdited[i] = assetsEditedList[assetEditedId];
+                //Last case the asset hasn't been edited
+            } else {
+                uint256 assetId = assetsFromOrg[_orgId][i];
+                listOrgAssets[i] = assetsList[assetId];
+            }
+        }
+        return (listOrgAssets, listOrgAssetsEdited);
+    }
+
+    //CREAMOS UNA LISTA QUE RECOGE LOS id de los ASSETS ORIGINALES QUE TIENEN ALGUNA EDICIÓN
+    //uint256[] private assetsOriginalEdited;
+
+    //CREAR MAPPING DE ID ORIGINAL A LIST OF BOOLEAN
+    // QUE INDICA SI EL ID ESTÁ EDITADO EN EL PRIMER VALOR
+    // EN EL SEGUNDO VALOR INDICA SI ESTÁ ELIMINADO
+    mapping(uint256 => bool[]) private assetBoolEditedAndDeleted;
+    //DE ESTA MANERA PODEMOS VER EN CADA CASO EL ID SI ESTÁ EDITADO O ELIMINADO
+
+    //mapping que relaciona la org con los assets que tiene eliminados
+    mapping(uint256 => uint256[]) private assetsFromOrgDeleted;
+
+    function insertEditedAsset(
+        uint256 originalAssetId,
+        string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        bool deleted,
+        string memory assetType
+    ) public {
+        //CHECK IF THE ASSET IS ALREADY IN ASSETS EDITED LIST
+        if (!assetBoolEditedAndDeleted[originalAssetId][0]) {
+            assetBoolEditedAndDeleted[originalAssetId][0] = true;
+        }
+        assetsEditedList.push(
+            (
+                AssetEdited(
+                    name,
+                    organizationId,
+                    adquireDate,
+                    creationDate,
+                    assetType,
+                    deleted,
+                    assetsEditedList.length
+                )
+            )
+        );
+        originalAssetsToEditedList[originalAssetId].push(
+            assetsEditedList.length - 1
+        );
+
+        if (deleted == true) {
+            assetsFromOrgDeleted[organizationId].push(
+                assetsEditedList.length - 1
+            );
+            assetBoolEditedAndDeleted[originalAssetId][1] = true;
+        }
+    }
+
+    function getAssetsDeleted(uint256 orgId)
+        public
+        view
+        returns (AssetEdited[] memory)
+    {
+        uint256 cont = assetsFromOrgDeleted[orgId].length;
+        AssetEdited[] memory listAssetsDeleted = new AssetEdited[](cont);
+        for (uint256 i = 0; i < cont; i++) {
+            uint256 id = assetsFromOrgDeleted[orgId][i];
+            listAssetsDeleted[i] = assetsEditedList[id];
+        }
+        return listAssetsDeleted;
+    }
+
+    function getIsAssetEdited(uint256 idAsset)
+        public
+        view
+        returns (bool result)
+    {
+        return assetBoolEditedAndDeleted[idAsset][0];
+    }
+
+    function getIsAssetDeleted(uint256 idAsset)
+        public
+        view
+        returns (bool result)
+    {
+        return assetBoolEditedAndDeleted[idAsset][1];
+    }
+
+    /* 
     //asset
     [1,2,3]
     //editados
@@ -140,10 +324,9 @@ nombre, tipo, skjdalksjd, booldeleted
     //mapping(editado=>asset)
     //mapping(asset=> []editado) para sacar el ultimo que se ha editado
 
-
     //assets editados (asset 1)
     //[]
 
     //boolean editar
-    //marca eliminar 
+    //marca eliminar
 }

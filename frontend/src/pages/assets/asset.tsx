@@ -2,6 +2,7 @@ import AssetCard from "components/atoms/Cards/assetCard";
 import React, { useEffect, useState } from "react";
 import { CallGetAsset } from "components/wallet/contractCall";
 import { ethers } from "ethers";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -15,7 +16,7 @@ const AssetDetailPage = () => {
         assetType?: string;
     };
 
-
+    const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [asset, setAsset] = useState({});
 
@@ -25,10 +26,10 @@ const AssetDetailPage = () => {
 
   useEffect(() => {
       
-      //TODO CHECK ID OF THE ASSET
-      const assetId = 3;
-  
-      CallGetAsset(assetId).then((response) => {
+    const assetId = window.sessionStorage.getItem('detailId');
+    if (assetId == null) navigate("/assets")
+    else {
+      CallGetAsset(Number(assetId)).then((response) => {
           console.log("Obtenemos el asset");
   
           
@@ -43,8 +44,10 @@ const AssetDetailPage = () => {
           };
           console.log(asset)
           setAsset(asset);
+          setIsLoading(false);
       });
-      setIsLoading(false);
+    }
+      
   },[]);
 
   return <AssetCard props={asset}></AssetCard>;

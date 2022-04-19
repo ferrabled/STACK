@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button, Typography, Table, CircularProgress } from "@mui/material";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { Card, Button, Typography, Table, CircularProgress, IconButton } from "@mui/material";
+import { DataGrid, GridCellValue, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { AssetsList } from "types";
 import { useNavigate } from "react-router-dom";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { CallInsertEditedAsset } from "components/wallet/contractCall";
+import { formatDate } from "utils";
+
+
 
 const AssetsCard = (props:any) => {
   const navigate = useNavigate();
@@ -37,74 +44,96 @@ const AssetsCard = (props:any) => {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "name", headerName: "First name", width: 130 },
-    { field: "lastName", headerName: "Last name", width: 130 },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      width: 90,
+      field: "action",
+      headerName: "Action",
+      sortable: false,
+      width: 150,
+      renderCell: (params) => {
+        const onClickDetails = (e:any) => {
+          e.stopPropagation(); // don't select this row after clicking
+          console.log(params.row.originalId);
+          const originalId = params.row.originalId;
+          //const api: GridApi = params.api;
+          //sessionStorage.removeItem("editId");
+          sessionStorage.setItem('detailId', String(originalId));
+          navigate("/asset/");
+
+        };
+
+        const onClickEdit = (e:any) => {
+          e.stopPropagation(); // don't select this row after clicking
+          console.log(params.row.originalId);
+          const originalId = params.row.originalId;
+          //const api: GridApi = params.api;
+          //sessionStorage.removeItem("editId");
+          sessionStorage.setItem('editId', String(originalId));
+          navigate("/asset/edit");
+
+        };
+
+        const onClickDelete = (e:any) => {
+          e.stopPropagation(); // don't select this row after clicking
+          console.log("Eliminamos el activo: ");
+          const asset = params.row;
+          console.log(asset);
+
+          try {
+            asset.deleted = true;
+            CallInsertEditedAsset(asset);
+            navigate("/assets");
+          }
+          catch {
+              console.log("User reverted transaction");
+          }
+        };
+        return <>
+        <div className="w-1/3">
+          <IconButton color="primary" onClick={onClickDetails}>
+            <VisibilityIcon/>
+          </IconButton></div>
+        <div className="w-1/3 items-center">
+        <IconButton color="primary" onClick={onClickEdit}>
+          <EditIcon/>
+        </IconButton></div>
+        <div className="w-1/3">
+        <IconButton color="primary" onClick={onClickDelete}>
+          <DeleteForeverIcon/>
+        </IconButton></div>
+        </>;
+      },
+    },
+    { 
+      field: "adquireDate", 
+      headerName: "Fecha", 
+      width: 130, 
+      renderCell: (params) => {
+        const adquireDate = new Date(params.row.adquireDate);
+        const adquireDateF = formatDate(adquireDate);
+        return <>{adquireDateF}</>
+      },
     },
     {
+      field: "assetType",
+      headerName: "Tipo",
+      type: "string",
+      width: 90,
+    },
+    /* {
       field: "fullName",
-      headerName: "Full name",
+      headerName: "Departamento",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 160,
       valueGetter: (params: GridValueGetterParams) =>
         `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-    },
+    }, */
+    
   ];
 
-  /* const rows = [
-    { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-    { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-    { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-    { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-    { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-    { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-    { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-    { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-    { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-  ]; */
 
     console.log(rows);
-  /* const [users, setUsers] = useState([
-    {
-      id: 1,
-      firstName: "Frank",
-      lastName: "Murphy",
-      email: "frank.murphy@test.com",
-      role: "User",
-    },
-    {
-      id: 2,
-      firstName: "Vic",
-      lastName: "Reynolds",
-      email: "vic.reynolds@test.com",
-      role: "Admin",
-    },
-    {
-      id: 3,
-      firstName: "Gina",
-      lastName: "Jabowski",
-      email: "gina.jabowski@test.com",
-      role: "Admin",
-    },
-    {
-      id: 4,
-      firstName: "Jessi",
-      lastName: "Glaser",
-      email: "jessi.glaser@test.com",
-      role: "User",
-    },
-    {
-      id: 5,
-      firstName: "Jay",
-      lastName: "Bilzerian",
-      email: "jay.bilzerian@test.com",
-      role: "User",
-    },
-  ]); */
+
   if (isLoading) return <CircularProgress />
   else return (
     <Card className="gap-7 p-10 flex flex-col items-center h-full">

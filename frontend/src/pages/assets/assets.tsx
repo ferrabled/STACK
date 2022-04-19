@@ -13,6 +13,7 @@ type Asset = {
   assetType: string;
   creationDate: number;
   adquireDate: number;
+  originalId: number;
 };
 
 const AssetsPage = () => {
@@ -39,6 +40,7 @@ const AssetsPage = () => {
             assetType: response[0][i].assetType,
             creationDate: Number(response[0][i].creationDate),
             adquireDate: Number(response[0][i].adquireDate),
+            originalId: Number(response[0][i].index)
           }
           console.log("Añadido")
           console.log(asset);

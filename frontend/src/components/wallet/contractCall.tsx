@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 
 declare var window: any;
 const mainABI = require("./mainABI.json");
-const contractAddress = "0xa931baD6cec3f4546c0C5695008Db85e663C36EF";
+const contractAddress = "0xC0fc6eA23A178C76271e8EF15a590f0F91787512";
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const contract = new ethers.Contract(
         contractAddress,
@@ -53,6 +53,7 @@ export async function CallInsertAsset(props: any) {
     const signer = provider.getSigner();
     let signerAddress = await signer.getAddress();
     console.log("HOLA");
+    //TODO change ORG ID
     input.organizationId=2;
 
     contract.insertAsset(input.name, input.organizationId, input.adquireDate, 
@@ -92,14 +93,12 @@ export async function CallGetAdminData(props: Number) {
 
 
 export async function CallInsertEditedAsset(props: any) {
-    console.log(props);
     const input = props;
     const signer = provider.getSigner();
     let signerAddress = await signer.getAddress();
-    console.log("HOLA");
-    input.originalAssetId=3;
+    input.originalAssetId = input.originalId;
     console.log(input);
-    input.organizationId=2;
+    input.organizationId=localStorage.getItem('orgId');
 
     contract.insertEditedAsset(input.originalAssetId, input.name, input.organizationId, input.adquireDate, 
        input.creationDate, input.deleted, input.assetType);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Button, TextField, Typography } from "@mui/material";
@@ -6,9 +6,29 @@ import { Button, TextField, Typography } from "@mui/material";
 import DateAdapter from "@mui/lab/AdapterDayjs";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
 import { date } from "yup/lib/locale";
-import  { CallInsertAsset } from "components/wallet/contractCall";
+import  { CallInsertAsset, CallInsertEditedAsset } from "components/wallet/contractCall";
 
-const EditAssetForm = () => {
+type Asset = {
+  name: string;
+  adquireDate?: Date;
+  creationDate?: Date;
+  assetType?: string;
+};
+
+
+
+const EditAssetForm = (props: {data: Asset}) => {
+
+  const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  useEffect(()=> {
+    console.log(props.data.name);
+    setName(props.data.name);
+    setIsLoading(false);
+  },[])
+  
   const validationSchema = Yup.object({
     name: Yup.string().required("El nombre es obligatorio").max(20),
     adquireDate: Yup.string()
@@ -20,14 +40,15 @@ const EditAssetForm = () => {
   });
 
   const ConnectToContract = (data: any) => {
-    CallInsertAsset(data);
+    CallInsertEditedAsset(data);
   }
 
-  return (
+  if (isLoading) return <></>
+  else return (
     <div>
       <Formik
         initialValues={{
-          name: "",
+          name: name,
           organizationId: 0,
           adquireDateString: "",
           adquireDate: 0,
@@ -70,7 +91,7 @@ const EditAssetForm = () => {
         {({ values, isSubmitting, errors, handleChange }) => (
           <Form>
             <div className="mb-6">
-              <Typography variant="h5">Datos del nuevo activo</Typography>
+              <Typography variant="h5">Editar activo</Typography>
             </div>
 
             <div className="mb-6">
