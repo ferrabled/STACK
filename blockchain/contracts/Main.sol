@@ -89,7 +89,11 @@ contract Main {
             )
         );
         orgCount++;
-        addressToOrganizationIndex[userAddress] = organizations.length - 1;
+        uint256 id = organizations.length - 1;
+        addressToOrganizationIndex[userAddress] = id;
+        //Create the mapping with 0 assets edited and 0 deleted
+        organizationNumberOfAssetsED[id].push(0);
+        organizationNumberOfAssetsED[id].push(0);
     }
 
     // Check if the address has created a org, == is an administrator.
@@ -203,9 +207,14 @@ contract Main {
         view
         returns (Asset[] memory, AssetEdited[] memory)
     {
+        uint32 contEdited = organizationNumberOfAssetsED[_orgId][0];
+        uint32 contDeleted = organizationNumberOfAssetsED[_orgId][1];
+        uint32 edList = uint32(uint32(contEdited) - uint32(contDeleted));
         uint256 cont = assetsFromOrg[_orgId].length;
-        Asset[] memory listOrgAssets = new Asset[](cont);
-        AssetEdited[] memory listOrgAssetsEdited = new AssetEdited[](cont);
+        Asset[] memory listOrgAssets = new Asset[](cont-edList);
+        AssetEdited[] memory listOrgAssetsEdited = new AssetEdited[](edList);
+        uint32 bucleEdited = 0;
+        uint bucleOriginal = 0;
         for (uint256 i = 0; i < cont; i++) {
             //First check if that asset has been deleted
             //so we don't retrieve it
@@ -217,15 +226,21 @@ contract Main {
             if (assetBoolEditedAndDeleted[i][0] == true) {
                 uint256 lastItem = originalAssetsToEditedList[i].length - 1;
                 uint256 assetEditedId = originalAssetsToEditedList[i][lastItem];
-                listOrgAssetsEdited[i] = assetsEditedList[assetEditedId];
+                listOrgAssetsEdited[bucleEdited] = assetsEditedList[assetEditedId];
+                bucleEdited++;
                 //Last case the asset hasn't been edited
             } else {
                 uint256 assetId = assetsFromOrg[_orgId][i];
-                listOrgAssets[i] = assetsList[assetId];
+                listOrgAssets[bucleOriginal] = assetsList[assetId];
+                bucleOriginal++;
             }
         }
         return (listOrgAssets, listOrgAssetsEdited);
     }
+
+
+    //MAPPING ID OF WITH THE LIST OF NUMBER OF ASSETS EDITED AND DELETED
+    mapping(uint256 => uint32[]) private organizationNumberOfAssetsED;
 
     //CREAMOS UNA LISTA QUE RECOGE LOS id de los ASSETS ORIGINALES QUE TIENEN ALGUNA EDICIÓN
     //uint256[] private assetsOriginalEdited;
@@ -249,9 +264,7 @@ contract Main {
         string memory assetType
     ) public {
         //CHECK IF THE ASSET IS ALREADY IN ASSETS EDITED LIST
-        if (!assetBoolEditedAndDeleted[originalAssetId][0]) {
-            assetBoolEditedAndDeleted[originalAssetId][0] = true;
-        }
+        
         assetsEditedList.push(
             (
                 AssetEdited(
@@ -265,15 +278,21 @@ contract Main {
                 )
             )
         );
-        originalAssetsToEditedList[originalAssetId].push(
-            assetsEditedList.length - 1
-        );
-
+        uint256 id = assetsEditedList.length - 1;
+        if (!assetBoolEditedAndDeleted[originalAssetId][0]) {
+            assetBoolEditedAndDeleted[originalAssetId][0] = true;
+            uint32 ed = organizationNumberOfAssetsED[organizationId][0]+1;
+            organizationNumberOfAssetsED[organizationId][0] = ed;
+        }
+        originalAssetsToEditedList[originalAssetId].push(id);
+        
         if (deleted == true) {
             assetsFromOrgDeleted[organizationId].push(
                 assetsEditedList.length - 1
             );
             assetBoolEditedAndDeleted[originalAssetId][1] = true;
+            uint32 de = organizationNumberOfAssetsED[organizationId][1]+1;
+            organizationNumberOfAssetsED[organizationId][1] = de;
         }
     }
 
@@ -305,6 +324,18 @@ contract Main {
         returns (bool result)
     {
         return assetBoolEditedAndDeleted[idAsset][1];
+    }
+
+    function getOrgNumEdited(uint orgId) public view returns (uint numEdited) {
+        return organizationNumberOfAssetsED[orgId][0];
+    }
+
+    function getOrgNumDeleted(uint orgId) public view returns (uint numDeleted) {
+        return organizationNumberOfAssetsED[orgId][1];
+    }
+
+    function getEdDeList(uint assetId) public view returns (uint[] memory listEdited) {
+        return originalAssetsToEditedList[assetId];
     }
 
     /* 
