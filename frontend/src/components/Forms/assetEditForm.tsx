@@ -7,25 +7,31 @@ import DateAdapter from "@mui/lab/AdapterDayjs";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
 import { date } from "yup/lib/locale";
 import  { CallInsertAsset, CallInsertEditedAsset } from "components/wallet/contractCall";
+import {formatDate, formatDateyMd} from "utils";
 
-type Asset = {
+type AssetEdited = {
   name: string;
   adquireDate?: Date;
   creationDate?: Date;
   assetType?: string;
+  originalAssetId:number;
 };
 
 
 
-const EditAssetForm = (props: {data: Asset}) => {
+const EditAssetForm = (props: {data: AssetEdited}) => {
 
-  const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [assetEd, setAssetEd] = useState<AssetEdited>();
+  const [fAdquireDate, setFAdqDate] = useState("");
 
 
   useEffect(()=> {
-    console.log(props.data.name);
-    setName(props.data.name);
+    console.log(props);
+    setAssetEd(props.data);
+    const date = formatDateyMd(props.data.adquireDate!);
+    console.log(date);
+    setFAdqDate(date);
     setIsLoading(false);
   },[])
   
@@ -48,40 +54,28 @@ const EditAssetForm = (props: {data: Asset}) => {
     <div>
       <Formik
         initialValues={{
-          name: name,
+          name: assetEd!.name,
+          //TODO ORG ID
           organizationId: 0,
-          adquireDateString: "",
-          adquireDate: 0,
-          creationDate: 0,
-          assetType: "",
+          adquireDateString: fAdquireDate,
+          adquireDate: assetEd!.adquireDate!.getTime(),
+          creationDate: assetEd!.creationDate!.getTime(),
+          assetType: assetEd!.assetType,
+          originalAssetId: assetEd!.originalAssetId
         }}
         validationSchema={validationSchema}
         onSubmit={(data, { setSubmitting }) => {
 
-            var now = new Date();
-            var timeOffset = now.getTimezoneOffset();
-
-            data.creationDate = Date.now();
-            //let diff = data.creationDate.getTimezoneOffset();
-            //console.log(data.creationDate.toUTCString())
-            
-
-            //TODO GUARDAR WITH TIMEZONE DIFFERENCE OR WITHOUT
-            
+                        
             var dateString = data.adquireDateString; // Oct 23
             var dateParts: Array<String> = dateString.split("-");
             // month is 0-based, that's why we need dataParts[1] - 1
             var dateObject = new Date(+dateParts[0], +dateParts[1] - 1, +dateParts[2]); 
-            console.log(dateObject.getTime()); 
             data.adquireDate = dateObject.getTime();
 
             const offset = dateObject.getTimezoneOffset();
             dateObject = new Date(dateObject.getTime() - (offset*60*1000));
-            
-            
-            //data.creationDate = dateObject;
-            //var dateAgain = dateObject.toISOString().split('T')[0];
-            //console.log(dateAgain);
+
             setSubmitting(true);
             console.log(data);
             console.log("Enviar")

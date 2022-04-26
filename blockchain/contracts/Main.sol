@@ -134,11 +134,16 @@ contract Main {
     //ASSETS TYPE AND FUNCTIONS
     struct Asset {
         string name;
-        uint256 organziationId;
+        uint256 organizationId;
         uint256 adquireDate;
         uint256 creationDate;
         string assetType;
         uint256 index;
+        //mapping(uint => uint[]) mapeo;
+    }
+
+    struct datasoft {
+        string name;
     }
 
     Asset[] private assetsList;
@@ -152,19 +157,20 @@ contract Main {
 
     //ASSET EDITED INTRODUCES A BOOL DELETED
     struct AssetEdited {
+        uint256 originalAssetId;
         string name;
-        uint256 organziationId;
+        uint256 organizationId;
         uint256 adquireDate;
         uint256 creationDate;
         string assetType;
         bool deleted;
         uint256 index;
+
+        //uint fechafin;
+
     }
 
     AssetEdited[] private assetsEditedList;
-    //uint256 orgCount;
-    mapping(uint256 => uint256) private assetEditedToAsset;
-
     //ASSETS ORIGINAL TO LIST OF ASSETS EDITED
     mapping(uint256 => uint256[]) private originalAssetsToEditedList;
 
@@ -194,6 +200,12 @@ contract Main {
         originalAssetsToEditedList[assetsList.length - 1];
     }
 
+    function getLastAssetEdited(uint256 id) public view returns (AssetEdited memory) {
+        uint256 lastItem = originalAssetsToEditedList[id].length - 1;
+        uint256 assetEditedId = originalAssetsToEditedList[id][lastItem];
+        return assetsEditedList[assetEditedId];
+    }
+
     function getAsset(uint256 id) public view returns (Asset memory) {
         return assetsList[id];
     }
@@ -211,7 +223,7 @@ contract Main {
         uint32 contDeleted = organizationNumberOfAssetsED[_orgId][1];
         uint32 edList = uint32(uint32(contEdited) - uint32(contDeleted));
         uint256 cont = assetsFromOrg[_orgId].length;
-        Asset[] memory listOrgAssets = new Asset[](cont-edList);
+        Asset[] memory listOrgAssets = new Asset[](cont-contEdited);
         AssetEdited[] memory listOrgAssetsEdited = new AssetEdited[](edList);
         uint32 bucleEdited = 0;
         uint bucleOriginal = 0;
@@ -242,8 +254,6 @@ contract Main {
     //MAPPING ID OF WITH THE LIST OF NUMBER OF ASSETS EDITED AND DELETED
     mapping(uint256 => uint32[]) private organizationNumberOfAssetsED;
 
-    //CREAMOS UNA LISTA QUE RECOGE LOS id de los ASSETS ORIGINALES QUE TIENEN ALGUNA EDICIÓN
-    //uint256[] private assetsOriginalEdited;
 
     //CREAR MAPPING DE ID ORIGINAL A LIST OF BOOLEAN
     // QUE INDICA SI EL ID ESTÁ EDITADO EN EL PRIMER VALOR
@@ -268,6 +278,7 @@ contract Main {
         assetsEditedList.push(
             (
                 AssetEdited(
+                    originalAssetId,
                     name,
                     organizationId,
                     adquireDate,
@@ -294,6 +305,21 @@ contract Main {
             uint32 de = organizationNumberOfAssetsED[organizationId][1]+1;
             organizationNumberOfAssetsED[organizationId][1] = de;
         }
+    }
+
+    function getRecordList(uint assetId) public view returns (Asset memory, AssetEdited[] memory) {
+        Asset memory original = assetsList[assetId];
+        uint len = originalAssetsToEditedList[assetId].length;
+        AssetEdited[] memory listEdited = new AssetEdited[](len);
+        for (uint256 i = 0; i < len; i++) {
+            uint num = originalAssetsToEditedList[assetId][i];
+            listEdited[i] = assetsEditedList[num];
+        }
+        return (original, listEdited);
+     }
+
+    function getAssetEdited(uint256 id) public view returns (AssetEdited memory) {
+        return assetsEditedList[id];
     }
 
     function getAssetsDeleted(uint256 orgId)
@@ -337,27 +363,4 @@ contract Main {
     function getEdDeList(uint assetId) public view returns (uint[] memory listEdited) {
         return originalAssetsToEditedList[assetId];
     }
-
-    /* 
-    //asset
-    [1,2,3]
-    //editados
-    [1,2]
-
-    //lista de assets eliminados []
-    //
-
-    /* /editado {
-nombre, tipo, skjdalksjd, booldeleted
-    listaborrados.push() cuando se elimine
-    } */
-
-    //mapping(editado=>asset)
-    //mapping(asset=> []editado) para sacar el ultimo que se ha editado
-
-    //assets editados (asset 1)
-    //[]
-
-    //boolean editar
-    //marca eliminar
 }

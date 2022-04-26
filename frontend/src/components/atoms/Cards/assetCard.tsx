@@ -1,45 +1,38 @@
-import { Button, Card, Table, Typography } from "@mui/material";
+import { Button, Card, Skeleton, Table, Typography } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import React from "react";
 import AssetUsersTable from "./assetUsers";
-import { CallInsertEditedAsset } from "components/wallet/contractCall";
+import { CallDeleteAsset, CallInsertEditedAsset } from "components/wallet/contractCall";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "utils";
 
 const AssetCard = (props: any) => {
-
     const navigate = useNavigate();
-
     const asset = props.props
-
+    
     const deleteAsset = () => {
         console.log("Eliminando asset");
-
-        try {
-            asset.deleted = true;
-            console.log(asset.adquireDate.getTime());
-            console.log(asset.creationDate.getTime());
-            let mem = asset.adquireDate.getTime();
-            asset.adquireDate = mem;
-            mem = asset.creationDate.getTime();
-            asset.creationDate = mem;
-        }
-        catch {
-            console.log("No need to format data");
-        }
-        
-        CallInsertEditedAsset(asset);
+        CallDeleteAsset(Number(window.sessionStorage.getItem('detailId'))).then((response) => {
+            //TODO AWAIT FOR THE CONTRACT TO BE SIGNED IN ORDER TO NAVIGATE TO ASSETS
+        });
         navigate("/assets");
-
     } 
+
+    const onClickEdit = () => {
+        window.sessionStorage.setItem('editId', window.sessionStorage.getItem('detailId')!)
+        navigate("edit");
+    }
+
+    const onClickRecord = () => {
+        navigate("record");
+    }
+    
 
     const adquireDate = new Date(asset.adquireDate);
     const formattedADate = formatDate(adquireDate);
-    
     const creationDate = new Date(asset.creationDate);
     const formattedCDate = formatDate(creationDate);
-    /* console.log(formattedADate);
-    console.log(formattedCDate); */
+
 
     return(
 
@@ -49,38 +42,42 @@ const AssetCard = (props: any) => {
                     <div className="flex flex-col mb-5">
                         <div className="flex flex-row justify-between content-evenly"> 
                             <Typography variant="h6">Nombre</Typography>
-                            <div>{asset.name}</div>
+                            {asset.name && <div>{asset.name}</div> ||
+                            <Skeleton variant="text" width={85} height={32}/>}
                         </div> 
                         <div className="flex flex-row justify-between content-evenly"> 
                             <Typography variant="h6">Fecha de Creación</Typography>
-                            <div>{formattedCDate}</div>
+                            {asset.name && <div>{formattedCDate}</div> ||
+                            <Skeleton variant="text" width={85} height={32}/>}
                         </div>
                         <div className="flex flex-row justify-between content-evenly"> 
                             <Typography variant="h6">Fecha de Adquisición</Typography>
-                            <div>{formattedADate}</div>
+                            {asset.name && <div>{formattedADate}</div> ||
+                            <Skeleton variant="text" width={85} height={32}/>}
+                            
                         </div>
                     </div>
                     <div className="flex flex-row justify-between content-evenly"> 
                         <div className="gap-5">
-                            <Button className="" variant="contained" color="primary"> Editar </Button>
+                            <Button variant="contained" color="primary" onClick={onClickEdit}> Editar </Button>
                             <Button variant="contained" color="primary" onClick={deleteAsset}> Eliminar </Button>
                         </div>
-                        <Button variant="contained" color="primary"> Historial de Cambios </Button>
+                        <Button variant="contained" color="primary" onClick={onClickRecord}> Historial de Cambios </Button>
                     </div>
                 </Card>
                 <Card className="p-5 m-5 w-1/2">
                     <div className="flex flex-col mb-5">
                         <div className="flex flex-row justify-between content-evenly"> 
                             <Typography variant="h6">Nombre</Typography>
-                            <div>Fernando</div>
+                            <Skeleton variant="text" width={85} height={32}/>
                         </div> 
                         <div className="flex flex-row justify-between content-evenly"> 
                             <Typography variant="h6">Apellidos</Typography>
-                            <div>Rabasco</div>
+                            <Skeleton variant="text" width={85} height={32}/>
                         </div>
                         <div className="flex flex-row justify-between content-evenly"> 
                             <Typography variant="h6">Email</Typography>
-                            <div>frabascol@gmail.com</div>
+                            <Skeleton variant="text" width={85} height={32}/>
                         </div>
                     </div>
                     <Button variant="contained" color="primary">Añadir Nuevo</Button>
@@ -93,7 +90,8 @@ const AssetCard = (props: any) => {
                     <Typography variant="h6">Usuarios del Activo</Typography>
                     <Button variant="contained" color="primary">Añadir Nuevo</Button>
                 </div>
-                    <AssetUsersTable/>
+                    <Skeleton variant="rectangular"/>
+                    {/* <AssetUsersTable/> */}
                 </Card>
             </section>
             

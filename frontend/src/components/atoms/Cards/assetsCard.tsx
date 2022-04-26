@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { CallInsertEditedAsset } from "components/wallet/contractCall";
+import { CallDeleteAsset, CallGetIsAssetEdited, CallInsertEditedAsset } from "components/wallet/contractCall";
 import { formatDate } from "utils";
 
 
@@ -54,33 +54,64 @@ const AssetsCard = (props:any) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log(params.row.originalId);
           const originalId = params.row.originalId;
+          CallGetIsAssetEdited(originalId).then(
+            (response) => {
+              console.log("True or false");
+              console.log(response);
+              if(response) {
+                console.log("True");
+                sessionStorage.setItem('isEdited', String(true));
+              } else {
+                console.log("false");
+                sessionStorage.setItem('isEdited', String(false));
+              }
+            sessionStorage.setItem('record','n');
+            sessionStorage.setItem('detailId', String(originalId));    
+            navigate("/asset/");
+            }
+          )
           //const api: GridApi = params.api;
           //sessionStorage.removeItem("editId");
-          sessionStorage.setItem('detailId', String(originalId));
-          navigate("/asset/");
+          
+         
 
         };
 
         const onClickEdit = (e:any) => {
           e.stopPropagation(); // don't select this row after clicking
-          console.log(params.row.originalId);
+          console.log("orignianl")
+          console.log(params.row);
           const originalId = params.row.originalId;
+          CallGetIsAssetEdited(originalId).then(
+            (response) => {
+              console.log("True or false");
+              console.log(response);
+              if(response) {
+                console.log("True");
+                sessionStorage.setItem('isEdited', String(true));
+                sessionStorage.setItem('editId', String(originalId));
+              } else {
+                console.log("false");
+                sessionStorage.setItem('isEdited', String(false));
+                sessionStorage.setItem('editId', String(originalId));
+              }   
+            navigate("/asset/edit");
+            }
+          )
+          
           //const api: GridApi = params.api;
           //sessionStorage.removeItem("editId");
-          sessionStorage.setItem('editId', String(originalId));
-          navigate("/asset/edit");
+
+          
 
         };
 
         const onClickDelete = (e:any) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log("Eliminamos el activo: ");
-          const asset = params.row;
-          console.log(asset);
-
           try {
-            asset.deleted = true;
-            CallInsertEditedAsset(asset);
+            console.log("delete original asset:"+params.row.originalId);
+            CallDeleteAsset(params.row.originalId);
             navigate("/assets");
           }
           catch {

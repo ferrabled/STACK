@@ -19,3 +19,49 @@ export type AssetsList = {
   type: string;
   department?: string;
 }
+
+export type Organization = {
+    name: string,
+    address: string,
+    telephone: Number
+}
+
+export type Admin = {
+  name: string,
+  lastName: string,
+  address: string,
+  email: string,
+  telephone: Number
+}
+
+
+//ASSETS:
+
+export type Asset = {
+  name: string;
+  assetType: string;
+  creationDate: number;
+  adquireDate: number;
+  index: number;
+};
+
+export type AssetEdited = {
+  name: string;
+  adquireDate?: Date;
+  creationDate?: Date;
+  assetType?: string;
+  originalAssetId:number;
+};
+
+export type AssetsInList = {
+  name: string;
+  adquireDate?: Number;
+  creationDate?: Number;
+  assetType?: string;
+  originalId:number;
+  //Id shown in the list
+  id?:number;
+  //Index from list 
+  //on the blockchain
+  index:number;
+}

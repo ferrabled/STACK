@@ -1,55 +1,46 @@
 import { Card, Typography } from "@mui/material";
 import Page from "pages/page";
-import React, { useState } from "react";
-import { CallGetOrganizationData } from "components/wallet/contractCall"; 
+import React, { useEffect, useState } from "react";
+import { CallGetAdminData, CallGetOrganizationData } from "components/wallet/contractCall"; 
 import { OrganizationCard, AdministratorCard } from "components/atoms/Cards/Organization";
 import { Loader } from "components/atoms";
+import { Admin, Organization } from "types";
 
 const MyOrganizationPage = () => {
-    type Organization = {
-        name: string,
-        address: string,
-        telephone: Number
-    }
-
-    type Admin = {
-        name: string,
-        address: string,
-        email: string,
-        telephone: Number
-    }
-
     const [isLoading, setIsLoading] = useState(true);
-    const [org, setOrg] = useState({});
-    const [admin, setAdmin] = useState({});
+    const [org, setOrg] = useState<Organization>();
+    const [admin, setAdmin] = useState<Admin>();
 
 
-    const GetOrgAndAdminData = () => {
-        //TODO CONNECT WITH BLOCKCHAIN
-        const orgId = 0;
-
-        CallGetOrganizationData(orgId).then((response)=> {
-            console.log(response);
-
-            const organization: Organization = {
-                name: response["name"],
-                address: response["addressO"],
-                telephone: response["telephone"]
-            }
-            setOrg(organization);
-
-        })
-
-
-
-
-    }
-
-    if (isLoading === true){
-        GetOrgAndAdminData()
-        setIsLoading(false);
-        
-    }
+    useEffect(() => {
+        const GetOrgAndAdminData = () => {
+            //TODO CONNECT WITH BLOCKCHAIN
+            const orgId = 0;
+    
+            CallGetOrganizationData(orgId).then((response)=> {  
+                const organization: Organization = {
+                    name: response["name"],
+                    address: response["addressO"],
+                    telephone: response["telephone"]
+                }
+                setOrg(organization);
+            
+                CallGetAdminData(orgId).then((response)=> {
+                        const admin: Admin = {
+                            name: response["name"],
+                            lastName: response["lastname"],
+                            address: response["addressO"],
+                            telephone: response["telephone"],
+                            email: response["email"]
+                        }
+                        setAdmin(admin);
+                        setIsLoading(false);
+                    })
+            })
+        }
+        GetOrgAndAdminData();  
+    
+    },[]);
 
     
     return (
@@ -57,7 +48,7 @@ const MyOrganizationPage = () => {
             {!isLoading && (<OrganizationCard data={org} />)}
             {isLoading && (<Card className="mb-5"><Loader/></Card>)}
             
-            {!isLoading && (<AdministratorCard data={admin} />)}
+            {!isLoading && (<AdministratorCard {...admin!} />)}
             {isLoading && (<Card className="mb-5"><Loader/></Card>)}
              
         </Page>     

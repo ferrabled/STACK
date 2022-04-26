@@ -292,6 +292,68 @@
         "type": "uint256"
       }
     ],
+    "name": "getLastAssetEdited",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "originalAssetId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "organizationId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "adquireDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "creationDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "assetType",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "deleted",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Main.AssetEdited",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
     "name": "getAsset",
     "outputs": [
       {
@@ -303,7 +365,7 @@
           },
           {
             "internalType": "uint256",
-            "name": "organziationId",
+            "name": "organizationId",
             "type": "uint256"
           },
           {
@@ -407,7 +469,7 @@
           },
           {
             "internalType": "uint256",
-            "name": "organziationId",
+            "name": "organizationId",
             "type": "uint256"
           },
           {
@@ -438,13 +500,18 @@
       {
         "components": [
           {
+            "internalType": "uint256",
+            "name": "originalAssetId",
+            "type": "uint256"
+          },
+          {
             "internalType": "string",
             "name": "name",
             "type": "string"
           },
           {
             "internalType": "uint256",
-            "name": "organziationId",
+            "name": "organizationId",
             "type": "uint256"
           },
           {
@@ -529,11 +596,11 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "orgId",
+        "name": "assetId",
         "type": "uint256"
       }
     ],
-    "name": "getAssetsDeleted",
+    "name": "getRecordList",
     "outputs": [
       {
         "components": [
@@ -544,7 +611,173 @@
           },
           {
             "internalType": "uint256",
-            "name": "organziationId",
+            "name": "organizationId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "adquireDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "creationDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "assetType",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Main.Asset",
+        "name": "",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "originalAssetId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "organizationId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "adquireDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "creationDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "assetType",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "deleted",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Main.AssetEdited[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAssetEdited",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "originalAssetId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "organizationId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "adquireDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "creationDate",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "assetType",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "deleted",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Main.AssetEdited",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "orgId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAssetsDeleted",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "originalAssetId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "organizationId",
             "type": "uint256"
           },
           {
@@ -616,6 +849,66 @@
         "internalType": "bool",
         "name": "result",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "orgId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getOrgNumEdited",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "numEdited",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "orgId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getOrgNumDeleted",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "numDeleted",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "assetId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getEdDeList",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "listEdited",
+        "type": "uint256[]"
       }
     ],
     "stateMutability": "view",

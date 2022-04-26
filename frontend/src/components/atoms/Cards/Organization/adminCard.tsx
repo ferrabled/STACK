@@ -1,8 +1,8 @@
 import { Card, Typography } from "@mui/material";
 import React from "react";
+import { Admin } from "types";
 
-
-const AdministratorCard = (props: any) => {
+const AdministratorCard = (props: Admin) => {
     const admin = props;
 
     return (
@@ -11,19 +11,19 @@ const AdministratorCard = (props: any) => {
                     <Typography variant="h6">Datos del Administrador</Typography>
                         <div className="flex flex-row justify-between content-evenly"> 
                             <Typography variant="h6">Nombre</Typography>
-                            <div>{}</div>
+                            <div>{admin.name}</div>
                         </div> 
                         <div className="flex flex-row justify-between content-evenly"> 
                             <Typography variant="h6">Apellido</Typography>
-                            <div>{}</div>
+                            <div>{admin.lastName}</div>
                         </div>
                         <div className="flex flex-row justify-between content-evenly"> 
                             <Typography variant="h6">Correo electrónico</Typography>
-                            <div>{}</div>
+                            <div>{admin.email}</div>
                         </div>
                         <div className="flex flex-row justify-between content-evenly"> 
                             <Typography variant="h6">Teléfono   </Typography>
-                            <div>{}</div>
+                            <div>{admin.telephone}</div>
                         </div>
                     </div>                
             </Card>
