@@ -165,5 +165,9 @@ export async function CallGetRecordList(props: number){
     return contract.getRecordList(props);
 }
 
+//Org id and get all assets deleted
+export async function CallGetAssetsDeleted(props: number){
+    return contract.getAssetsDeleted(props);
+}
 
 

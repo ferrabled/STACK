@@ -1,12 +1,14 @@
-import { Card, Typography } from "@mui/material";
+import { Button, Card, Typography } from "@mui/material";
 import Page from "pages/page";
 import React, { useEffect, useState } from "react";
 import { CallGetAdminData, CallGetOrganizationData } from "components/wallet/contractCall"; 
 import { OrganizationCard, AdministratorCard } from "components/atoms/Cards/Organization";
 import { Loader } from "components/atoms";
 import { Admin, Organization } from "types";
+import { useNavigate } from "react-router-dom";
 
 const MyOrganizationPage = () => {
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [org, setOrg] = useState<Organization>();
     const [admin, setAdmin] = useState<Admin>();
@@ -50,6 +52,8 @@ const MyOrganizationPage = () => {
             
             {!isLoading && (<AdministratorCard {...admin!} />)}
             {isLoading && (<Card className="mb-5"><Loader/></Card>)}
+
+            <Button variant="contained" color="primary" onClick={() => navigate("/assets/deleted")}> Activos Eliminados</Button>
              
         </Page>     
         

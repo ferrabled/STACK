@@ -39,10 +39,12 @@ export type Admin = {
 
 export type Asset = {
   name: string;
-  assetType: string;
+  //TODO ORG ID CHECK EVERYWHERE
+  orgId: number;
+  assetType: number;
   creationDate: number;
   adquireDate: number;
-  index: number;
+  index?: number;
 };
 
 export type AssetEdited = {
