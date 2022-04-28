@@ -155,6 +155,8 @@ contract Main {
     //CREAR UN MAPPING DE ORGANIZACIÓN (ID) A LISTA DE ASSETS (ID)?
     mapping(uint256 => uint256[]) private assetsFromOrg;
 
+    
+
     //ASSET EDITED INTRODUCES A BOOL DELETED
     struct AssetEdited {
         uint256 originalAssetId;
