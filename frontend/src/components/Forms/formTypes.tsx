@@ -31,16 +31,16 @@ const validationSchemaHard = Yup.object({
 
 const validationSchemaDoc = Yup.object({
     //doc
-    description: Yup.string().required("La descripción es obligatoria").max(20),
+    name: Yup.string().required("La descripción es obligatoria").max(20),
     location: Yup.string().required("La ubicación es obligatoria").max(20),
-    doctype: Yup.number(),
+    //doctype: Yup.number(),
 });
 
 
 const validationSchemaData = Yup.object({
     //data
-    description: Yup.string().required("La descripción es obligatoria").max(20),
-    local: Yup.boolean(),
+    location: Yup.string().required("La descripción es obligatoria").max(20),
+    //local: Yup.boolean(),
 });
 
 const validationSchemaNetwork = Yup.object({
@@ -54,15 +54,25 @@ const validationSchemaOther = Yup.object({
     description: Yup.string().required("La descripción es obligatoria").max(20),
 })
 
+export const SubmitAsset = (props:any) => {
+  return(
+    <Button fullWidth
+    type="submit"
+    variant="contained"
+    color="primary"
+    form="form1"
+    > Guardar</Button>
+  )
+}
 
 export const SoftwareForm = () => {
   return (
-    <div className="flex flex-col m-6">
+    <div>
       <Formik
         initialValues={{
           version: "",
           provider: "",
-          type: 0,
+          type: "",
         }}
         validationSchema={validationSchemaSoft}
         onSubmit={(data, { setSubmitting }) => {
@@ -72,8 +82,8 @@ export const SoftwareForm = () => {
             console.log(data);
         }}
       >
-        {({ values, isSubmitting, errors, handleChange, handleSubmit }) => (
-          <Form>
+        {({ values, isSubmitting, errors, handleChange }) => (
+          <Form id="form1">
             <div className="mb-6">
               <Typography variant="h5">Características del Software</Typography>
             </div>
@@ -90,7 +100,7 @@ export const SoftwareForm = () => {
                 as={TextField}
               />
             </div>
-            <div className="mb-6">
+            <div className="mb-4">
               <Field
                 name="provider"
                 value={values.provider}
@@ -103,20 +113,18 @@ export const SoftwareForm = () => {
                 as={TextField}
               />
             </div>
-            <div className="mb-6">
-              <div className="lg:w-1/2 min-w-1/2">
+            <div className="mb-9">
+              <div className="">
                 <InputLabel id="test-select-label">Tipo de Software</InputLabel>
                 <Field
-                  name="assetType"
-                  style={{ width: "200px" }}
-                  className="px-2 my-2"
+                  name="sType"
+                  label=""
+                  className="px-2 my-2 w-1/2"
                   variant="outlined"
-                  onChange={handleChange}
-                  select
+                  onChange={handleChange("type")}
                   required
-                  error={Boolean(errors.type)}
+                  //error={Boolean(errors.type)}
                   value={values.type}
-                  fullWidth
                   as={Select}
                 >
                   <MenuItem value={0}>Sistema Operativo</MenuItem>
@@ -128,29 +136,12 @@ export const SoftwareForm = () => {
                 </Field>
               </div>
             </div>
-            <Button fullWidth
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleSubmit()}> Finalizar </Button>
           </Form>
         )}
       </Formik>
     </div>
   );
 };
-
-
-export const SubmitAsset = (props:any) => {
-  return(
-    <Button fullWidth
-    type="submit"
-    variant="contained"
-    color="primary"
-    form="form1"
-    > Guardar</Button>
-  )
-}
 
 export const HardwareForm = () => {
   return (
@@ -161,9 +152,8 @@ export const HardwareForm = () => {
           model: "model",
           provider: "2",
           serialNumber: "12",
-          type: "0",
+          type: "",
         }}
-        
         validationSchema={validationSchemaHard}
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
@@ -222,7 +212,7 @@ export const HardwareForm = () => {
                   name="hardwareType"
                   className="px-2 my-2 w-1/2"
                   variant="outlined"
-                  onChange={handleChange}
+                  onChange={handleChange('type')}
                   required
                   /* error={Boolean(errors.assetType)}  */
                   value={values.type}
@@ -248,22 +238,22 @@ export const HardwareForm = () => {
 
 export const DocumentForm = () => {
     return (
-      <div className="flex flex-col m-6">
+      <div>
         <Formik
           initialValues={{
             name: "",
             location: "",
-            doctype: undefined
+            doctype: ""
           }}
           validationSchema={validationSchemaDoc}
           onSubmit={(data, { setSubmitting }) => {
-            setSubmitting(true);
             console.log(data);
             //make async call
+            setSubmitting(true);
           }}
         >
           {({ values, isSubmitting, errors, handleChange }) => (
-            <Form>
+            <Form id="form1">
               <div className="mb-6">
                 <Typography variant="h5">Características del Documento</Typography>
               </div>
@@ -280,33 +270,30 @@ export const DocumentForm = () => {
                   as={TextField}
                 />
               </div> 
-              <div className="mb-6">
+              <div className="mb-4">
                 <Field
                   name="location"
-                  value={values.name}
+                  value={values.location}
                   label="Ubicación"
                   inputProps={{ maxLength: 255 }}
                   fullWidth
                   required
-                  error={Boolean(errors.name)}
-                  helperText={errors.name ? errors.name : " "}
+                  error={Boolean(errors.location)}
+                  helperText={errors.location ? errors.location : " "}
                   as={TextField}
                 />
               </div>
-              <div className="mb-6">
-              <div className="lg:w-1/2 min-w-1/2">
+              <div className="mb-9">
+              <div className="">
                 <InputLabel id="test-select-label">Tipo de Documento</InputLabel>
                 <Field
                   name="docType"
-                  style={{ width: "200px" }}
-                  className="px-2 my-2"
+                  className="px-2 my-2 w-1/2"
                   variant="outlined"
-                  onChange={handleChange}
-                  select
+                  onChange={handleChange('doctype')}
                   required
-                  /* error={Boolean(errors.assetType)}  */
+                  error={Boolean(errors.doctype)} 
                   value={values.doctype}
-                  fullWidth
                   as={Select}
                 >
                   <MenuItem value={0}>Contrato</MenuItem>
@@ -320,11 +307,11 @@ export const DocumentForm = () => {
         </Formik>
       </div>
     );
-  };
+};
 
 export const DataForm = () => {
   return (
-    <div className="flex flex-col m-6">
+    <div>
       <Formik
         initialValues={{
           location: "",
@@ -338,11 +325,11 @@ export const DataForm = () => {
         }}
       >
         {({ values, isSubmitting, errors, handleChange }) => (
-          <Form>
+          <Form id="form1">
             <div className="mb-6">
               <Typography variant="h5">Características de los Datos</Typography>
             </div>
-            <div className="mb-6">
+            <div className="mb-4">
               <Field
                 name="location"
                 value={values.location}
@@ -355,6 +342,7 @@ export const DataForm = () => {
                 as={TextField}
               />
             </div>
+            <div className="mb-6">
             <Field 
                 as={FormControlLabel}
                 name="local"
@@ -362,7 +350,7 @@ export const DataForm = () => {
                 control={<Checkbox />}
                 label="Local"
                 onChange={handleChange}
-                 />
+                 /></div>
 
           </Form>
         )}
@@ -373,7 +361,7 @@ export const DataForm = () => {
 
 export const NetworkForm = () => {
     return (
-      <div className="flex flex-col m-6">
+      <div>
         <Formik
           initialValues={{
             url: "",
@@ -387,7 +375,7 @@ export const NetworkForm = () => {
           }}
         >
           {({ values, isSubmitting, errors, handleChange }) => (
-            <Form>
+            <Form id="form1">
               <div className="mb-6">
                 <Typography variant="h5">Características de la Nube</Typography>
               </div>
@@ -426,7 +414,7 @@ export const NetworkForm = () => {
 
 export const OtherForm = () => {
     return (
-      <div className="flex flex-col m-6">
+      <div>
         <Formik
           initialValues={{
             description: "",
@@ -439,7 +427,7 @@ export const OtherForm = () => {
           }}
         >
           {({ values, isSubmitting, errors, handleChange }) => (
-            <Form>
+            <Form id="form1">
               <div className="mb-6">
                 <Typography variant="h5">Características</Typography>
               </div>

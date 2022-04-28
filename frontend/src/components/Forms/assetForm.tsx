@@ -55,7 +55,7 @@ const AssetForm = () => {
           adquireDateString: "1999-10-11",
           adquireDate: 10,
           creationDate: 100,
-          assetType: "1",
+          assetType: "2",
           department:"0",
 
         }}
@@ -159,7 +159,7 @@ const AssetForm = () => {
                     </Field>
                   </div>
                 </div>
-                <div className="mb-5">
+                <div className="mb-9">
                   <div className="">
                     <InputLabel id="test-select-label">
                       Tipo de activo
