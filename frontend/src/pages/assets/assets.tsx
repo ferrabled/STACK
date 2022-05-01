@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { ethers } from "ethers";
 import { CircularProgress, containerClasses, Typography } from "@mui/material";
 import { CallGetOrganizationAssets } from "components/wallet/contractCall";
-import { AssetsInList } from "types"
+import { AssetsInList, AssetTypes } from "types"
 import PageLoged from "pages/pageCheckLogin";
 
 declare var window: Window & { ethereum: any };
@@ -34,6 +34,7 @@ const AssetsPage = () => {
           const asset: AssetsInList = {
             name: response[0][i].name,
             assetType: response[0][i].assetType,
+            assetTS: AssetTypes[response[0][i].assetType],
             creationDate: Number(response[0][i].creationDate),
             adquireDate: Number(response[0][i].adquireDate),
             originalId: Number(response[0][i].index),
@@ -54,10 +55,11 @@ const AssetsPage = () => {
           const asset: AssetsInList = {
             name: response[1][o].name,
             assetType: response[1][o].assetType,
+            assetTS: AssetTypes[response[1][o].assetType],
             creationDate: Number(response[1][o].creationDate),
             adquireDate: Number(response[1][o].adquireDate),
             originalId: Number(response[1][o].originalAssetId),
-            index: Number(response[1][o].index)
+            index: Number(response[1][o].index),
           }
           if(asset.creationDate === 0  && asset.adquireDate === 0) continue;
           else {

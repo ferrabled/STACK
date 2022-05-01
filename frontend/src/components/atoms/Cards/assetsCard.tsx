@@ -145,7 +145,7 @@ const AssetsCard = (props:any) => {
       },
     },
     {
-      field: "assetType",
+      field: "assetTS",
       headerName: "Tipo",
       type: "string",
       width: 90,

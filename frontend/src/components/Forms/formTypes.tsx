@@ -8,7 +8,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { CallInsertNewCloudAsset, CallInsertNewDataAsset, CallInsertNewDocAsset, CallInsertNewHardAsset, CallInsertNewNetworkAsset, CallInsertNewOtherAsset, CallInsertNewSoftAsset } from "components/wallet/contractCall";
+import { CallGetSoftwareAsset, CallInsertSoftware } from "components/wallet/dataStructsCall";
 import { Field, Form, Formik } from "formik";
+import { Asset } from "types";
 import * as Yup from "yup";
 
 
@@ -31,7 +34,7 @@ const validationSchemaHard = Yup.object({
 
 const validationSchemaDoc = Yup.object({
     //doc
-    name: Yup.string().required("La descripción es obligatoria").max(20),
+    name: Yup.string().required("La descripción es obligatoria").max(70),
     location: Yup.string().required("La ubicación es obligatoria").max(20),
     //doctype: Yup.number(),
 });
@@ -44,6 +47,10 @@ const validationSchemaData = Yup.object({
 });
 
 const validationSchemaNetwork = Yup.object({
+  cidrblock: Yup.string().required("El bloque CIDR es obligatorio").max(70),
+});
+
+const validationSchemaCloud = Yup.object({
     //network
     url: Yup.string().matches(urlReg, "Introduce una url válida").required("La url es obligatoria").max(100),
     domain: Yup.string().required("El dominio es obligatorio").max(20),
@@ -65,18 +72,19 @@ export const SubmitAsset = (props:any) => {
   )
 }
 
-export const SoftwareForm = () => {
+export const SoftwareForm = (asset:Asset) => {
   return (
     <div>
       <Formik
         initialValues={{
           version: "",
           provider: "",
-          type: "",
+          stype: "",
         }}
         validationSchema={validationSchemaSoft}
         onSubmit={(data, { setSubmitting }) => {
             console.log("GHIOALLA");
+            CallInsertNewSoftAsset(asset, data);
             setSubmitting(true);
             //setSubmitting(true);
             console.log(data);
@@ -121,10 +129,10 @@ export const SoftwareForm = () => {
                   label=""
                   className="px-2 my-2 w-1/2"
                   variant="outlined"
-                  onChange={handleChange("type")}
+                  onChange={handleChange("stype")}
                   required
-                  //error={Boolean(errors.type)}
-                  value={values.type}
+                  //error={Boolean(errors.stype)}
+                  value={values.stype}
                   as={Select}
                 >
                   <MenuItem value={0}>Sistema Operativo</MenuItem>
@@ -143,7 +151,7 @@ export const SoftwareForm = () => {
   );
 };
 
-export const HardwareForm = () => {
+export const HardwareForm = (asset:Asset) => {
   return (
     <div>
       <Formik
@@ -152,13 +160,14 @@ export const HardwareForm = () => {
           model: "model",
           provider: "2",
           serialNumber: "12",
-          type: "",
+          htype: "",
         }}
         validationSchema={validationSchemaHard}
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
+          console.log(asset);
           console.log(data);
-          //make async call
+          CallInsertNewHardAsset(asset, data);
         }}
       >
         {({ values, isSubmitting, errors, handleChange }) => (
@@ -212,10 +221,10 @@ export const HardwareForm = () => {
                   name="hardwareType"
                   className="px-2 my-2 w-1/2"
                   variant="outlined"
-                  onChange={handleChange('type')}
+                  onChange={handleChange('htype')}
                   required
                   /* error={Boolean(errors.assetType)}  */
-                  value={values.type}
+                  value={values.htype}
                   as={Select}
                 >
                   <MenuItem value={0}>Ordenador</MenuItem>
@@ -236,7 +245,7 @@ export const HardwareForm = () => {
   );
 };
 
-export const DocumentForm = () => {
+export const DocumentForm = (asset:Asset) => {
     return (
       <div>
         <Formik
@@ -250,6 +259,7 @@ export const DocumentForm = () => {
             console.log(data);
             //make async call
             setSubmitting(true);
+            CallInsertNewDocAsset(asset, data);
           }}
         >
           {({ values, isSubmitting, errors, handleChange }) => (
@@ -265,8 +275,8 @@ export const DocumentForm = () => {
                   inputProps={{ maxLength: 255 }}
                   fullWidth
                   required
-                  error={Boolean(errors.location)}
-                  helperText={errors.location ? errors.location : " "}
+                  error={Boolean(errors.name)}
+                  helperText={errors.name ? errors.name : " "}
                   as={TextField}
                 />
               </div> 
@@ -309,7 +319,7 @@ export const DocumentForm = () => {
     );
 };
 
-export const DataForm = () => {
+export const DataForm = (asset:Asset) => {
   return (
     <div>
       <Formik
@@ -321,7 +331,7 @@ export const DataForm = () => {
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
           console.log(data);
-          //make async call
+          CallInsertNewDataAsset(asset, data);
         }}
       >
         {({ values, isSubmitting, errors, handleChange }) => (
@@ -359,7 +369,58 @@ export const DataForm = () => {
   );
 };
 
-export const NetworkForm = () => {
+export const NetworkForm = (asset:Asset) => {
+    return (
+      <div>
+        <Formik
+         initialValues={{
+          cidrblock: "",
+          nat: false,
+        }}
+          validationSchema={validationSchemaNetwork}
+          onSubmit={(data, { setSubmitting }) => {
+            //TODO SETS SUBMITTINGS
+            //setSubmitting(true);
+            console.log(data);
+            CallInsertNewNetworkAsset(asset, data);
+          }}
+        >
+          {({ values, isSubmitting, errors, handleChange }) => (
+            <Form id="form1">
+              <div className="mb-6">
+                <Typography variant="h5">Características de la Red</Typography>
+              </div>
+              <div className="mb-6">
+                <Field
+                  name="cidrblock"
+                  value={values.cidrblock}
+                  label="Bloque CIDR"
+                  inputProps={{ maxLength: 255 }}
+                  fullWidth
+                  required
+                  error={Boolean(errors.cidrblock)}
+                  helperText={errors.cidrblock ? errors.cidrblock : " "}
+                  as={TextField}
+                />
+              </div> 
+              <div className="mb-6">
+              <Field 
+                as={FormControlLabel}
+                name="nat"
+                value={values.nat}
+                control={<Checkbox />}
+                label="Nat"
+                onChange={handleChange}
+                 />
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    );
+  };
+
+export const CloudForm = (asset:Asset) => {
     return (
       <div>
         <Formik
@@ -367,11 +428,10 @@ export const NetworkForm = () => {
             url: "",
             domain: "",
           }}
-          validationSchema={validationSchemaNetwork}
+          validationSchema={validationSchemaCloud}
           onSubmit={(data, { setSubmitting }) => {
-            setSubmitting(true);
             console.log(data);
-            //make async call
+            CallInsertNewCloudAsset(asset, data).then(()=> setSubmitting(true));   
           }}
         >
           {({ values, isSubmitting, errors, handleChange }) => (
@@ -412,7 +472,7 @@ export const NetworkForm = () => {
     );
   };
 
-export const OtherForm = () => {
+export const OtherForm = (asset:Asset) => {
     return (
       <div>
         <Formik
@@ -424,6 +484,7 @@ export const OtherForm = () => {
             setSubmitting(true);
             console.log(data);
             //make async call
+            CallInsertNewOtherAsset(asset, data);
           }}
         >
           {({ values, isSubmitting, errors, handleChange }) => (

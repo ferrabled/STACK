@@ -1,7 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.10;
+import "./DataStruct.sol";
 
 contract Main {
+    address public dataStructsAdd;
+
+    constructor (address _dataSAdd){
+        dataStructsAdd = _dataSAdd;
+    }
+
     //EVENTS
     event NewOrganization(address user, string name);
     event LogNewUser(
@@ -137,9 +144,8 @@ contract Main {
         uint256 organizationId;
         uint256 adquireDate;
         uint256 creationDate;
-        string assetType;
+        uint8 assetType;
         uint256 index;
-        //mapping(uint => uint[]) mapeo;
     }
 
     struct datasoft {
@@ -164,7 +170,7 @@ contract Main {
         uint256 organizationId;
         uint256 adquireDate;
         uint256 creationDate;
-        string assetType;
+        uint8 assetType;
         bool deleted;
         uint256 index;
 
@@ -181,7 +187,7 @@ contract Main {
         uint256 organizationId,
         uint256 adquireDate,
         uint256 creationDate,
-        string memory assetType
+        uint8 assetType
     ) public {
         assetsList.push(
             (
@@ -200,6 +206,112 @@ contract Main {
         assetBoolEditedAndDeleted[assetsList.length - 1].push(false);
         assetBoolEditedAndDeleted[assetsList.length - 1].push(false);
         originalAssetsToEditedList[assetsList.length - 1];
+    }
+
+    //CREATE A FUNCTION FOR EACH INSERTED ASSET TYPE
+    function insertNewSoftAsset(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        string memory version, 
+        string memory provider, 
+        uint8 stype) public {
+            
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        uint assetId = assetsList.length - 1; 
+        DataStructs DS = DataStructs(dataStructsAdd);
+        DS.insertSoftware(version, provider, stype, assetId);
+    }
+
+    function insertNewHardAsset(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        string memory model, 
+        string memory provider, 
+        string memory serialNumber, 
+        uint8 htype) public {
+        
+        uint assetId = assetsList.length; 
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        
+        DataStructs DS = DataStructs(dataStructsAdd);
+        DS.insertHardware(model, provider, serialNumber, htype, assetId);
+    }
+
+    function insertNewDocAsset(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        string memory description,
+        string memory location,
+        uint8 doctype) public {
+        
+        uint assetId = assetsList.length; 
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        
+        DataStructs DS = DataStructs(dataStructsAdd);
+        DS.insertDocument(description, location, doctype, assetId);
+    }
+
+    function insertNewDataAsset(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        string memory location, 
+        bool local) public {
+        
+        uint assetId = assetsList.length; 
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        
+        DataStructs DS = DataStructs(dataStructsAdd);
+        DS.insertData(location, local, assetId);
+    }
+
+    function insertNewNetworkAsset(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        string memory cidrblock, 
+        bool nat) public {
+        
+        uint assetId = assetsList.length; 
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        
+        DataStructs DS = DataStructs(dataStructsAdd);
+        DS.insertNetwork(cidrblock, nat, assetId);
+    }
+
+    function insertNewCloudAsset(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        string memory url, 
+        string memory domain) public {
+        
+        uint assetId = assetsList.length; 
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        DataStructs DS = DataStructs(dataStructsAdd);
+        DS.insertCloud(url, domain, assetId);
+    }
+
+    function insertNewOtherAsset(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        string memory description) public {
+        
+        uint assetId = assetsList.length; 
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        DataStructs DS = DataStructs(dataStructsAdd);
+        DS.insertOther(description, assetId);
     }
 
     function getLastAssetEdited(uint256 id) public view returns (AssetEdited memory) {
@@ -273,7 +385,7 @@ contract Main {
         uint256 adquireDate,
         uint256 creationDate,
         bool deleted,
-        string memory assetType
+        uint8 assetType
     ) public {
         //CHECK IF THE ASSET IS ALREADY IN ASSETS EDITED LIST
         

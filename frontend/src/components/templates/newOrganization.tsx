@@ -4,7 +4,7 @@ import { AdminFormValues, OrganizationFormValues } from "types";
 /* import utils from "utils";
  */
 import { Error } from "components/atoms";
-import { OrganizationForm, OrganizationForm2, OrganizationForm3 } from "components/organisms";
+import { OrganizationForm } from "components/organisms";
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import { Card } from "@mui/material";
@@ -44,16 +44,7 @@ const NewOrganization = () => {
     <div >
       <Card className="my-3">
         <OrganizationForm/>
-      </Card>
-      {/* <Card>
-      <OrganizationForm2 onSubmit={handleSubmit2} />
-      {error && <Error error={error} />}
-      </Card>
-      <Card className="my-3">
-        <OrganizationForm3></OrganizationForm3>
-      </Card> */}
-      {/* <ButtonSOrganization></ButtonSOrganization> */}
-      
+      </Card>      
     </div>
   );
 };

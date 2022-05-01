@@ -1,16 +1,19 @@
-import React from "react";
 import { ethers } from "ethers";
+import { useEffect, useState } from "react";
+import { Asset } from "types";
+import addresses from "../../assets/addresses.json";
+
 
 declare var window: any;
 const mainABI = require("./mainABI.json");
-const contractAddress = "0x24c3537138f821A5b65D7FF0EeD028725d4232C1";
+
+const contractAddress = addresses.Main;
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const contract = new ethers.Contract(
-        contractAddress,
-        mainABI,
-        provider.getSigner());
-
-
+            contractAddress,
+            mainABI,
+            provider.getSigner());
+        
 export async function CallInsertOrg(props: any) {
     const signer = provider.getSigner();
     let signerAddress = await signer.getAddress();
@@ -37,7 +40,41 @@ export async function CallGetAdminToOrg(props: number) {
     return orgId;
 }
 
+export async function CallInsertNewSoftAsset(asset:Asset, props: any){
+    contract.insertNewSoftAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+        asset.assetType, props.version, props.provider, props.stype); 
+}
 
+export async function CallInsertNewHardAsset(asset:Asset, props: any){
+    contract.insertNewHardAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+        asset.assetType, props.model, props.provider, props.serialNumber, props.htype); 
+}
+
+export async function CallInsertNewDocAsset(asset:Asset, props: any){
+    console.log("Insertar doc")
+    contract.insertNewDocAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+        asset.assetType, props.name, props.location, props.doctype); 
+}
+
+export async function CallInsertNewDataAsset(asset:Asset, props: any){
+    contract.insertNewDataAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+        asset.assetType, props.location, props.local); 
+}
+
+export async function CallInsertNewNetworkAsset(asset:Asset, props: any){
+    contract.insertNewDataAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+        asset.assetType, props.cidrblock, props.nat); 
+}
+
+export async function CallInsertNewCloudAsset(asset:Asset, props: any){
+    contract.insertNewDataAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+        asset.assetType, props.url, props.domain); 
+}
+
+export async function CallInsertNewOtherAsset(asset:Asset, props: any){
+    contract.insertNewOtherAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+        asset.assetType, props.description); 
+}
 
 
 export async function CallInsertAsset(props: any) {

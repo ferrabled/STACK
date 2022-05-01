@@ -59,11 +59,28 @@ export type AssetsInList = {
   name: string;
   adquireDate?: Number;
   creationDate?: Number;
-  assetType?: string;
+  assetType: string;
+  assetTS?:String;
   originalId:number;
   //Id shown in the list
   id?:number;
   //Index from list 
   //on the blockchain
   index:number;
+}
+
+export const AssetTypes = ["Software", "Hardware", "Documento", "Datos", "Red", "Nube", "No determinado"];
+export const SoftwareTypes = ["Sistema Operativo", "Firmware", "Antivirus", "Aplicación Móvil", "Código", "No determinado"];
+export const HardwareTypes = ["Ordenador", "Smartphone", "Periférico", "Servidor", "Sensor", "Actuador", "Equipo de Red", "No determinado"];
+export const DocTypes = ["Contrato", "Factura", "No determinado"];
+
+
+export type Users = {
+  addr: Number;
+  name: String;
+  surname: String;
+  email: String; 
+  telephone: Number;
+  orgId: Number;
+  index?: Number;
 }

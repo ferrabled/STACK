@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { SoftwareForm, HardwareForm, DocumentForm, DataForm, NetworkForm, OtherForm, SubmitAsset } from "./formTypes";
+import { SoftwareForm, HardwareForm, DocumentForm, DataForm, NetworkForm, OtherForm, SubmitAsset, CloudForm } from "./formTypes";
 
 import DateAdapter from "@mui/lab/AdapterDayjs";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
@@ -51,11 +51,11 @@ const AssetForm = () => {
         initialValues={{
           //TODO change initial values
           name: "Nombre",
-          organizationId: 0,
+          organizationId: Number(window.localStorage.getItem('orgId')!),
           adquireDateString: "1999-10-11",
           adquireDate: 10,
           creationDate: 100,
-          assetType: "2",
+          assetType: "1",
           department:"0",
 
         }}
@@ -87,7 +87,7 @@ const AssetForm = () => {
           //data.creationDate = dateObject;
           //var dateAgain = dateObject.toISOString().split('T')[0];
           //console.log(dateAgain);
-          setSubmitting(true);
+          
           console.log(data);
           console.log("Enviar");
           const asset: Asset = {
@@ -99,7 +99,7 @@ const AssetForm = () => {
           }
           setAsset(asset)
           setFormIndex(formIndex + 1);
-          //ConnectToContract(data);
+          setSubmitting(true);
         }}
       >
         {({ values, isSubmitting, errors, handleChange }) => (
@@ -178,8 +178,9 @@ const AssetForm = () => {
                       <MenuItem value={1}>Hardware</MenuItem>
                       <MenuItem value={2}>Documento</MenuItem>
                       <MenuItem value={3}>Datos</MenuItem>
-                      <MenuItem value={4}>Nube</MenuItem>
-                      <MenuItem value={5}>No determinado</MenuItem>
+                      <MenuItem value={4}>Red</MenuItem>
+                      <MenuItem value={5}>Nube</MenuItem>
+                      <MenuItem value={6}>No determinado</MenuItem>
                     </Field>
                   </div>
                 </div>
@@ -204,12 +205,13 @@ const AssetForm = () => {
       )}
       {formIndex === 1 && (
               <>
-              {asset!.assetType === 0 && (<SoftwareForm/>)}
-              {asset!.assetType === 1 && (<HardwareForm/>)}
-              {asset!.assetType === 2 && (<DocumentForm/>)}
-              {asset!.assetType === 3 && (<DataForm/>)}
-              {asset!.assetType === 4 && (<NetworkForm/>)}
-              {asset!.assetType === 5 && (<OtherForm/>)}
+              {asset!.assetType === 0 && (<SoftwareForm {...asset!} />)}
+              {asset!.assetType === 1 && (<HardwareForm {...asset!} />)}
+              {asset!.assetType === 2 && (<DocumentForm {...asset!} />)}
+              {asset!.assetType === 3 && (<DataForm {...asset!} />)}
+              {asset!.assetType === 4 && (<NetworkForm {...asset!} />)}
+              {asset!.assetType === 5 && (<CloudForm {...asset!} />)}
+              {asset!.assetType === 6 && (<OtherForm {...asset!} />)}
               <div className="lg:mx-56 xl:mx-64 2xl:mx-80 2xl:gap-40 flex flex-row gap-24 items-center justify-center">
                 <Button
                   fullWidth
