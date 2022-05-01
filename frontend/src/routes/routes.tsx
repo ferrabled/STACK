@@ -11,7 +11,7 @@ import {
   HomePage,
   LandingPage, LogInPage, NewOrganizationPage,
   MyOrganizationPage,
-  AssetsPage, NewAssetPage, AssetDetailPage
+  AssetsPage, NewAssetPage, AssetDetailPage, RegisterPage
 } from "pages";
 
 import { AssetHistoryPage, AssetsDeletedPage, EditAssetPage } from "pages/assets";
@@ -30,6 +30,7 @@ const AppRoutes = () => {
             <Route path="/landing" element={<LandingPage />} />
             <Route path="/login" element={<LogInPage />} />
             <Route path="/organization/new" element={<NewOrganizationPage />} />
+            <Route path="/organization/:id/register" element={<RegisterPage />} />
             <Route path="/organization" element={<MyOrganizationPage/>} />
             <Route path="/home" element={<HomePage></HomePage>} /> 
             <Route path="*" element={<Navigate to="/home" />} />

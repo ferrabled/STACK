@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.7.0 <0.9.10;
-import './Main.sol';
 
 
 contract Users {
@@ -35,12 +34,6 @@ contract Users {
 
 
     function getAllUsersFromOrg(uint orgId) public view returns(User[] memory){
-        //Comprobar el id de cada usuario y 
-        //cuando sea el buscado añadirlo a la lista para devolver?
-        
-        //Hay que tener algún contador que indique los usuarios de una organización
-        //ya que tenemos que crear de primeras el array de users
-
         uint[] memory idList = orgIdToUserList[orgId];
         uint cont = idList.length;
         User[] memory usersFromOrg = new User[](cont);
@@ -57,6 +50,17 @@ contract Users {
         return userList[userId];
     }
 
+    //RELATION BETWEEN ASSET AND USER
+
+    mapping(uint => uint[]) public userIdToAssetList;
+    mapping(uint => uint[]) public assetToListOfUsers;
+
+
+    //TODO INSERT VARIOUS USERS AT THE SAME TIME
+    function insertUserToAsset(uint assetId, uint userId) public {
+        userIdToAssetList[userId].push(assetId);
+        assetToListOfUsers[assetId].push(userId);
+    }
 
 
 }
