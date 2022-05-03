@@ -106,7 +106,7 @@ contract DataStructs {
 
     function insertCloud(string memory url, string memory domain, uint assetId) public {
         cloudList.push(Cloud(url, domain));
-        assetNetwork[assetId] = (cloudList.length-1);
+        assetCloud[assetId] = (cloudList.length-1);
     }
 
     function insertOther(string memory description, uint assetId) public {

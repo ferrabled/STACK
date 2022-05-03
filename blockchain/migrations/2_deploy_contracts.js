@@ -9,8 +9,8 @@ module.exports = function(deployer) {
     deployer.deploy(DataStructs).then(() => DataStructs.deployed())
     .then(DataStructs => 
         deployer.deploy(Main, DataStructs.address))
-        .then(() => 
-            deployer.deploy(OrgUsers))
+        .then((Main) => 
+            deployer.deploy(OrgUsers, Main.address))
             .then(()=> {
                 let addresses = {
                     Main: Main.address,

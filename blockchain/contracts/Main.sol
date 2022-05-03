@@ -38,18 +38,18 @@ contract Main {
 
     //DATA
     Organization[] private organizations;
-    uint256 orgCount;
+    uint256 public orgCount;
 
     Admin[] private admins;
     uint256 adminsCount;
 
     //List of users with a org created (administrators)
-    address[] private administrators;
+    address[] public administrators;
 
     mapping(address => uint256) public addressToOrganizationIndex;
 
     //FUNCTIONS
-
+    //TODO CHECK IS ADMINISTRATOR IF WORKING PROPERLY
     //data created with organization
     function insertOrgAndAdmin(
         address admin,
@@ -201,7 +201,6 @@ contract Main {
                 )
             )
         );
-        //adminsCount++;
         assetsFromOrg[organizationId].push(assetsList.length - 1);
         assetBoolEditedAndDeleted[assetsList.length - 1].push(false);
         assetBoolEditedAndDeleted[assetsList.length - 1].push(false);
@@ -477,4 +476,43 @@ contract Main {
     function getEdDeList(uint assetId) public view returns (uint[] memory listEdited) {
         return originalAssetsToEditedList[assetId];
     }
+
+    function retrieveListOfAsset(uint256[] memory ids) public view returns (Asset[] memory, AssetEdited[] memory) {
+        uint cont = 0;
+        uint contOr = 0;
+        for (uint256 i = 0; i < ids.length; i++) {
+           if(assetBoolEditedAndDeleted[ids[i]][0]) {
+               if(assetBoolEditedAndDeleted[ids[i]][1]) {
+                   continue;
+                } else {
+                    cont = cont +1;
+                } 
+            } else {
+                contOr = contOr+1;
+            }
+        }
+        Asset[] memory listAssets = new Asset[](contOr);
+        AssetEdited[] memory listEdited = new AssetEdited[](cont);
+        uint32 bucleEdited = 0;
+        uint bucleOriginal = 0;
+        for (uint256 i = 0; i < ids.length; i++) {
+            if(assetBoolEditedAndDeleted[ids[i]][1]) {
+               continue;
+            } if (assetBoolEditedAndDeleted[ids[i]][0]) {
+                uint256 lastItem = originalAssetsToEditedList[ids[i]].length - 1;
+                uint256 assetEditedId = originalAssetsToEditedList[ids[i]][lastItem];
+                listEdited[bucleEdited] = assetsEditedList[assetEditedId];
+                bucleEdited++;
+                //Last case the asset hasn't been edited
+            } else {
+                uint256 assetId = ids[i];
+                listAssets[bucleOriginal] = assetsList[assetId];
+                bucleOriginal++;
+            }
+        }
+        return (listAssets, listEdited);
+    }
+    
+
+
 }
