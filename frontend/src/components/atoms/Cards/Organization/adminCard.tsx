@@ -6,7 +6,7 @@ const AdministratorCard = (props: Admin) => {
     const admin = props;
 
     return (
-        <Card id="Administrator" className="">
+        <Card id="Administrator" className="w-full">
                 <div className="flex flex-col m-5">
                     <Typography variant="h6">Datos del Administrador</Typography>
                         <div className="flex flex-row justify-between content-evenly"> 

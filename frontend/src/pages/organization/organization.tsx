@@ -1,4 +1,4 @@
-import { Button, Card, Typography } from "@mui/material";
+import { Button, Card, Skeleton, Typography } from "@mui/material";
 import Page from "pages/page";
 import React, { useEffect, useState } from "react";
 import { CallGetAdminData, CallGetOrganizationData } from "components/wallet/contractCall"; 
@@ -6,6 +6,7 @@ import { OrganizationCard, AdministratorCard } from "components/atoms/Cards/Orga
 import { Loader } from "components/atoms";
 import { Admin, Organization } from "types";
 import { useNavigate } from "react-router-dom";
+import DashboardData from "components/organisms/dashboardData";
 
 const MyOrganizationPage = () => {
     const navigate = useNavigate();
@@ -47,13 +48,22 @@ const MyOrganizationPage = () => {
     
     return (
         <Page>
-            {!isLoading && (<OrganizationCard data={org} />)}
-            {isLoading && (<Card className="mb-5"><Loader/></Card>)}
+            <div className="flex flex-col gap-6">
+            {isLoading && (
+            <div className="flex flex-row w-full justify-center gap-5">
+                <div className="w-full"><Skeleton variant="rectangular" height={200}/></div>
+                <div className="w-full"><Skeleton variant="rectangular" height={200}/></div>
+            </div>)}
+            <>
+            {!isLoading && (<div className="flex flex-row w-full items-center justify-center gap-5">
+                <OrganizationCard data={org} />
+                <AdministratorCard {...admin!} />
+                </div>)}</>
             
-            {!isLoading && (<AdministratorCard {...admin!} />)}
-            {isLoading && (<Card className="mb-5"><Loader/></Card>)}
-
-            <Button variant="contained" color="primary" onClick={() => navigate("/assets/deleted")}> Activos Eliminados</Button>
+            
+            {/* {!isLoading && (<AdministratorCard {...admin!} />)}
+            {isLoading && (<Card className="mb-5"><Loader/></Card>)} */}
+            <DashboardData></DashboardData></div>
              
         </Page>     
         

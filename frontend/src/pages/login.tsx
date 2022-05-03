@@ -29,8 +29,6 @@ const LogInCard = () => {
 };
 
 const LogInPage = () => {
-  const [showCards, setShowCards] = React.useState(false);
-
   return (
     <Page title="">
       <div className="overflow-hidden">
