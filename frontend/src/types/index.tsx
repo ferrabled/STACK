@@ -76,11 +76,18 @@ export const DocTypes = ["Contrato", "Factura", "No determinado"];
 
 
 export type Users = {
-  addr: Number;
+  addr: String;
   name: String;
   surname: String;
   email: String; 
   telephone: Number;
   orgId: Number;
   index?: Number;
+  id?: Number;
+}
+
+export type Notify = {
+  isOpen: Boolean;
+  message: String;
+  type: String;
 }

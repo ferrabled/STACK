@@ -6,7 +6,7 @@ import NewOrganizationPage from "./organization/newOrg";
 import HomePage from "./home";
 import { AssetsPage, AssetDetailPage, NewAssetPage } from "./assets";
 import { MyOrganizationPage } from "./organization";
-import { RegisterPage } from "./users";
+import { RegisterPage, UsersPage } from "./users";
 
 
 
@@ -21,5 +21,6 @@ export {
     AssetsPage,
     AssetDetailPage,
     NewAssetPage,
-    RegisterPage
+    RegisterPage,
+    UsersPage
 };

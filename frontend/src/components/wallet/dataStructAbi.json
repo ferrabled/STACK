@@ -68,6 +68,11 @@
         "type": "string"
       },
       {
+        "internalType": "string",
+        "name": "location",
+        "type": "string"
+      },
+      {
         "internalType": "uint8",
         "name": "doctype",
         "type": "uint8"
@@ -264,6 +269,11 @@
           {
             "internalType": "string",
             "name": "description",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "location",
             "type": "string"
           },
           {
@@ -470,6 +480,11 @@
       {
         "internalType": "string",
         "name": "description",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "location",
         "type": "string"
       },
       {

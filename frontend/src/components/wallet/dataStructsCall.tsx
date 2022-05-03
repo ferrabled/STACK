@@ -11,42 +11,32 @@ const contract2 = new ethers.Contract(
         provider2.getSigner());
 
 
-
-//TODO CHECK IDS
-export async function CallInsertSoftware(props: any){
-    console.log(props); 
-    contract2.insertSoftware(props.version, props.provider, 0, props.type, 1);
-}
-
-export async function CallInsertHardware(props: any){
-    console.log(props); 
-    contract2.insertSoftware(props.model, props.provider, props.serialNumber, props.type, 1);
-}
-
-export async function CallInsertDocument(props: any){
-    console.log(props); 
-    contract2.insertSoftware(props.name, props.location, props.doctype, 1);
-}
-
-export async function CallInsertData(props: any){
-    console.log(props); 
-    contract2.insertSoftware(props.location, props.local, 1);
-}
-
-export async function CallInsertNetwork(props: any){
-    console.log(props); 
-    contract2.insertSoftware(props.url, props.domain, 1);
-}
-
-export async function CallInsertOther(props: any){
-    console.log(props); 
-    contract2.insertSoftware(props.description, 1);
-}
-
-
 //TODO CHECK IDS
 export async function CallGetSoftwareAsset(props: any){
-    console.log("HOLA")
     const ret = contract2.getSoftwareAsset(props);
     return ret;
+}
+
+export async function CallGetHardwareAsset(props: any){
+    return contract2.getHardwareAsset(props);
+}
+
+export async function CallGetDocAsset(props: any){
+    return contract2.getDocAsset(props);
+}
+
+export async function CallGetDataAsset(props: any){
+    return contract2.getDataAsset(props);
+}
+
+export async function CallGetNetworkAsset(props: any){
+    return contract2.getNetworkAsset(props);
+}
+
+export async function CallGetCloudAsset(props: any){
+    return contract2.getCloudAsset(props);
+}
+
+export async function CallGetOtherAsset(props: any){
+    return contract2.getOtherAsset(props);
 }

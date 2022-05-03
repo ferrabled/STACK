@@ -1,3 +1,4 @@
 import RegisterPage from "./register";
+import UsersPage from "./userList";
 
-export {RegisterPage};
+export {RegisterPage, UsersPage};

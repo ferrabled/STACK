@@ -62,12 +62,12 @@ export async function CallInsertNewDataAsset(asset:Asset, props: any){
 }
 
 export async function CallInsertNewNetworkAsset(asset:Asset, props: any){
-    contract.insertNewDataAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+    contract.insertNewNetworkAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
         asset.assetType, props.cidrblock, props.nat); 
 }
 
 export async function CallInsertNewCloudAsset(asset:Asset, props: any){
-    contract.insertNewDataAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+    contract.insertNewCloudAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
         asset.assetType, props.url, props.domain); 
 }
 
@@ -205,6 +205,10 @@ export async function CallGetRecordList(props: number){
 //Org id and get all assets deleted
 export async function CallGetAssetsDeleted(props: number){
     return contract.getAssetsDeleted(props);
+}
+
+export async function CallRetrieveListOfAsset(props: number[]){
+    return contract.retrieveListOfAsset(props);
 }
 
 
