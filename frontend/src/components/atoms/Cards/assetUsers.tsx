@@ -1,20 +1,67 @@
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import React from "react";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Card, Button, CircularProgress, IconButton } from "@mui/material";
+import { useEffect, useState } from "react";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
-const AssetUsersTable = () => {
-    //CALL TO CONTRACT IN ORDER TO GET USERS BY ID OF ASSET
 
+const AssetUsersTable = (assetId: number) => {
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [userId, setUserId] = useState('');
+
+  //CALL TO CONTRACT IN ORDER TO GET USERS BY ID OF ASSET
+
+
+    useEffect(() => {
+      /* const userList:any[] = [];
+      console.log("objects");
+      console.log(users)
+      const cont = Object.keys(users).length;
+      console.log("len "+cont);
+      for (var i = 0; i < cont; i++) {
+          console.log(users[i]);
+          users[i].id = (i+1);
+          //console.log("AAA")
+          userList.push(users[i]);
+      }
+      console.log(Object.keys(users).length);
+      setRows(userList);
+      setIsLoading(false); */
+    }, [])
 
 
     const columns: GridColDef[] = [
-        { field: "firstName", headerName: "Nombre completo", width: 130 },
-        { field: "lastName", headerName: "Correo", width: 130 },
-        { field: "", headerName: "Teléfono", width: 130, sortable: false},
-        { field: "address", headerName: "Billetera", sortable: false, width: 160,
-          valueGetter: (params: GridValueGetterParams) =>
-            `${params.row.firstName || ""} ${params.row.lastName || ""}`,
+      { field: "id", headerName: "ID", width: 70 },
+      { field: "name", headerName: "Nombre", width: 130 },
+      { field: "surname", headerName: "Apellido", width: 130 },
+      { field: "email", headerName: "Correo", width: 130 },
+      { field: "telephone", headerName: "Teléfono", width: 130 },
+      {
+        field: "action",
+        headerName: "Activos",
+        sortable: false,
+        width: 80,
+        renderCell: (params) => {
+          const onClickDetails = (e:any) => {
+            e.stopPropagation(); // don't select this row after clicking
+            console.log("HOLA")
+            console.log(params.row.index);
+  
+            const userId = params.row.index;
+            setUserId(userId);
+            //setShowModal(true);
+          };
+  
+          return <>
+          <div className="w-1/3">
+            <IconButton color="primary" onClick={onClickDetails}>
+              <VisibilityIcon/>
+            </IconButton></div>
+          </>;
         },
-      ];
+      },
+      
+    ];
 
       const rows = [
         { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },

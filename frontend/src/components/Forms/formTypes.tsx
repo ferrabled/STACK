@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import { CallInsertNewCloudAsset, CallInsertNewDataAsset, CallInsertNewDocAsset, CallInsertNewHardAsset, CallInsertNewNetworkAsset, CallInsertNewOtherAsset, CallInsertNewSoftAsset } from "components/wallet/contractCall";
-import { CallGetSoftwareAsset, CallInsertSoftware } from "components/wallet/dataStructsCall";
 import { Field, Form, Formik } from "formik";
 import { Asset } from "types";
 import * as Yup from "yup";

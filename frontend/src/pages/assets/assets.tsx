@@ -17,9 +17,7 @@ const AssetsPage = () => {
 
   useEffect(() => {
     const GetAssets = () => {
-      //const idOrg = Number(localStorage.getItem('idOrg'));
-      //TODO ID ORGGGG
-      const idOrg = 0;
+      const idOrg = Number(localStorage.getItem('idOrg'));
       console.log("obteniendo assets")
       CallGetOrganizationAssets(idOrg).then((response) => {
         console.log(response);

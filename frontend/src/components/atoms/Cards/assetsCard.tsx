@@ -65,6 +65,7 @@ const AssetsCard = (props:any) => {
                 console.log("false");
                 sessionStorage.setItem('isEdited', String(false));
               }
+            sessionStorage.setItem('aType', params.row.assetType);
             sessionStorage.setItem('record','n');
             sessionStorage.setItem('detailId', String(originalId));    
             navigate("/asset/");
@@ -95,6 +96,7 @@ const AssetsCard = (props:any) => {
                 sessionStorage.setItem('isEdited', String(false));
                 sessionStorage.setItem('editId', String(originalId));
               }   
+            sessionStorage.setItem('aType', params.row.assetType);
             navigate("/asset/edit");
             }
           )

@@ -1,4 +1,4 @@
-import { Button, Card, CircularProgress, IconButton } from "@mui/material";
+import { Button, Card, CircularProgress, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -89,8 +89,10 @@ const AssetsDeletedCard = (props:AssetsInList[]) => {
   
     if (isLoading) return <CircularProgress />
     else return (
+      
       <Card className="gap-7 p-10 flex flex-col items-center h-full">
-        <DataGrid
+        
+        { rows.length !==0 && (<DataGrid
           className="w-full h-full"
           rows={rows}
           columns={columns}
@@ -98,6 +100,8 @@ const AssetsDeletedCard = (props:AssetsInList[]) => {
           rowsPerPageOptions={[5]}
           autoHeight
         ></DataGrid>
+        )}
+        <Typography>Aún no hay activos eliminados</Typography>
         <div className="w-full flex flex-row justify-evenly">
           <Button color="primary" variant="contained" onClick={() => window.history.back()}> Atrás </Button>
         </div>
