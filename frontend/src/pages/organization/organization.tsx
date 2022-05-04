@@ -1,25 +1,26 @@
 import { Button, Card, Skeleton, Typography } from "@mui/material";
 import Page from "pages/page";
 import React, { useEffect, useState } from "react";
-import { CallGetAdminData, CallGetOrganizationData } from "components/wallet/contractCall"; 
+import { CallGetAdminData, CallGetOrganizationData, CallRetrieveOrgData } from "components/wallet/contractCall"; 
 import { OrganizationCard, AdministratorCard } from "components/atoms/Cards/Organization";
 import { Loader } from "components/atoms";
 import { Admin, Organization } from "types";
 import { useNavigate } from "react-router-dom";
 import DashboardData from "components/organisms/dashboardData";
+import { CallGetNumUsersFromOrg } from "components/wallet/userCall";
 
 const MyOrganizationPage = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [org, setOrg] = useState<Organization>();
     const [admin, setAdmin] = useState<Admin>();
+    const [dashboardValues, setDashboardValues] = useState<number[]>();
 
 
     useEffect(() => {
+        const orgId = Number(window.localStorage.getItem('orgId')!);
+        
         const GetOrgAndAdminData = () => {
-            //TODO CONNECT WITH BLOCKCHAIN
-            const orgId = 0;
-    
             CallGetOrganizationData(orgId).then((response)=> {  
                 const organization: Organization = {
                     name: response["name"],
@@ -37,12 +38,25 @@ const MyOrganizationPage = () => {
                             email: response["email"]
                         }
                         setAdmin(admin);
-                        setIsLoading(false);
-                    })
+                        GetDashboardData(); 
+                    }) 
             })
         }
-        GetOrgAndAdminData();  
-    
+
+
+        const GetDashboardData = () => {
+            let cont: number[];
+            CallRetrieveOrgData(orgId).then(r => {
+                cont = [Number(r[0]), Number(r[1]), Number(r[2])];
+                CallGetNumUsersFromOrg(orgId).then(res => {
+                    cont.push(Number(res));
+                    setDashboardValues(cont);
+                    setIsLoading(false);
+                })
+            })
+        }
+
+        GetOrgAndAdminData();    
     },[]);
 
     
@@ -55,15 +69,15 @@ const MyOrganizationPage = () => {
                 <div className="w-full"><Skeleton variant="rectangular" height={200}/></div>
             </div>)}
             <>
-            {!isLoading && (<div className="flex flex-row w-full items-center justify-center gap-5">
+            {!isLoading && (<>
+            <div className="flex flex-row w-full items-center justify-center gap-5">
                 <OrganizationCard data={org} />
                 <AdministratorCard {...admin!} />
-                </div>)}</>
-            
-            
-            {/* {!isLoading && (<AdministratorCard {...admin!} />)}
-            {isLoading && (<Card className="mb-5"><Loader/></Card>)} */}
-            <DashboardData></DashboardData></div>
+                </div>
+                <DashboardData {...dashboardValues!}></DashboardData>
+                </>
+                )}</>
+           </div>
              
         </Page>     
         

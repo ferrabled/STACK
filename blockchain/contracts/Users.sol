@@ -76,6 +76,11 @@ contract Users {
         return usersFromOrg;
     }
 
+    function getNumUsersFromOrg(uint orgId) public view returns(uint){
+        uint usersFromOrg = orgIdToUserList[orgId].length;
+        return usersFromOrg;
+    }
+
 
 
     function getUserData(uint userId) public view returns(User memory){

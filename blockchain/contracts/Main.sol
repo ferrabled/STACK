@@ -514,5 +514,13 @@ contract Main {
     }
     
 
+    function retrieveOrgData(uint orgId) public view returns(uint[] memory){
+        uint[] memory result = new uint[](3);
+        result[0] = assetsFromOrg[orgId].length;
+        result[1] = (organizationNumberOfAssetsED[orgId][0]);
+        result[2] = (organizationNumberOfAssetsED[orgId][1]);
+        return result;
+    }
+
 
 }

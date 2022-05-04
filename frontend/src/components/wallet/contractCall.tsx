@@ -211,4 +211,8 @@ export async function CallRetrieveListOfAsset(props: number[]){
     return contract.retrieveListOfAsset(props);
 }
 
+export async function CallRetrieveOrgData(props: number){
+    return contract.retrieveOrgData(props);
+}
+
 

@@ -97,3 +97,8 @@ export async function CallGetAllUsersFromOrg(props: Number) {
     console.log("Get users from asset " + assetId);
     return contract.getAssetUsers(assetId);
 }
+
+
+export async function CallGetNumUsersFromOrg(assetId: number){
+  return contract.getNumUsersFromOrg(assetId);
+}
