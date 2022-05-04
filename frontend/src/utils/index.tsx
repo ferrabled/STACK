@@ -1,4 +1,3 @@
-import insertOrgAndAdmin from "./contractConection";
 
 export var formatDate = function formatDate(date: Date) {            // function for reusability
     var d = date.getUTCDate().toString(),           // getUTCDate() returns 1 - 31
