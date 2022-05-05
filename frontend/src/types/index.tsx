@@ -91,3 +91,12 @@ export type Notify = {
   message: String;
   type: String;
 }
+
+export type Department = {
+  name: String;
+  description: String;
+  telephone: Number;
+  orgId: Number;
+  index?: Number;
+  id?: Number;
+}

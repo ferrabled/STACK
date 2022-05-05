@@ -102,3 +102,19 @@ export async function CallGetAllUsersFromOrg(props: Number) {
 export async function CallGetNumUsersFromOrg(assetId: number){
   return contract.getNumUsersFromOrg(assetId);
 }
+
+
+//DEPARTMENTS
+export async function CallInsertDepartment(props: any) {
+  contract.insertDepartment(props.name, props.description, props.telephone, props.orgId);
+}
+
+export async function CallGetDepartFromOrg(props: number) {
+  return contract.getDepartFromOrg(props);
+}
+
+
+export async function CallGetUsersFromDepart(props: number) {
+  return contract.getUsersFromDepart(props);
+}
+
