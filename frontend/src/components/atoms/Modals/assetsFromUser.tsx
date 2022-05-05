@@ -28,94 +28,70 @@ const BasicModal = (props: any) => {
   const [assets, setAssets] = useState<AssetsInList[]>();
 
   useEffect(() => {
+    console.log(props);
+    if (!props.show) return;
+    setIsLoading(true);
 
-    const refactorAssets = (response:any) => {
-        console.log(response);
-        const cont = response[0].length;
-        const contEdit = response[1].length;
-        let container: AssetsInList[] = [];
-        //let object = new container;
-        for (var i = 0; i < cont; i++) {
-          console.log(response[0][i]);
-          console.log(i);
-          const asset: AssetsInList = {
-            name: response[0][i].name,
-            assetType: response[0][i].assetType,
-            assetTS: AssetTypes[response[0][i].assetType],
-            creationDate: Number(response[0][i].creationDate),
-            adquireDate: Number(response[0][i].adquireDate),
-            originalId: Number(response[0][i].index),
-            index: Number(response[0][i].index)
-          }
-          console.log("original")
-          console.log(asset);
-          //TODO CHECK IF IT RETURNS ANY ASSET DELETED
-          if(asset.creationDate === 0  && asset.adquireDate === 0) continue;
-          else {
-            container.push(asset);
-          }
-          
+    const refactorAssets = (response: any) => {
+      console.log(response);
+      const cont = response[0].length;
+      const contEdit = response[1].length;
+      let container: AssetsInList[] = [];
+      for (var i = 0; i < cont; i++) {
+        const asset: AssetsInList = {
+          name: response[0][i].name,
+          assetType: response[0][i].assetType,
+          assetTS: AssetTypes[response[0][i].assetType],
+          creationDate: Number(response[0][i].creationDate),
+          adquireDate: Number(response[0][i].adquireDate),
+          originalId: Number(response[0][i].index),
+          index: Number(response[0][i].index),
+        };
+        //TODO CHECK IF IT RETURNS ANY ASSET DELETED
+        if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
+        else {
+          container.push(asset);
         }
-
-        for (var o = 0; o < contEdit; o++) {
-          console.log(response[1][o]);
-          const asset: AssetsInList = {
-            name: response[1][o].name,
-            assetType: response[1][o].assetType,
-            assetTS: AssetTypes[response[1][o].assetType],
-            creationDate: Number(response[1][o].creationDate),
-            adquireDate: Number(response[1][o].adquireDate),
-            originalId: Number(response[1][o].originalAssetId),
-            index: Number(response[1][o].index),
-          }
-          if(asset.creationDate === 0  && asset.adquireDate === 0) continue;
-          else {
-            console.log("Añadido")
-            console.log(asset);
-            container.push(asset);
-          }
-          
-        }
-        console.log("CONTAINER "+ container)
-        console.log(container);
-        setAssets(container);
-        console.log("Enviamos")
-        console.log(assets);
-        setIsLoading(false);
       }
 
-
-
-
+      for (var o = 0; o < contEdit; o++) {
+        const asset: AssetsInList = {
+          name: response[1][o].name,
+          assetType: response[1][o].assetType,
+          assetTS: AssetTypes[response[1][o].assetType],
+          creationDate: Number(response[1][o].creationDate),
+          adquireDate: Number(response[1][o].adquireDate),
+          originalId: Number(response[1][o].originalAssetId),
+          index: Number(response[1][o].index),
+        };
+        if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
+        else {
+          container.push(asset);
+        }
+      }
+      setAssets(container);
+      setIsLoading(false);
+    };
 
     console.log(props.show);
-    if(props.show){
+    if (props.show) {
       setAssetId(props.userId);
-    console.log("Obteniendo assets de usuario " + props.userId);
-    if (assetId === "") {
-      console.log("Vacío");
-    } else {
-      CallGetUserAssets(Number(assetId)).then((r) => {
-        console.log("Primera llamada");
-        console.log(r);
-        CallRetrieveListOfAsset(r).then((response) => {
-          console.log("RESPUESTA");
-          console.log(response);
-          if (response[0].length !== 0 || response[1].length !== 0) {
-            console.log("El usuario tiene activos asignados");
-            setIsEmpty(false);
-            refactorAssets(response)
-          } else {
-            setIsEmpty(true); 
-            setIsLoading(false);
-          }
-         
+      if (props.userId !== "") {
+        CallGetUserAssets(Number(props.userId)).then((r) => {
+          console.log(r);
+          CallRetrieveListOfAsset(r).then((response) => {
+            if (response[0].length !== 0 || response[1].length !== 0) {
+              setIsEmpty(false);
+              refactorAssets(response);
+            } else {
+              setIsEmpty(true);
+              setIsLoading(false);
+            }
+          });
         });
-      });
+      }
     }
-    }
-    
-  }, [props.show]);
+  }, [props.show, props.userId]);
 
   return (
     <div>
@@ -129,20 +105,18 @@ const BasicModal = (props: any) => {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Activos del Usuario {props.userId + 1}
           </Typography>
-          {isLoading && (
-              <Skeleton></Skeleton>
+          {isLoading && <Skeleton></Skeleton>}
+          {!isLoading && (
+            <>
+              {isEmpty && (
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  Este usuario aún no tiene activos asignados. Puedes asignarle
+                  activos desde la vista detallada de cualquier activo.
+                </Typography>
+              )}
+              {!isEmpty && <SimpleAssetsTable {...assets!} />}
+            </>
           )}
-          {!isLoading && 
-          (<> 
-            {isEmpty && (
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Este usuario aún no tiene activos asignados. Puedes asignarle
-                activos desde la vista detallada de cualquier activo.
-              </Typography>
-            )}
-            {!isEmpty && (<SimpleAssetsTable {...assets!}/>)}
-          </>)}
-          
         </Box>
       </Modal>
     </div>

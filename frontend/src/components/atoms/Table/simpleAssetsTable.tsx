@@ -19,19 +19,19 @@ const SimpleAssetsTable = (props:AssetsInList[]) => {
   
       const FormatData = () => {
         const listAssets = props;
-        console.log("Recibimos los datos");
-        console.log(listAssets);
+        // console.log("Recibimos los datos");
+        // console.log(listAssets);
   
-        console.log(listAssets.length);
+        // console.log(listAssets.length);
         const cont = Object.keys(listAssets).length;
         const tempRow: any[] = []; 
         for (var i = 0; i < cont; i++) {
-          console.log(listAssets[i]);
+          // console.log(listAssets[i]);
           listAssets[i].id = i;
           tempRow.push(listAssets[i]);
         }
-        console.log("ROWWWWWWWWW");
-        console.log(rows);
+        // console.log("ROWWWWWWWWW");
+        // console.log(rows);
         setRows(tempRow);
         setIsLoading(false)
       }
