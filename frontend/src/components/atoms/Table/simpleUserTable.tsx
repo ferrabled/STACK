@@ -1,13 +1,13 @@
 import { Button, IconButton } from "@mui/material";
 import { DataGrid, GridColDef, GridRowParams, GridSelectionModel } from "@mui/x-data-grid"
-import { CallInsertUsersToAsset } from "components/wallet/userCall";
+import { CallInsertUsersToAsset, CallInsertUserToDepartment } from "components/wallet/userCall";
 import { useEffect, useState } from "react";
 import { Users } from "types"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BasicModal from "../Modals/assetsFromUser";
 
 
-const SimpleUserTable = (users: Users[]) => {
+const SimpleUserTable = ({users, depart, idList}:{users: Users[], depart:boolean, idList:number[]}) => {
 
     const [rows, setRows] = useState<any>([]);
     const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
@@ -46,7 +46,14 @@ const SimpleUserTable = (users: Users[]) => {
             ids.push(item.index);
             //console.log(selectionModel[i].index);
         }
-        CallInsertUsersToAsset(Number(assetId), ids)
+        if(depart === true) {
+          console.log("add users to department");
+          CallInsertUserToDepartment(Number(assetId), ids);
+        }
+        else{
+          console.log("add users to asset");
+          CallInsertUsersToAsset(Number(assetId), ids);
+        } 
 
     }
     
@@ -89,7 +96,7 @@ const SimpleUserTable = (users: Users[]) => {
         <DataGrid
             rows={rows}
             columns={columns}
-            //isRowSelectable={(params: GridRowParams) => params.row.quantity > 50000}
+            isRowSelectable={(params: GridRowParams) => !idList.includes(params.row.index)}
             checkboxSelection
             onSelectionModelChange={(ids) => {
                 const selectedIDs = new Set(ids);

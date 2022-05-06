@@ -6,7 +6,7 @@ import { ethers } from "ethers";
 import { Button, CircularProgress, containerClasses, Typography } from "@mui/material";
 import { AssetsInList, AssetTypes, Department } from "types"
 import PageLoged from "pages/pageCheckLogin";
-import { CallGetDepartFromOrg } from "components/wallet/userCall";
+import { CallGetAllDepartmentsFromOrg } from "components/wallet/userCall";
 import DepartmentTable from "components/atoms/Table/DepartmentsTable";
 
 declare var window: Window & { ethereum: any };
@@ -20,7 +20,7 @@ const DepartmentsPage = () => {
     const GetDepartments = () => {
       const idOrg = Number(localStorage.getItem('idOrg'));
       console.log("obteniendo departamentos de org "+idOrg);
-      CallGetDepartFromOrg(idOrg).then((response) => {
+      CallGetAllDepartmentsFromOrg(idOrg).then((response) => {
         console.log(response);
         const cont = response.length;
         let container: Department[] = [];
@@ -54,7 +54,7 @@ const DepartmentsPage = () => {
         <div className="min-h-full h-full">
             <DepartmentTable {...departments!} />
         </div>
-        <Button color="primary" variant="contained" onClick={()=> navigate('/department/new')}>Nuevo Departamento</Button>
+        <Button color="primary" variant="contained" onClick={()=> navigate('/departments/new')}>Nuevo Departamento</Button>
     </PageLoged>
   );  
 };

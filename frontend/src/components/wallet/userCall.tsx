@@ -109,12 +109,19 @@ export async function CallInsertDepartment(props: any) {
   contract.insertDepartment(props.name, props.description, props.telephone, props.orgId);
 }
 
-export async function CallGetDepartFromOrg(props: number) {
-  return contract.getDepartFromOrg(props);
+export async function CallGetDepartment(props: number){
+  return contract.getDepartment(props);
 }
 
+export async function CallGetAllDepartmentsFromOrg(props: number) {
+  return contract.getAllDepartmentsFromOrg(props);
+}
 
 export async function CallGetUsersFromDepart(props: number) {
   return contract.getUsersFromDepart(props);
 }
+
+export async function CallInsertUserToDepartment(departId: number, userIds: number[]) {
+  contract.insertUserToDepartment(departId, userIds);
+} 
 

@@ -83,6 +83,13 @@ export default function MenuDrawer() {
           <ListItemText primary={'Organización'} />
         </ListItem>
 
+        <ListItem button key={'Departamentos'} onClick={()=> navigate('/departments')}>
+          <ListItemIcon>
+            <HomeWorkIcon color="primary"/>
+          </ListItemIcon>
+          <ListItemText primary={'Departamentos'} />
+        </ListItem>
+
         <ListItem button key={'Usuarios'} onClick={()=> navigate('/users')}>
           <ListItemIcon>
             <AssignmentIndIcon color="primary" />

@@ -15,7 +15,7 @@ import {
 } from "pages";
 
 import { AssetHistoryPage, AssetsDeletedPage, EditAssetPage } from "pages/assets";
-import { DepartmentsPage, NewDepartmentPage } from "pages/departments";
+import { DepartmentPage, DepartmentsPage, NewDepartmentPage } from "pages/departments";
 const AppRoutes = () => {
   return (
     <Suspense
@@ -43,8 +43,10 @@ const AppRoutes = () => {
             <Route path="/asset/" element={<AssetDetailPage />} />
             <Route path="/asset/edit" element={<EditAssetPage />} />
             <Route path="/asset/record" element={<AssetHistoryPage/>} />
-            <Route path="/department/new" element={<NewDepartmentPage />} />
+            <Route path="/departments/new" element={<NewDepartmentPage />} />
             <Route path="/departments/" element={<DepartmentsPage />} />
+            <Route path="/department/" element={<DepartmentPage />} />
+
 
           </Routes>
         </Router>

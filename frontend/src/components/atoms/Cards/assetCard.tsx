@@ -8,17 +8,17 @@ import {
 } from "components/wallet/contractCall";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "utils";
-import UsersFAModal from "../Modals/usersFromAsset";
 import UsersCard from "./usersCard";
 import { CallGetAllUsersFromOrg, CallGetAssetUsers } from "components/wallet/userCall";
 import { Users } from "types";
 import AssetTypeCard from "./Assets/assetTypeData";
+import UserSelectModal from "../Modals/userSelectModal";
 
 const AssetCard = (props: any) => {
   const [showModal, setShowModal] = useState(false);
   const [assetId, setAssetId] = useState("");
   //const [asset, setAsset] = useState<any>("");
-
+  const [usersIds, setUsersIds] = useState<Number[]>([]);
   const [assetType, setAssetType] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
@@ -85,6 +85,7 @@ const AssetCard = (props: any) => {
         console.log("USUARIOS DEL ASSET " + response.length);
         console.log(window.sessionStorage.getItem("detailId"));
         const cont = response.length;
+        let userIds: Number[] = [];
         let container: Users[] = [];
         for (var i = 0; i < cont; i++) {
           console.log(response[i]);
@@ -98,8 +99,9 @@ const AssetCard = (props: any) => {
             index: Number(response[i].index),
           };
           container.push(user);
-          console.log(container);
+          userIds.push(user.index!);
         }
+        setUsersIds(userIds);
         console.log(container)
         setUsers(container);
         setIsLoading(false);
@@ -179,16 +181,16 @@ const AssetCard = (props: any) => {
                <Typography align="center">Añadir nuevos usuarios a un activo permite que esos usuarios asignados puedan realizar cambios y eliminar el activo</Typography></div>
             )} 
             {((users!.length !== 0)) && (
-                        <UsersCard {...users!} />
-                        )}
+                        <UsersCard {...users!} />)}
           </>
           )}
         </Card>
       </section>
-      <UsersFAModal
+      <UserSelectModal
         show={showModal!}
         close={() => setShowModal(false)}
-        assetId={assetId}
+        depart = {false}
+        usersIds={usersIds}
       />
     </div>
   );

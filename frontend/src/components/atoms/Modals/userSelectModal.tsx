@@ -8,6 +8,7 @@ import { CallGetAllUsersFromOrg } from "components/wallet/userCall";
 import { UsersCard } from "../Cards";
 import { Users } from "types";
 import EnhancedTable from "../Table/simpleUserTable";
+import SimpleUserTable from "../Table/simpleUserTable";
 
 const style = {
   position: "absolute" as "absolute",
@@ -21,17 +22,16 @@ const style = {
   p: 4,
 };
 
-const UsersFAModal = (props: any) => {
+const UserSelectModal = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<Users[]>();
 
   useEffect(() => {
-    console.log(props.assetId);
     const orgId = window.localStorage.getItem("orgId");
-    
+    console.log("QUE HEMOS RECIBIDO " + props.usersIds);
+    console.log(props.usersIds);
 
     CallGetAllUsersFromOrg(Number(orgId!)).then((response) => {
-      console.log(response.length);
       const cont = response.length;
       let container: Users[] = [];
       for (var i = 0; i < cont; i++) {
@@ -62,19 +62,43 @@ const UsersFAModal = (props: any) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Añadir Usuario al Activo
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Selecciona a continuación qué usuarios quieres añadir al activo.
-            Estos usuarios tendrán permisos para editar y eliminar el activo.
-          </Typography>
+          {props.depart === true && (
+            <>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Añadir Usuario al Departamento
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Selecciona a continuación qué usuarios quieres añadir al
+                departamento. Estos usuarios tendrán permisos para editar y
+                eliminar los activos asignados al departamento.
+              </Typography>
+            </>
+          )}
+          {props.depart === false && (
+            <>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Añadir Usuario al Activo
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Selecciona a continuación qué usuarios quieres añadir al activo.
+                Estos usuarios tendrán permisos para editar y eliminar el
+                activo.
+              </Typography>
+            </>
+          )}
           <div className="mb-6"></div>
-          {isLoading && <Skeleton></Skeleton> }
-          {!isLoading && <EnhancedTable {...users!}></EnhancedTable>}
+          {isLoading && <Skeleton></Skeleton>}
+          {/* TODO SEND data */}
+          {!isLoading && (
+            <SimpleUserTable
+              users={users!}
+              depart = {props.depart}
+              idList={props.usersIds}
+            ></SimpleUserTable>
+          )}
         </Box>
       </Modal>
     </div>
   );
 };
-export default UsersFAModal;
+export default UserSelectModal;

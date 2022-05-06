@@ -35,100 +35,6 @@ contract Users {
     mapping(address => uint) addressToId;
 
 
-    struct Department {
-        string name;
-        string description;
-        uint32 telephone;
-        uint orgId;
-        uint256 index;
-    }
-
-    Department[] private departList;
-    mapping(uint256 => uint256[]) orgIdToDepartList;
-
-
-    
-    mapping(uint => mapping(uint => bool)) departToUserBool;
-    mapping(uint => uint[]) departIdToUserList;
-
-
-    function insertDepartment(string memory name,
-        string memory description,
-        uint32 telephone,
-        uint orgId
-        ) public {
-            uint departId = departList.length;
-            departList.push(Department(name, description, telephone, orgId, departId));
-            orgIdToDepartList[orgId].push(departId);
-    }
-
-    function getDepartFromOrg(uint orgId) public view returns(Department[] memory){
-        uint[] memory idList = orgIdToDepartList[orgId];
-        uint cont = idList.length;
-        Department[] memory departFromOrg = new Department[](cont);
-
-        for (uint i = 0; i < cont; i++) {
-            departFromOrg[i] = departList[idList[i]];
-        }
-        return departFromOrg;
-    }
-
-
-
-    //USERS from department
-    function insertUserToDepartment(uint departId, uint[] memory userIds) public {
-        uint cont = userIds.length;
-        for (uint i = 0; i < cont; i++) {
-            if(departToUserBool[departId][userIds[i]] == true) {
-                revert("user already in department");
-            } else {
-                departIdToUserList[departId].push(userIds[i]);
-                departToUserBool[departId][i] = true;
-            }
-            
-        }
-    }
-
-    //If admin wants to delete any user from the department
-    //first we will need to find that user 
-    //and then delete the index 
-    function deleteUsersFromDepartment(uint departId, uint[] memory userIds) public {
-        uint userCont = userIds.length;
-        for (uint i = 0; i < userCont; i++) {
-            departToUserBool[departId][userIds[i]] = false;
-            uint departUsers = departIdToUserList[departId].length;
-            for(uint o = 0; o < departUsers; o++){
-                if (departIdToUserList[departId][o] == userIds[i]){
-                    for (uint e = o; e<departUsers-1; e++){
-                        departIdToUserList[departId][e] = departIdToUserList[departId][e+1];
-                    }
-                    departIdToUserList[departId].pop();
-                    break;
-                }
-            }
-        }
-    }
-
-
-    function getUsersIdsFromDepart(uint departId) public view returns(uint[] memory){
-        return departIdToUserList[departId];
-        
-    }
-
-
-
-    function getUsersFromDepart(uint departId) public view returns(User[] memory){
-        uint[] memory idList = departIdToUserList[departId];
-        uint cont = idList.length;
-        User[] memory usersFromDepart = new User[](cont);
-
-        for (uint i = 0; i < cont; i++) {
-            usersFromDepart[i] = userList[idList[i]];
-        }
-        return usersFromDepart;
-    }
-
-
 
     function isUser(address userAddress) public view returns (bool isIndeed) {
         if (users.length == 0) return false;
@@ -211,6 +117,107 @@ contract Users {
         }
         return usersOfAsset;
     }
+
+
+    //DEPARTMENTS
+    
+    struct Department {
+        string name;
+        string description;
+        uint32 telephone;
+        uint orgId;
+        uint256 index;
+    }
+
+    Department[] private departList;
+    mapping(uint256 => uint256[]) orgIdToDepartList;
+
+
+    
+    mapping(uint => mapping(uint => bool)) departToUserBool;
+    mapping(uint => uint[]) departIdToUserList;
+
+
+    function insertDepartment(string memory name,
+        string memory description,
+        uint32 telephone,
+        uint orgId
+        ) public {
+            uint departId = departList.length;
+            departList.push(Department(name, description, telephone, orgId, departId));
+            orgIdToDepartList[orgId].push(departId);
+    }
+
+    function getDepartment(uint departId) public view returns(Department memory){
+        return departList[departId];
+    }
+
+    function getAllDepartmentsFromOrg(uint orgId) public view returns(Department[] memory){
+        uint[] memory idList = orgIdToDepartList[orgId];
+        uint cont = idList.length;
+        Department[] memory departFromOrg = new Department[](cont);
+
+        for (uint i = 0; i < cont; i++) {
+            departFromOrg[i] = departList[idList[i]];
+        }
+        return departFromOrg;
+    }
+
+
+
+    //USERS from department
+    function insertUserToDepartment(uint departId, uint[] memory userIds) public {
+        uint cont = userIds.length;
+        for (uint i = 0; i < cont; i++) {
+            if(departToUserBool[departId][userIds[i]] == true) {
+                revert("user already in department");
+            } else {
+                departIdToUserList[departId].push(userIds[i]);
+                departToUserBool[departId][i] = true;
+            }
+            
+        }
+    }
+
+    //If admin wants to delete any user from the department
+    //first we will need to find that user 
+    //and then delete the index 
+    function deleteUsersFromDepartment(uint departId, uint[] memory userIds) public {
+        uint userCont = userIds.length;
+        for (uint i = 0; i < userCont; i++) {
+            departToUserBool[departId][userIds[i]] = false;
+            uint departUsers = departIdToUserList[departId].length;
+            for(uint o = 0; o < departUsers; o++){
+                if (departIdToUserList[departId][o] == userIds[i]){
+                    for (uint e = o; e<departUsers-1; e++){
+                        departIdToUserList[departId][e] = departIdToUserList[departId][e+1];
+                    }
+                    departIdToUserList[departId].pop();
+                    break;
+                }
+            }
+        }
+    }
+
+
+    function getUsersIdsFromDepart(uint departId) public view returns(uint[] memory){
+        return departIdToUserList[departId];
+        
+    }
+
+
+
+    function getUsersFromDepart(uint departId) public view returns(User[] memory){
+        uint[] memory idList = departIdToUserList[departId];
+        uint cont = idList.length;
+        User[] memory usersFromDepart = new User[](cont);
+
+        for (uint i = 0; i < cont; i++) {
+            usersFromDepart[i] = userList[idList[i]];
+        }
+        return usersFromDepart;
+    }
+
 
 
 }
