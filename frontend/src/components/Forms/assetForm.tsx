@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import {
@@ -16,11 +16,44 @@ import DateAdapter from "@mui/lab/AdapterDayjs";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
 import { date } from "yup/lib/locale";
 import { CallInsertAsset } from "components/wallet/contractCall";
-import { Asset } from "types";
+import { Asset, Department } from "types";
 import { useNavigate } from "react-router-dom";
+import { CallGetAllDepartmentsFromOrg } from "components/wallet/userCall";
 
 
 const AssetForm = () => {
+
+  const [departments, setDepartments] = useState<Department[]>();
+  const [isLoading, setIsLoading] = useState(true);
+
+
+
+
+  useEffect(()=>{
+    CallGetAllDepartmentsFromOrg(Number(window.localStorage.getItem('orgId')!)).then(r=> {
+      console.log(r);
+      const cont = r.length;
+      let container: Department[] = [];
+      for (var i = 0; i < cont; i++) {
+          const department: Department = {
+            name: r[i].name,
+            description: r[i].description,
+            telephone: Number(r[i].telephone),
+            orgId: Number(r[i].orgId),
+            id: Number(r[i].index),
+            index: Number(r[i].index)
+          }
+      container.push(department);
+      }
+      setDepartments(container);
+      setIsLoading(false);
+    })
+  }, []);
+
+
+  
+
+
   const navigate = useNavigate(); 
 
   const validationSchema = Yup.object({
@@ -32,11 +65,6 @@ const AssetForm = () => {
       .required("El tipo de activo es obligatorio")
       .max(40),
   });
-
-  const ConnectToContract = (data: any) => {
-    CallInsertAsset(data);
-  };
-
 
   const [asset, setAsset] = useState<Asset>()
 
@@ -94,6 +122,7 @@ const AssetForm = () => {
             name: data.name,
             orgId: data.organizationId,
             assetType: Number(data.assetType),
+            assetDepart: Number(data.department),
             creationDate: data.creationDate,
             adquireDate: data.adquireDate,
           }
@@ -155,6 +184,13 @@ const AssetForm = () => {
                       as={Select}
                     >
                       <MenuItem value={0}>Sin departamento</MenuItem>
+                      {!isLoading && (departments!.map(department => (
+                          <MenuItem
+                            key={Number(department.index)}
+                            value={Number(department.index)}
+                          >
+                            {department.name}
+                          </MenuItem>)))}
                   
                     </Field>
                   </div>

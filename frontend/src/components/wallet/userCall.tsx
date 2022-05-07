@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
-import { Users } from "types";
+import { Asset, Users } from "types";
 import addresses from "../../assets/addresses.json";
 
 declare var window: any;
@@ -125,3 +125,59 @@ export async function CallInsertUserToDepartment(departId: number, userIds: numb
   contract.insertUserToDepartment(departId, userIds);
 } 
 
+export async function CallDeleteUsersFromDepartment(departId: number, userIds: number[]) {
+  contract.deleteAssetFromDepartment(departId, userIds);
+}
+
+
+
+//Department assets
+export async function CallInsertAssetToDepartment(departId: number, assetsIds: number[]) {
+  contract.insertAssetToDepartment(departId, assetsIds);
+}
+
+export async function CallDeleteAssetFromDepartment(departId: number, assetsIds: number[]) {
+  contract.deleteAssetFromDepartment(departId, assetsIds);
+}
+
+export async function CallGetAssetsIdsFromDepart(departId: number) {
+  return contract.getAssetsIdsFromDepart(departId);
+}
+
+
+//NEW ASSETS WITH DEPARTMENT
+export async function CallInsertNewSAssetWithDepartment(asset:Asset, props: any){
+  contract.insertNewSAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      asset.assetType, asset.assetDepart, props.version, props.provider, props.stype); 
+}
+
+export async function CallInsertNewHAssetWithDepartment(asset:Asset, props: any){
+  contract.insertNewHAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      asset.assetType, asset.assetDepart, props.model, props.provider, props.serialNumber, props.htype); 
+}
+
+export async function CallInsertNewDocAssetWithDepartment(asset:Asset, props: any){
+  console.log("Insertar doc")
+  contract.insertNewDocAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      asset.assetType,  asset.assetDepart,props.name, props.location, props.doctype); 
+}
+
+export async function CallInsertNewDataAssetWithDepartment(asset:Asset, props: any){
+  contract.insertNewDataAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      asset.assetType, asset.assetDepart, props.location, props.local); 
+}
+
+export async function CallInsertNewNAssetWithDepartment(asset:Asset, props: any){
+  contract.insertNewNAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      asset.assetType, asset.assetDepart, props.cidrblock, props.nat); 
+}
+
+export async function CallInsertNewCAssetWithDepartment(asset:Asset, props: any){
+  contract.insertNewCAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      asset.assetType, asset.assetDepart, props.url, props.domain); 
+}
+
+export async function CallInsertNewOAssetWithDepartment(asset:Asset, props: any){
+  contract.insertNewOAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      asset.assetType, asset.assetDepart, props.description); 
+}

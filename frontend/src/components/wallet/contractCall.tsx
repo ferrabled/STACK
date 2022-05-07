@@ -42,38 +42,38 @@ export async function CallGetAdminToOrg(props: number) {
 
 export async function CallInsertNewSoftAsset(asset:Asset, props: any){
     contract.insertNewSoftAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, props.version, props.provider, props.stype); 
+        asset.assetType, asset.assetDepart, props.version, props.provider, props.stype); 
 }
 
 export async function CallInsertNewHardAsset(asset:Asset, props: any){
     contract.insertNewHardAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, props.model, props.provider, props.serialNumber, props.htype); 
+        asset.assetType, asset.assetDepart, props.model, props.provider, props.serialNumber, props.htype); 
 }
 
 export async function CallInsertNewDocAsset(asset:Asset, props: any){
     console.log("Insertar doc")
     contract.insertNewDocAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, props.name, props.location, props.doctype); 
+        asset.assetType,  asset.assetDepart,props.name, props.location, props.doctype); 
 }
 
 export async function CallInsertNewDataAsset(asset:Asset, props: any){
     contract.insertNewDataAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, props.location, props.local); 
+        asset.assetType, asset.assetDepart, props.location, props.local); 
 }
 
 export async function CallInsertNewNetworkAsset(asset:Asset, props: any){
     contract.insertNewNetworkAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, props.cidrblock, props.nat); 
+        asset.assetType, asset.assetDepart, props.cidrblock, props.nat); 
 }
 
 export async function CallInsertNewCloudAsset(asset:Asset, props: any){
     contract.insertNewCloudAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, props.url, props.domain); 
+        asset.assetType, asset.assetDepart, props.url, props.domain); 
 }
 
 export async function CallInsertNewOtherAsset(asset:Asset, props: any){
     contract.insertNewOtherAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, props.description); 
+        asset.assetType, asset.assetDepart, props.description); 
 }
 
 

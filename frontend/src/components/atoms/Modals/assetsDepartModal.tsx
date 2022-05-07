@@ -4,10 +4,11 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Skeleton } from "@mui/material";
 import { CallGetUserAssets } from "components/wallet/userCall";
-import { CallRetrieveListOfAsset } from "components/wallet/contractCall";
+import { CallGetOrganizationAssets, CallRetrieveListOfAsset } from "components/wallet/contractCall";
 import { useEffect, useState } from "react";
 import { AssetsInList, AssetTypes } from "types";
 import SimpleAssetsTable from "../Table/simpleAssetsTable";
+import { SimpleSelectAssetsTable } from "../Table";
 
 const style = {
   position: "absolute" as "absolute",
@@ -21,7 +22,7 @@ const style = {
   p: 4,
 };
 
-const BasicModal = (props: any) => {
+const AssetsDepartModal = (props: any) => {
   const [isEmpty, setIsEmpty] = useState(true);
   const [assetId, setAssetId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -76,10 +77,22 @@ const BasicModal = (props: any) => {
     };
 
     console.log(props.show);
-    if (props.show) {
+    const orgId = window.localStorage.getItem("orgId");
+    CallGetOrganizationAssets(Number(orgId)).then((r) => {
+        console.log(r);
+        if (r[0].length !== 0 || r[1].length !== 0) {
+            setIsEmpty(false);
+            refactorAssets(r);
+          } else {
+            setIsEmpty(true);
+            setIsLoading(false);
+          }
+    });
+
+    /* if (props.show) {
       setAssetId(props.userId);
       if (props.userId !== "") {
-        CallGetUserAssets(Number(props.userId)).then((r) => {
+        CallGetOrganizationAssets(Number(props.userId)).then((r) => {
           console.log(r);
           CallRetrieveListOfAsset(r).then((response) => {
             if (response[0].length !== 0 || response[1].length !== 0) {
@@ -92,7 +105,7 @@ const BasicModal = (props: any) => {
           });
         });
       }
-    }
+    } */
   }, [props.show, props.userId]);
 
   return (
@@ -105,7 +118,7 @@ const BasicModal = (props: any) => {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Activos del Usuario {props.userId + 1}
+            Añadir Activos al Departamento
           </Typography>
           {isLoading && <Skeleton></Skeleton>}
           {!isLoading && (
@@ -116,7 +129,7 @@ const BasicModal = (props: any) => {
                   activos desde la vista detallada de cualquier activo.
                 </Typography>
               )}
-              {!isEmpty && <SimpleAssetsTable {...assets!} />}
+              {!isEmpty && <SimpleSelectAssetsTable {...assets!} />}
             </>
           )}
         </Box>
@@ -124,4 +137,4 @@ const BasicModal = (props: any) => {
     </div>
   );
 };
-export default BasicModal;
+export default AssetsDepartModal;

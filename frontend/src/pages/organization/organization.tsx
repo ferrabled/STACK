@@ -7,7 +7,7 @@ import { Loader } from "components/atoms";
 import { Admin, Organization } from "types";
 import { useNavigate } from "react-router-dom";
 import DashboardData from "components/organisms/dashboardData";
-import { CallGetNumUsersFromOrg } from "components/wallet/userCall";
+import { CallGetAllDepartmentsFromOrg, CallGetNumUsersFromOrg } from "components/wallet/userCall";
 
 const MyOrganizationPage = () => {
     const navigate = useNavigate();
@@ -50,8 +50,15 @@ const MyOrganizationPage = () => {
                 cont = [Number(r[0]), Number(r[1]), Number(r[2])];
                 CallGetNumUsersFromOrg(orgId).then(res => {
                     cont.push(Number(res));
-                    setDashboardValues(cont);
-                    setIsLoading(false);
+                    
+                    CallGetAllDepartmentsFromOrg(orgId).then(res=> {
+                        cont.push(Number(res.length));
+                        setDashboardValues(cont);
+                        setIsLoading(false);
+                    })
+                    
+                    
+                    
                 })
             })
         }

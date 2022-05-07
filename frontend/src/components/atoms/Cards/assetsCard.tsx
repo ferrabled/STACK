@@ -152,15 +152,12 @@ const AssetsCard = (props:any) => {
       type: "string",
       width: 90,
     },
-    /* {
-      field: "fullName",
+    {
+      field: "assetDepart",
       headerName: "Departamento",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 160,
-      valueGetter: (params: GridValueGetterParams) =>
-        `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-    }, */
+      type: "string",
+      width: 90,
+    },
     
   ];
 

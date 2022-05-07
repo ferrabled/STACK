@@ -8,6 +8,7 @@ contract Users {
 
     constructor (address _mainAddr){
         mainAddr = _mainAddr;
+        departList.push(Department('0','0',0,0,0));
     }
 
     event Register(
@@ -170,10 +171,10 @@ contract Users {
         uint cont = userIds.length;
         for (uint i = 0; i < cont; i++) {
             if(departToUserBool[departId][userIds[i]] == true) {
-                revert("user already in department");
+                revert("User already in department");
             } else {
                 departIdToUserList[departId].push(userIds[i]);
-                departToUserBool[departId][i] = true;
+                departToUserBool[departId][userIds[i]] = true;
             }
             
         }
@@ -185,15 +186,17 @@ contract Users {
     function deleteUsersFromDepartment(uint departId, uint[] memory userIds) public {
         uint userCont = userIds.length;
         for (uint i = 0; i < userCont; i++) {
-            departToUserBool[departId][userIds[i]] = false;
-            uint departUsers = departIdToUserList[departId].length;
-            for(uint o = 0; o < departUsers; o++){
-                if (departIdToUserList[departId][o] == userIds[i]){
-                    for (uint e = o; e<departUsers-1; e++){
-                        departIdToUserList[departId][e] = departIdToUserList[departId][e+1];
+            if(departToUserBool[departId][userIds[i]] == true) {
+                departToUserBool[departId][userIds[i]] = false;
+                uint departUsers = departIdToUserList[departId].length;
+                for(uint o = 0; o < departUsers; o++){
+                    if (departIdToUserList[departId][o] == userIds[i]){
+                        for (uint e = o; e<departUsers-1; e++){
+                            departIdToUserList[departId][e] = departIdToUserList[departId][e+1];
+                        }
+                        departIdToUserList[departId].pop();
+                        break;
                     }
-                    departIdToUserList[departId].pop();
-                    break;
                 }
             }
         }
@@ -218,6 +221,164 @@ contract Users {
         return usersFromDepart;
     }
 
+    mapping(uint => mapping(uint => bool)) departToAssetBool;
+    mapping(uint => uint[]) departIdToAssetList;
+
+    //ASSETS from department
+    function insertAssetToDepartment(uint departId, uint[] memory assetsIds) public {
+        uint cont = assetsIds.length;
+        for (uint i = 0; i < cont; i++) {
+            if(departToAssetBool[departId][assetsIds[i]] == true) {
+                revert("Asset already in department");
+            } else {
+                departIdToAssetList[departId].push(assetsIds[i]);
+                departToAssetBool[departId][assetsIds[i]] = true;
+                Main mainInstance = Main(mainAddr);
+                mainInstance.insertAssetToDepartment(assetsIds[i], departId);
+            }
+            
+        }
+    }
+
+    function deleteAssetFromDepartment(uint departId, uint[] memory assetsIds) public {
+        uint assetCont = assetsIds.length;
+        for (uint i = 0; i < assetCont; i++) {
+            if(departToAssetBool[departId][assetsIds[i]] == true) {
+                departToAssetBool[departId][assetsIds[i]] = false;
+                uint departAssets = departIdToAssetList[departId].length;
+                for(uint o = 0; o < departAssets; o++){
+                    if (departIdToAssetList[departId][o] == assetsIds[i]){
+                        for (uint e = o; e < departAssets-1; e++){
+                            departIdToAssetList[departId][e] = departIdToAssetList[departId][e+1];
+                        }
+                        departIdToAssetList[departId].pop();
+                        Main mainInstance = Main(mainAddr);
+                        mainInstance.insertAssetToDepartment(assetsIds[i], 0);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    function getAssetsIdsFromDepart(uint departId) public view returns(uint[] memory){
+        return departIdToAssetList[departId];
+        
+    }
+
+
+    function insertNewSAssetWithDepartment(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        uint256 assetDepart,
+        string memory version, 
+        string memory provider, 
+        uint8 stype) public {
+            Main mainInstance = Main(mainAddr);
+            uint id = mainInstance.getIdAsset();
+            mainInstance.insertNewSoftAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, version, provider, stype);
+            departIdToAssetList[assetDepart].push(id);
+            departToAssetBool[assetDepart][id] = true;
+        }
+
+    
+    function insertNewHAssetWithDepartment(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        uint256 assetDepart,
+        string memory model, 
+        string memory provider, 
+        string memory serialNumber, 
+        uint8 htype) public {
+            Main mainInstance = Main(mainAddr);
+            uint id = mainInstance.getIdAsset();
+            mainInstance.insertNewHardAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, model, provider, serialNumber, htype);
+            departIdToAssetList[assetDepart].push(id);
+            departToAssetBool[assetDepart][id] = true;
+        }
+
+    function insertNewDocAssetWithDepartment(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        uint256 assetDepart,
+        string memory description,
+        string memory location,
+        uint8 doctype) public {
+            Main mainInstance = Main(mainAddr);
+            uint id = mainInstance.getIdAsset();
+            mainInstance.insertNewDocAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, description, location, doctype);
+            departIdToAssetList[assetDepart].push(id);
+            departToAssetBool[assetDepart][id] = true;
+        }
+
+    function insertNewDataAssetWithDepartment(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        uint256 assetDepart,
+        string memory location, 
+        bool local) public {
+            Main mainInstance = Main(mainAddr);
+            uint id = mainInstance.getIdAsset();
+            mainInstance.insertNewDataAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, location, local);
+            departIdToAssetList[assetDepart].push(id);
+            departToAssetBool[assetDepart][id] = true;
+        }
+
+
+    function insertNewNAssetWithDepartment(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        uint256 assetDepart,
+        string memory cidrblock, 
+        bool nat) public {
+            Main mainInstance = Main(mainAddr);
+            uint id = mainInstance.getIdAsset();
+            mainInstance.insertNewNetworkAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, cidrblock, nat);
+            departIdToAssetList[assetDepart].push(id);
+            departToAssetBool[assetDepart][id] = true;
+        }
+
+
+    function insertNewCAssetWithDepartment(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        uint256 assetDepart,
+        string memory url, 
+        string memory domain) public {
+            Main mainInstance = Main(mainAddr);
+            uint id = mainInstance.getIdAsset();
+            mainInstance.insertNewCloudAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, url, domain);
+            departIdToAssetList[assetDepart].push(id);
+            departToAssetBool[assetDepart][id] = true;
+        }
+
+    function insertNewOAssetWithDepartment(string memory name,
+        uint256 organizationId,
+        uint256 adquireDate,
+        uint256 creationDate,
+        uint8 assetType,
+        uint256 assetDepart,
+        string memory description) public {
+            Main mainInstance = Main(mainAddr);
+            uint id = mainInstance.getIdAsset();
+            mainInstance.insertNewOtherAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, description);
+            departIdToAssetList[assetDepart].push(id);
+            departToAssetBool[assetDepart][id] = true;
+        }
+
+        
 
 
 }

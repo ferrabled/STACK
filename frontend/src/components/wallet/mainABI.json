@@ -101,6 +101,56 @@
     "constant": true
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "assetsList",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "organizationId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "adquireDate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "creationDate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "assetType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "assetDepart",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
     "inputs": [],
     "name": "dataStructsAdd",
     "outputs": [
@@ -244,6 +294,20 @@
     "constant": true
   },
   {
+    "inputs": [],
+    "name": "getIdAsset",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -336,9 +400,32 @@
         "internalType": "uint8",
         "name": "assetType",
         "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "assetDepart",
+        "type": "uint256"
       }
     ],
     "name": "insertAsset",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "assetDepartId",
+        "type": "uint256"
+      }
+    ],
+    "name": "insertAssetToDepartment",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -369,6 +456,11 @@
         "internalType": "uint8",
         "name": "assetType",
         "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "assetDepart",
+        "type": "uint256"
       },
       {
         "internalType": "string",
@@ -417,6 +509,11 @@
         "internalType": "uint8",
         "name": "assetType",
         "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "assetDepart",
+        "type": "uint256"
       },
       {
         "internalType": "string",
@@ -472,6 +569,11 @@
         "type": "uint8"
       },
       {
+        "internalType": "uint256",
+        "name": "assetDepart",
+        "type": "uint256"
+      },
+      {
         "internalType": "string",
         "name": "description",
         "type": "string"
@@ -520,6 +622,11 @@
         "type": "uint8"
       },
       {
+        "internalType": "uint256",
+        "name": "assetDepart",
+        "type": "uint256"
+      },
+      {
         "internalType": "string",
         "name": "location",
         "type": "string"
@@ -561,6 +668,11 @@
         "internalType": "uint8",
         "name": "assetType",
         "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "assetDepart",
+        "type": "uint256"
       },
       {
         "internalType": "string",
@@ -606,6 +718,11 @@
         "type": "uint8"
       },
       {
+        "internalType": "uint256",
+        "name": "assetDepart",
+        "type": "uint256"
+      },
+      {
         "internalType": "string",
         "name": "url",
         "type": "string"
@@ -647,6 +764,11 @@
         "internalType": "uint8",
         "name": "assetType",
         "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "assetDepart",
+        "type": "uint256"
       },
       {
         "internalType": "string",
@@ -700,6 +822,11 @@
             "internalType": "uint8",
             "name": "assetType",
             "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "assetDepart",
+            "type": "uint256"
           },
           {
             "internalType": "bool",
@@ -757,6 +884,11 @@
             "internalType": "uint8",
             "name": "assetType",
             "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "assetDepart",
+            "type": "uint256"
           },
           {
             "internalType": "uint256",
@@ -864,6 +996,11 @@
           },
           {
             "internalType": "uint256",
+            "name": "assetDepart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
             "name": "index",
             "type": "uint256"
           }
@@ -903,6 +1040,11 @@
             "internalType": "uint8",
             "name": "assetType",
             "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "assetDepart",
+            "type": "uint256"
           },
           {
             "internalType": "bool",
@@ -960,6 +1102,11 @@
         "internalType": "uint8",
         "name": "assetType",
         "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "assetDepart",
+        "type": "uint256"
       }
     ],
     "name": "insertEditedAsset",
@@ -1006,6 +1153,11 @@
           },
           {
             "internalType": "uint256",
+            "name": "assetDepart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
             "name": "index",
             "type": "uint256"
           }
@@ -1045,6 +1197,11 @@
             "internalType": "uint8",
             "name": "assetType",
             "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "assetDepart",
+            "type": "uint256"
           },
           {
             "internalType": "bool",
@@ -1109,6 +1266,11 @@
             "type": "uint8"
           },
           {
+            "internalType": "uint256",
+            "name": "assetDepart",
+            "type": "uint256"
+          },
+          {
             "internalType": "bool",
             "name": "deleted",
             "type": "bool"
@@ -1169,6 +1331,11 @@
             "internalType": "uint8",
             "name": "assetType",
             "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "assetDepart",
+            "type": "uint256"
           },
           {
             "internalType": "bool",
@@ -1329,6 +1496,11 @@
           },
           {
             "internalType": "uint256",
+            "name": "assetDepart",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
             "name": "index",
             "type": "uint256"
           }
@@ -1368,6 +1540,11 @@
             "internalType": "uint8",
             "name": "assetType",
             "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "assetDepart",
+            "type": "uint256"
           },
           {
             "internalType": "bool",

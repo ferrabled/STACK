@@ -12,11 +12,11 @@ const DashboardData = (values: number[]) => {
         <div className="grid grid-cols-3 gap-7">
           <a className="cursor-pointer hover:shadow-xl" onClick={()=> navigate("/assets")}>
           <DataBox
-            title="Activos Editados"
-            active={values[1] || 0}
+            title="Activos"
+            active={values[0] || 0}
             total={values[0] || 0}
             icon={<InventoryIcon color="primary" />}
-            color="success"
+            color="primary"
           /></a>
           <a className="cursor-pointer hover:shadow-xl" onClick={()=> navigate("/users")}>
           <DataBox
@@ -26,6 +26,23 @@ const DashboardData = (values: number[]) => {
             icon={<AssignmentIndIcon color="primary" />}
             color="primary"
           /></a>
+          <a className="cursor-pointer hover:shadow-xl" onClick={()=> navigate("/departments")}>
+          <DataBox
+            title="Departamentos"
+            active={values[4] || 0}
+            total={values[4] || 0}
+            icon={<AssignmentIndIcon color="primary" />}
+            color="primary"
+          /></a>
+          <a className="cursor-pointer hover:shadow-xl" onClick={()=> navigate("/assets")}>
+          <DataBox
+            title="Activos Editados"
+            active={values[1] || 0}
+            total={values[0] || 0}
+            icon={<InventoryIcon color="primary" />}
+            color="success"
+          /></a>
+          
           <a className="cursor-pointer hover:shadow-xl" onClick={()=> navigate("/assets/deleted")}>
           <DataBox
             title="Activos Eliminados"

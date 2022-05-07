@@ -1,52 +1,63 @@
-import { CircularProgress, IconButton } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Button, CircularProgress, IconButton } from "@mui/material";
+import { DataGrid, GridColDef, GridRowParams, GridSelectionModel } from "@mui/x-data-grid";
 import { CallDeleteAsset, CallGetIsAssetEdited } from "components/wallet/contractCall";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "utils";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { AssetsInList } from "types";
+import { CallInsertAssetToDepartment } from "components/wallet/userCall";
 
-const SimpleAssetsTable = (props:AssetsInList[]) => {
+const SimpleSelectAssetsTable = (props:AssetsInList[]) => {
     const navigate = useNavigate();
     const [rows, setRows] = useState<any>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
+
   
   
     useEffect(() => {
   
       const FormatData = () => {
         const listAssets = props;
-        // console.log("Recibimos los datos");
-        // console.log(listAssets);
-  
-        // console.log(listAssets.length);
         const cont = Object.keys(listAssets).length;
         const tempRow: any[] = []; 
         for (var i = 0; i < cont; i++) {
-          // console.log(listAssets[i]);
           listAssets[i].id = i;
           tempRow.push(listAssets[i]);
         }
-        // console.log("ROWWWWWWWWW");
-        // console.log(rows);
         setRows(tempRow);
         setIsLoading(false)
       }
       FormatData();
       
     }, [])
+
+    const handleSubmit = () => {
+      const departId = window.sessionStorage.getItem('departId');
+      console.log(selectionModel)
+      const cont = Object.keys(selectionModel).length;
+      const ids:number[] = [];
+      for (var i = 0; i < cont; i++) {
+          const item:any = selectionModel[i]; 
+          console.log("Tabla");
+          console.log(item.index);
+          ids.push(item.index);
+      }
+        console.log("add assets to department");
+        CallInsertAssetToDepartment(Number(departId), ids);
+      } 
+
+    
   
     const columns: GridColDef[] = [
-      { field: "id", headerName: "ID", width: 70 },
-      { field: "name", headerName: "First name", width: 130 },
+      { field: "id", headerName: "ID", width: 50 },
+      { field: "name", headerName: "Nombre", width: 130 },
       {
         field: "action",
         headerName: "Action",
         sortable: false,
-        width: 150,
+        width: 70,
         renderCell: (params) => {
           const onClickDetails = (e:any) => {
             e.stopPropagation(); // don't select this row after clicking
@@ -54,13 +65,9 @@ const SimpleAssetsTable = (props:AssetsInList[]) => {
             const originalId = params.row.originalId;
             CallGetIsAssetEdited(originalId).then(
               (response) => {
-                console.log("True or false");
-                console.log(response);
                 if(response) {
-                  console.log("True");
                   sessionStorage.setItem('isEdited', String(true));
                 } else {
-                  console.log("false");
                   sessionStorage.setItem('isEdited', String(false));
                 }
               sessionStorage.setItem('record','n');
@@ -68,67 +75,14 @@ const SimpleAssetsTable = (props:AssetsInList[]) => {
               navigate("/asset/");
               }
             )
-            //const api: GridApi = params.api;
-            //sessionStorage.removeItem("editId");
-            
            
   
-          };
-  
-          const onClickEdit = (e:any) => {
-            e.stopPropagation(); // don't select this row after clicking
-            console.log("orignianl")
-            console.log(params.row);
-            const originalId = params.row.originalId;
-            CallGetIsAssetEdited(originalId).then(
-              (response) => {
-                console.log("True or false");
-                console.log(response);
-                if(response) {
-                  console.log("True");
-                  sessionStorage.setItem('isEdited', String(true));
-                  sessionStorage.setItem('editId', String(originalId));
-                } else {
-                  console.log("false");
-                  sessionStorage.setItem('isEdited', String(false));
-                  sessionStorage.setItem('editId', String(originalId));
-                }   
-              navigate("/asset/edit");
-              }
-            )
-            
-            //const api: GridApi = params.api;
-            //sessionStorage.removeItem("editId");
-  
-            
-  
-          };
-  
-          const onClickDelete = (e:any) => {
-            e.stopPropagation(); // don't select this row after clicking
-            console.log("Eliminamos el activo: ");
-            try {
-              console.log("delete original asset:"+params.row.originalId);
-              CallDeleteAsset(params.row.originalId);
-              navigate("/assets");
-            }
-            catch {
-                console.log("User reverted transaction");
-            }
           };
           return <>
           <div className="w-1/3">
             <IconButton color="primary" onClick={onClickDetails}>
               <VisibilityIcon/>
             </IconButton></div>
-          <div className="w-1/3 items-center">
-          <IconButton color="primary" onClick={onClickEdit}>
-            <EditIcon/>
-          </IconButton></div>
-          <div className="w-1/3">
-          <IconButton color="primary" onClick={onClickDelete}>
-            <DeleteForeverIcon/>
-          </IconButton></div>
           </>;
         },
       },
@@ -171,16 +125,31 @@ const SimpleAssetsTable = (props:AssetsInList[]) => {
   
     if (isLoading) return <CircularProgress />
     else return (
+      <>
         <DataGrid
           className="w-full h-full"
           rows={rows}
           columns={columns}
+          //TODO ONLY SELECT ASSETS THAT DOES NOT HAVE A DEPARTMENT
+          //isRowSelectable={(params: GridRowParams) => (params.row.asset)}
+          checkboxSelection
+          onSelectionModelChange={(ids) => {
+              const selectedIDs = new Set(ids);
+              const selectionModel = rows.filter((row:any) =>
+                selectedIDs.has(row.id),
+              );
+    
+              setSelectionModel(selectionModel);
+            }}
+
           pageSize={5}
           rowsPerPageOptions={[5]}
           autoHeight
         ></DataGrid>
+        <Button color="primary" variant="contained" onClick={()=> handleSubmit()}>Añadir</Button></>
+
     );
   };
   
-  export default SimpleAssetsTable;
+  export default SimpleSelectAssetsTable;
   

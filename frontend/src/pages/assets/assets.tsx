@@ -32,6 +32,7 @@ const AssetsPage = () => {
           const asset: AssetsInList = {
             name: response[0][i].name,
             assetType: response[0][i].assetType,
+            assetDepart: response[0][i].assetDepart,
             assetTS: AssetTypes[response[0][i].assetType],
             creationDate: Number(response[0][i].creationDate),
             adquireDate: Number(response[0][i].adquireDate),
@@ -54,6 +55,7 @@ const AssetsPage = () => {
             name: response[1][o].name,
             assetType: response[1][o].assetType,
             assetTS: AssetTypes[response[1][o].assetType],
+            assetDepart: response[1][o].assetDepart,
             creationDate: Number(response[1][o].creationDate),
             adquireDate: Number(response[1][o].adquireDate),
             originalId: Number(response[1][o].originalAssetId),

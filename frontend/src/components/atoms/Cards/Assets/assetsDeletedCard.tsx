@@ -81,7 +81,13 @@ const AssetsDeletedCard = (props:AssetsInList[]) => {
         headerName: "Tipo",
         type: "string",
         width: 90,
-      },      
+      },
+      {
+        field: "assetDepart",
+        headerName: "Departamento",
+        type: "string",
+        width: 90,
+      },
     ];
   
   

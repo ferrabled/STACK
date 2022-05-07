@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { CallInsertNewCloudAsset, CallInsertNewDataAsset, CallInsertNewDocAsset, CallInsertNewHardAsset, CallInsertNewNetworkAsset, CallInsertNewOtherAsset, CallInsertNewSoftAsset } from "components/wallet/contractCall";
+import { CallInsertNewCAssetWithDepartment, CallInsertNewDataAssetWithDepartment, CallInsertNewDocAssetWithDepartment, CallInsertNewHAssetWithDepartment, CallInsertNewNAssetWithDepartment, CallInsertNewOAssetWithDepartment, CallInsertNewSAssetWithDepartment } from "components/wallet/userCall";
 import { Field, Form, Formik } from "formik";
 import { Asset } from "types";
 import * as Yup from "yup";
@@ -82,11 +83,9 @@ export const SoftwareForm = (asset:Asset) => {
         }}
         validationSchema={validationSchemaSoft}
         onSubmit={(data, { setSubmitting }) => {
-            console.log("GHIOALLA");
-            CallInsertNewSoftAsset(asset, data);
-            setSubmitting(true);
-            //setSubmitting(true);
-            console.log(data);
+          if(asset.assetDepart !== 0) CallInsertNewSAssetWithDepartment(asset, data);
+          else CallInsertNewSoftAsset(asset, data);
+          setSubmitting(true);
         }}
       >
         {({ values, isSubmitting, errors, handleChange }) => (
@@ -164,9 +163,8 @@ export const HardwareForm = (asset:Asset) => {
         validationSchema={validationSchemaHard}
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
-          console.log(asset);
-          console.log(data);
-          CallInsertNewHardAsset(asset, data);
+          if(asset.assetDepart !== 0) CallInsertNewHAssetWithDepartment(asset, data);
+          else CallInsertNewHardAsset(asset, data);
         }}
       >
         {({ values, isSubmitting, errors, handleChange }) => (
@@ -256,9 +254,9 @@ export const DocumentForm = (asset:Asset) => {
           validationSchema={validationSchemaDoc}
           onSubmit={(data, { setSubmitting }) => {
             console.log(data);
-            //make async call
             setSubmitting(true);
-            CallInsertNewDocAsset(asset, data);
+            if(asset.assetDepart !== 0) CallInsertNewDocAssetWithDepartment(asset, data);
+            else CallInsertNewDocAsset(asset, data);
           }}
         >
           {({ values, isSubmitting, errors, handleChange }) => (
@@ -329,8 +327,8 @@ export const DataForm = (asset:Asset) => {
         validationSchema={validationSchemaData}
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
-          console.log(data);
-          CallInsertNewDataAsset(asset, data);
+          if(asset.assetDepart !== 0) CallInsertNewDataAssetWithDepartment(asset, data);
+          else CallInsertNewDataAsset(asset, data);
         }}
       >
         {({ values, isSubmitting, errors, handleChange }) => (
@@ -381,7 +379,8 @@ export const NetworkForm = (asset:Asset) => {
             //TODO SETS SUBMITTINGS
             //setSubmitting(true);
             console.log(data);
-            CallInsertNewNetworkAsset(asset, data);
+            if(asset.assetDepart !== 0) CallInsertNewNAssetWithDepartment(asset, data);
+            else CallInsertNewNetworkAsset(asset, data);
           }}
         >
           {({ values, isSubmitting, errors, handleChange }) => (
@@ -429,8 +428,8 @@ export const CloudForm = (asset:Asset) => {
           }}
           validationSchema={validationSchemaCloud}
           onSubmit={(data, { setSubmitting }) => {
-            console.log(data);
-            CallInsertNewCloudAsset(asset, data).then(()=> setSubmitting(true));   
+            if(asset.assetDepart !== 0) CallInsertNewCAssetWithDepartment(asset, data);
+            else CallInsertNewCloudAsset(asset, data).then(()=> setSubmitting(true));   
           }}
         >
           {({ values, isSubmitting, errors, handleChange }) => (
@@ -481,9 +480,8 @@ export const OtherForm = (asset:Asset) => {
           validationSchema={validationSchemaOther}
           onSubmit={(data, { setSubmitting }) => {
             setSubmitting(true);
-            console.log(data);
-            //make async call
-            CallInsertNewOtherAsset(asset, data);
+            if(asset.assetDepart !== 0) CallInsertNewOAssetWithDepartment(asset, data);
+            else CallInsertNewOtherAsset(asset, data);
           }}
         >
           {({ values, isSubmitting, errors, handleChange }) => (

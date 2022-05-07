@@ -118,6 +118,10 @@ contract Main {
         return organizations[_orgId];
     }
 
+    function getIdAsset() public view returns (uint id) {
+        return assetsList.length;
+    }
+
     function getAdminToOrg(address userAddress)
         public
         view
@@ -145,14 +149,12 @@ contract Main {
         uint256 adquireDate;
         uint256 creationDate;
         uint8 assetType;
+        uint256 assetDepart;
         uint256 index;
     }
 
-    struct datasoft {
-        string name;
-    }
 
-    Asset[] private assetsList;
+    Asset[] public assetsList;
     //uint256 orgCount;
 
     //UNNECESARY MAPPING
@@ -171,6 +173,7 @@ contract Main {
         uint256 adquireDate;
         uint256 creationDate;
         uint8 assetType;
+        uint256 assetDepart;
         bool deleted;
         uint256 index;
 
@@ -187,7 +190,8 @@ contract Main {
         uint256 organizationId,
         uint256 adquireDate,
         uint256 creationDate,
-        uint8 assetType
+        uint8 assetType,
+        uint256 assetDepart
     ) public {
         assetsList.push(
             (
@@ -197,6 +201,7 @@ contract Main {
                     adquireDate,
                     creationDate,
                     assetType,
+                    assetDepart,
                     assetsList.length
                 )
             )
@@ -207,17 +212,22 @@ contract Main {
         originalAssetsToEditedList[assetsList.length - 1];
     }
 
+    function insertAssetToDepartment(uint256 index, uint256 assetDepartId) public {
+        assetsList[index].assetDepart = assetDepartId;
+    }
+
     //CREATE A FUNCTION FOR EACH INSERTED ASSET TYPE
     function insertNewSoftAsset(string memory name,
         uint256 organizationId,
         uint256 adquireDate,
         uint256 creationDate,
         uint8 assetType,
+        uint256 assetDepart,
         string memory version, 
         string memory provider, 
         uint8 stype) public {
             
-        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart);
         uint assetId = assetsList.length - 1; 
         DataStructs DS = DataStructs(dataStructsAdd);
         DS.insertSoftware(version, provider, stype, assetId);
@@ -228,13 +238,14 @@ contract Main {
         uint256 adquireDate,
         uint256 creationDate,
         uint8 assetType,
+        uint256 assetDepart,
         string memory model, 
         string memory provider, 
         string memory serialNumber, 
         uint8 htype) public {
         
         uint assetId = assetsList.length; 
-        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart);
         
         DataStructs DS = DataStructs(dataStructsAdd);
         DS.insertHardware(model, provider, serialNumber, htype, assetId);
@@ -245,12 +256,13 @@ contract Main {
         uint256 adquireDate,
         uint256 creationDate,
         uint8 assetType,
+        uint256 assetDepart,
         string memory description,
         string memory location,
         uint8 doctype) public {
         
         uint assetId = assetsList.length; 
-        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart);
         
         DataStructs DS = DataStructs(dataStructsAdd);
         DS.insertDocument(description, location, doctype, assetId);
@@ -261,11 +273,12 @@ contract Main {
         uint256 adquireDate,
         uint256 creationDate,
         uint8 assetType,
+        uint256 assetDepart,
         string memory location, 
         bool local) public {
         
         uint assetId = assetsList.length; 
-        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart);
         
         DataStructs DS = DataStructs(dataStructsAdd);
         DS.insertData(location, local, assetId);
@@ -276,11 +289,12 @@ contract Main {
         uint256 adquireDate,
         uint256 creationDate,
         uint8 assetType,
+        uint256 assetDepart,
         string memory cidrblock, 
         bool nat) public {
         
         uint assetId = assetsList.length; 
-        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart);
         
         DataStructs DS = DataStructs(dataStructsAdd);
         DS.insertNetwork(cidrblock, nat, assetId);
@@ -291,11 +305,12 @@ contract Main {
         uint256 adquireDate,
         uint256 creationDate,
         uint8 assetType,
+        uint256 assetDepart,
         string memory url, 
         string memory domain) public {
         
         uint assetId = assetsList.length; 
-        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart);
         DataStructs DS = DataStructs(dataStructsAdd);
         DS.insertCloud(url, domain, assetId);
     }
@@ -305,10 +320,11 @@ contract Main {
         uint256 adquireDate,
         uint256 creationDate,
         uint8 assetType,
+        uint256 assetDepart,
         string memory description) public {
         
         uint assetId = assetsList.length; 
-        insertAsset(name, organizationId, adquireDate, creationDate, assetType);
+        insertAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart);
         DataStructs DS = DataStructs(dataStructsAdd);
         DS.insertOther(description, assetId);
     }
@@ -384,7 +400,8 @@ contract Main {
         uint256 adquireDate,
         uint256 creationDate,
         bool deleted,
-        uint8 assetType
+        uint8 assetType,
+        uint256 assetDepart
     ) public {
         //CHECK IF THE ASSET IS ALREADY IN ASSETS EDITED LIST
         
@@ -397,6 +414,7 @@ contract Main {
                     adquireDate,
                     creationDate,
                     assetType,
+                    assetDepart,
                     deleted,
                     assetsEditedList.length
                 )

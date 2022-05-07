@@ -42,6 +42,7 @@ export type Asset = {
   //TODO ORG ID CHECK EVERYWHERE
   orgId: number;
   assetType: number;
+  assetDepart:number;
   creationDate: number;
   adquireDate: number;
   index?: number;
@@ -55,12 +56,16 @@ export type AssetEdited = {
   originalAssetId:number;
 };
 
+
+//ADD DEPARTMENT ID FOR EACH
 export type AssetsInList = {
   name: string;
   adquireDate?: Number;
   creationDate?: Number;
   assetType: string;
   assetTS?:String;
+  assetDepart: string;
+  assetDS?: string;
   originalId:number;
   //Id shown in the list
   id?:number;
