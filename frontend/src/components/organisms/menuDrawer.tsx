@@ -18,6 +18,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import { useNavigate } from "react-router-dom";
 import Identicon from "components/atoms/identicon";
 
@@ -62,12 +63,18 @@ export default function MenuDrawer() {
       <div className="flex flex-col justify-center items-center my-5">
         <Identicon></Identicon></div>
       
-          
+        <Divider />
         <ListItem button key={'Inicio'} onClick={()=> navigate('/home')}>
           <ListItemIcon>
             <HomeIcon color="primary"/>
           </ListItemIcon>
           <ListItemText primary={'Inicio'} />
+        </ListItem>
+        <ListItem button key={'Organización'} onClick={()=> navigate('/organization')}>
+          <ListItemIcon>
+            <HomeWorkIcon color="primary"/>
+          </ListItemIcon>
+          <ListItemText primary={'Organización'} />
         </ListItem>
         <Divider />
         <ListItem button key={'Activos'} onClick={()=> navigate('/assets')}>
@@ -76,20 +83,26 @@ export default function MenuDrawer() {
           </ListItemIcon>
           <ListItemText primary={'Activos'} />
         </ListItem>
-        <ListItem button key={'Organización'} onClick={()=> navigate('/organization')}>
+        <ListItem button key={'Nuevo Activo'} onClick={()=> navigate('/assets/new')}>
           <ListItemIcon>
-            <HomeWorkIcon color="primary"/>
+            <AddBoxIcon color="primary"/>
           </ListItemIcon>
-          <ListItemText primary={'Organización'} />
+          <ListItemText primary={'Nuevo Activo'} />
         </ListItem>
-
+        <Divider />
         <ListItem button key={'Departamentos'} onClick={()=> navigate('/departments')}>
           <ListItemIcon>
             <HomeWorkIcon color="primary"/>
           </ListItemIcon>
           <ListItemText primary={'Departamentos'} />
         </ListItem>
-
+        <ListItem button key={'Nuevo Departamento'} onClick={()=> navigate('/departments/new')}>
+          <ListItemIcon>
+            <AddBoxIcon color="primary"/>
+          </ListItemIcon>
+          <ListItemText primary={'Nuevo Departamento'} />
+        </ListItem>
+        <Divider />
         <ListItem button key={'Usuarios'} onClick={()=> navigate('/users')}>
           <ListItemIcon>
             <AssignmentIndIcon color="primary" />

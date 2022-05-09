@@ -1,10 +1,13 @@
 import Page from "../page";
-import { NewAsset } from "components/templates";
+import { Card } from "@mui/material";
+import { AssetForm } from "components/Forms";
 
 const NewAssetPage = () => {
   return (
     <Page title="">
-      <NewAsset />
+      <Card className="my-3">
+        <AssetForm/>
+      </Card>
     </Page>
   );
 };

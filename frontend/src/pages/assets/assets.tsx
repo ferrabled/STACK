@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { ethers } from "ethers";
-import { CircularProgress, containerClasses, Typography } from "@mui/material";
+import { Button, Card, CircularProgress, containerClasses, Typography } from "@mui/material";
 import { CallGetOrganizationAssets } from "components/wallet/contractCall";
 import { AssetsInList, AssetTypes } from "types"
 import PageLoged from "pages/pageCheckLogin";
@@ -12,23 +12,19 @@ declare var window: Window & { ethereum: any };
 
 const AssetsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [assets, setAssets] = useState({});
+  const [assets, setAssets] = useState<any>({});
   const navigate = useNavigate();
 
   useEffect(() => {
     const GetAssets = () => {
       const idOrg = Number(localStorage.getItem('idOrg'));
-      console.log("obteniendo assets")
       CallGetOrganizationAssets(idOrg).then((response) => {
-        console.log(response);
         const cont = response[0].length;
         const contEdit = response[1].length;
 
         let container: AssetsInList[] = [];
         //let object = new container;
         for (var i = 0; i < cont; i++) {
-          console.log(response[0][i]);
-          console.log(i);
           const asset: AssetsInList = {
             name: response[0][i].name,
             assetType: response[0][i].assetType,
@@ -39,8 +35,6 @@ const AssetsPage = () => {
             originalId: Number(response[0][i].index),
             index: Number(response[0][i].index)
           }
-          console.log("original")
-          console.log(asset);
           //TODO CHECK IF IT RETURNS ANY ASSET DELETED
           if(asset.creationDate === 0  && asset.adquireDate === 0) continue;
           else {
@@ -69,16 +63,9 @@ const AssetsPage = () => {
           }
           
         }
-        console.log("CONTAINER "+ container)
-        console.log(container);
         setAssets(container);
-        console.log("Enviamos")
-        console.log(assets);
         setIsLoading(false);
       });
-      
-      
-      
     };
 
 
@@ -107,16 +94,26 @@ const AssetsPage = () => {
   if (isLoading === true) return <CircularProgress />
   else return (
     <PageLoged>
-    <Typography variant="h5">Todos los activos</Typography>
-    <div className="min-h-full h-full">
+    <div className="my-5"><Typography variant="h5">Todos los activos</Typography></div>
+    {assets!.length !== 0 && (<div className="min-h-full h-full">
       <AssetsCard props={assets} />
-    </div>
+    </div>)}
+    {assets!.length == 0 && (
+    <Card>
+    <div className="mx-5 mt-5 mb-10 min-h-full h-full">
+      <div className="my-8 mx-48">
+        <Typography>Aún no hay activos creados en esta organización. Pulsa en el botón "Nuevo Activo" para crear tu primer activo.</Typography>
+        <div className='m-2'></div>
+        <Typography align="center">Añadir nuevos activos a una organización permite llevar un control sobre ellos.</Typography>
+      </div>
+      <div className="w-full flex flex-row justify-evenly mb-5">
+        <Button color="primary" variant="contained" onClick={() => window.history.back()}> Atrás </Button>
+        <Button color="primary" variant="contained" onClick={() => navigate('/assets/new')}>Nuevo Activo</Button>
+      </div>
+    </div></Card>
+    )}
     </PageLoged>
   );
-
-  // if (!isCorrectLogin) {
-  //     return <p>EROROIRORORORORORORORRRRR NO TIENES ACCESO!!!!!</p>
-  // }
 
   
 };

@@ -1,4 +1,4 @@
-import OrganizationForm from "./organizationForm";
+import OrganizationForm from "../Forms/organizationForm";
 import MenuDrawer from "./menuDrawer";
 
 

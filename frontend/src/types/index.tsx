@@ -105,3 +105,17 @@ export type Department = {
   index?: Number;
   id?: Number;
 }
+
+export type Comment = {
+  description: String;
+  userId: number;
+  date: number; 
+}
+
+export type License = {
+  name: String;
+  key: String;
+  adquireDate: number;
+  expirationDate: number;
+  licenseType: number; 
+}

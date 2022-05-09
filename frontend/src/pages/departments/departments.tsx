@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { ethers } from "ethers";
-import { Button, CircularProgress, containerClasses, Typography } from "@mui/material";
+import { Button, Card, CircularProgress, containerClasses, Typography } from "@mui/material";
 import { AssetsInList, AssetTypes, Department } from "types"
 import PageLoged from "pages/pageCheckLogin";
 import { CallGetAllDepartmentsFromOrg } from "components/wallet/userCall";
@@ -50,11 +50,23 @@ const DepartmentsPage = () => {
   if (isLoading === true) return <CircularProgress />
   else return (
     <PageLoged>
-        <Typography variant="h5">Todos los departamentos</Typography>
-        <div className="min-h-full h-full">
-            <DepartmentTable {...departments!} />
-        </div>
-        <Button color="primary" variant="contained" onClick={()=> navigate('/departments/new')}>Nuevo Departamento</Button>
+        <div className="my-5"><Typography variant="h5">Todos los departamentos</Typography></div>
+        <Card className="gap-7 p-10 flex flex-col items-center h-full">
+        {departments!.length !== 0 && (
+          <div className="min-h-full h-full w-full">
+              <DepartmentTable {...departments!} />
+          </div>
+        )}
+        {departments!.length == 0 && (
+        <>
+        <div className="mb-5 mx-48"><Typography>Aún no hay departamentos en la organización.</Typography>
+        <div className='m-2'></div><Typography align="center">Puedes crear un departamento nuevo haciendo click en el siguiente botón</Typography></div>
+        </>
+        )}
+        <div className="w-full flex flex-row justify-evenly">
+        <Button color="primary" variant="contained" onClick={() => window.history.back()}> Atrás </Button>
+        <Button color="primary" variant="contained" onClick={() => navigate('/departments/new')}>Nuevo Departamento</Button>
+      </div></Card>
     </PageLoged>
   );  
 };

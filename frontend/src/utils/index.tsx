@@ -1,3 +1,4 @@
+import { CallGetOrganizationData } from "components/wallet/contractCall";
 
 export var formatDate = function formatDate(date: Date) {            // function for reusability
     var d = date.getUTCDate().toString(),           // getUTCDate() returns 1 - 31
@@ -30,4 +31,17 @@ export var formatDateyMd = function formatDate(date: Date) {            // funct
     return formatted;
 }
 
-//export {insertOrgAndAdmin};
+
+export async function sendInviteEmail(url:String, orgId:number) {
+    const emailUrl = await CallGetOrganizationData(orgId).then((r) => {
+        const text = `👨‍🏭 Te han invitado a unirte al sistema de Inventario de la Organización: ${r.name}.%0D%0A👩‍💻 Para tener acceso a los activos de tu empresa, puedes inscribirte desde el siguiente enlace: 👨‍💻%0D%0A${url}
+        `;
+        const mailShareEndpoint = `mailto:?subject=Invitación para unirte a Inventario de ${r.name}&body=`;
+        return mailShareEndpoint+text;
+    })
+    return emailUrl;
+    
+    
+
+}
+

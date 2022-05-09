@@ -1,10 +1,13 @@
 import Page from "../page";
-import { NewOrganization } from "components/templates";
+import { OrganizationForm } from "components/organisms";
+import { Card } from "@mui/material";
 
 const NewOrganizationPage = () => {
   return (
-    <Page title="">
-      <NewOrganization />
+    <Page>
+      <Card className="my-3">
+        <OrganizationForm />
+      </Card>
     </Page>
   );
 };
