@@ -1,3 +1,4 @@
+import { Card } from "@mui/material";
 import { UserForm } from "components/Forms"
 import Page from "pages/page";
 import { useParams } from "react-router-dom";
@@ -8,8 +9,9 @@ const RegisterPage = () => {
 
     return (
         <Page>
-            {orgId}
-        <UserForm props={orgId}></UserForm>
+            <Card className="my-3">
+                <UserForm props={orgId}></UserForm>
+            </Card>
         </Page>
        
     )

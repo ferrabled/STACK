@@ -41,14 +41,12 @@ const SimpleUserTable = ({users, depart, idList}:{users: Users[], depart:boolean
         const ids:number[] = [];
         for (var i = 0; i < cont; i++) {
             const item:any = selectionModel[i]; 
-            console.log("Tabla");
-            console.log(item.index);
             ids.push(item.index);
-            //console.log(selectionModel[i].index);
         }
         if(depart === true) {
           console.log("add users to department");
-          CallInsertUserToDepartment(Number(assetId), ids);
+          const departId = window.sessionStorage.getItem("departId");
+          CallInsertUserToDepartment(Number(departId), ids);
         }
         else{
           console.log("add users to asset");

@@ -13,6 +13,8 @@ import { CallGetAllUsersFromOrg, CallGetAssetUsers } from "components/wallet/use
 import { Users } from "types";
 import AssetTypeCard from "./Assets/assetTypeData";
 import UserSelectModal from "../Modals/userSelectModal";
+import CommentsCard from "./commentsCard";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const AssetCard = (props: any) => {
   const [showModal, setShowModal] = useState(false);
@@ -163,6 +165,10 @@ const AssetCard = (props: any) => {
         
       </section>
       <section>
+          <CommentsCard assetId={Number(assetId)}></CommentsCard>
+
+      </section>
+      <section>
         <Card className="p-5 m-5">
           <div className="flex flex-row justify-between content-evenly p-1 mb-3">
             <Typography variant="h6">Usuarios del Activo</Typography>
@@ -171,7 +177,7 @@ const AssetCard = (props: any) => {
               color="primary"
               onClick={() => handleUserModal()}
             >
-              Añadir Nuevo
+              <AddBoxIcon className="mr-2"/>Añadir Nuevo
             </Button>
           </div>
           {isLoading && (<Skeleton variant="rectangular" height={230}/>)}

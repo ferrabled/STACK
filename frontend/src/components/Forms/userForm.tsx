@@ -32,7 +32,7 @@ const UserForm = (props: any) => {
   });
 
   return (
-    <div>
+    <div className="flex flex-col m-6">
     <Formik
       initialValues={{
         name: "Fernando",

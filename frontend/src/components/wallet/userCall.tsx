@@ -55,13 +55,26 @@ export async function CallInsertUser(user: any) {
       user.telephone,
       user.orgId
     );
+    const text = "Usuario creado correctamente. Guardando datos en la Blockchain...";
+    const notify = {
+        isOpen: true,
+        message: text,
+        type: "success",
+      };
+    return notify;
   } catch (e: any) {
-    console.log(e.data.message);
     let errorM = "";
-    if (e.data.message.includes("OrgId not found")) {
-      errorM = "El id de la organización no existe";
-    } else if (e.data.message.includes("Address already registered")) {
-      errorM = "La dirección de la cartera ya se encuentra registrada";
+    try{
+      if (e.data.message.includes("OrgId not found")) {
+        errorM = "El id de la organización no existe";
+      } else if (e.data.message.includes("user is admin")) {
+        errorM = "La billetera elegida es del administrador. Por favor elige otra";
+      } else if (e.data.message.includes("Address registered")) {
+        errorM = "La dirección de la cartera ya se encuentra registrada";
+      } 
+    }catch {
+      errorM = "Por favor, acepta la transacción en metamask";
+    
     }
     const notify = {
       isOpen: true,
@@ -108,10 +121,38 @@ export async function CallGetNumUsersFromOrg(assetId: number){
 export async function CallInsertDepartment(props: any) {
   let signerAddress = await provider.getSigner().getAddress();
   try {
-    contract.insertDepartment(props.name, props.description, props.telephone, props.orgId, signerAddress);
-  } catch (e: any){
-    console.log(e);
-  }
+    await contract.insertDepartment(props.name, props.description, props.telephone, props.orgId, signerAddress);
+    const text = "Departamento creado correctamente. Guardando datos en la Blockchain...";
+    const notify = {
+        isOpen: true,
+        message: text,
+        type: "success",
+      };
+    return notify
+} catch (e:any) {
+    try {
+        if(e.data.message.includes("revert")){
+        console.log(e.data.message);
+        const errorM = "La billetera conectada no pertenece a la organización";
+        const notify = {
+            isOpen: true,
+            message: errorM,
+            type: "error",
+        };
+        return notify;
+        }
+    } catch {
+        console.log(e);
+        const errorM = "Por favor, acepta la transacción en metamask";
+        const notify = {
+            isOpen: true,
+            message: errorM,
+            type: "error",
+        };
+        return notify;
+    }
+    
+}
 }
 
 export async function CallGetDepartment(props: number){
@@ -127,6 +168,7 @@ export async function CallGetUsersFromDepart(props: number) {
 }
 
 export async function CallInsertUserToDepartment(departId: number, userIds: number[]) {
+  console.log("Introducir usuario "+ userIds + " a departamento "+ departId);
   contract.insertUserToDepartment(departId, userIds);
 } 
 
@@ -195,7 +237,7 @@ export async function CallInsertNewOAssetWithDepartment(asset:Asset, props: any)
 
 
 //COMMENTS
-export async function CallInsertComment(comment:Comment, assetId:number, orgId:number){
+export async function CallInsertComment(comment:any, assetId:number, orgId:number){
   let signerAddress = await provider.getSigner().getAddress();
   contract.insertComment(comment.description, comment.date, assetId, orgId, signerAddress)
 }

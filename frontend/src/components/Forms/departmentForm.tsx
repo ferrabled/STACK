@@ -29,7 +29,7 @@ const DepartmentForm = () => {
   });
 
   return (
-    <div>
+    <div className="flex flex-col m-6">
     <Formik
       initialValues={{
         name: "Fernando",
@@ -44,8 +44,8 @@ const DepartmentForm = () => {
         try {
           CallInsertDepartment(data).then((response) => {
             /* console.log(response) */
-            /* const notify:Notify = response!; 
-            setNotify(notify); */
+            const notify:Notify = response!; 
+            setNotify(notify);
             setSubmitting(true);
           });
         }catch (e){
@@ -107,7 +107,7 @@ const DepartmentForm = () => {
         </Form>
       )}
     </Formik>
-    {/* <Notification {...notify}></Notification> */}
+     <Notification {...notify}></Notification>
     </div>
   );
 };

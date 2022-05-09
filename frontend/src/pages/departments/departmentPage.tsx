@@ -88,6 +88,7 @@ const DepartmentPage = () => {
             const userList:Users[] = [];
             const userIds:Number[] = [];
             const cont = r.length;
+            console.log("EL USER")
             console.log(cont);
             for (var i = 0; i < cont; i++) {
                 const user:Users = {
@@ -99,6 +100,7 @@ const DepartmentPage = () => {
                     orgId: Number(r[i].orgId),
                     index: Number(r[i].index),                   
                 }
+                
               console.log(user)
               userIds.push(user.index!);
               userList.push(user);                

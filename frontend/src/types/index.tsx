@@ -110,6 +110,17 @@ export type Comment = {
   description: String;
   userId: number;
   date: number; 
+  id?:number
+}
+
+export type CommentInTable = {
+  description: String;
+  userId: number;
+  date: number; 
+  id?:number;
+  fullName: String;
+  email: String;
+  telephone: Number;
 }
 
 export type License = {
