@@ -31,18 +31,12 @@ contract Users {
     User[] private userList;
     address[] private users;
     mapping(uint256 => uint256[]) orgIdToUserList;
-
-
     mapping(address => uint) addressToId;
-
-
 
     function isUser(address userAddress) public view returns (bool isIndeed) {
         if (users.length == 0) return false;
         return (users[addressToId[userAddress]] == userAddress);
-    }
-
-   
+    } 
 
     function insertUser(
         address addr, 
@@ -54,8 +48,8 @@ contract Users {
     ) public {
         //Instance main contract to see if the id of the org exists
         Main mainInstance = Main(mainAddr);
-
-        if(isUser(addr)) revert("Address already registered");
+        if(isAdminFromOrg(addr, orgId)) revert("user is admin");
+        if(isUser(addr)) revert("Address registered");
         if((mainInstance.orgCount()) < (uint256(orgId)+1)) revert("OrgId not found");
         uint userId = userList.length;
         userList.push(User(addr, name, surname, email, telephone, orgId, userId));
@@ -83,8 +77,6 @@ contract Users {
         return usersFromOrg;
     }
 
-
-
     function getUserData(uint userId) public view returns(User memory){
         return userList[userId];
     }
@@ -94,15 +86,12 @@ contract Users {
     mapping(uint => uint[]) public userIdToAssetList;
     mapping(uint => uint[]) public assetToListOfUsers;
 
-
     function insertUsersToAsset(uint assetId, uint[] memory userIds) public {
         uint cont = userIds.length;
         for (uint i = 0; i < cont; i++) {
             userIdToAssetList[userIds[i]].push(assetId);
             assetToListOfUsers[assetId].push(userIds[i]);
-        }
-
-        
+        } 
     }
 
     function getUserAssets(uint userId) public view returns(uint[] memory assetIds){
@@ -119,9 +108,7 @@ contract Users {
         return usersOfAsset;
     }
 
-
     //DEPARTMENTS
-    
     struct Department {
         string name;
         string description;
@@ -132,18 +119,36 @@ contract Users {
 
     Department[] private departList;
     mapping(uint256 => uint256[]) orgIdToDepartList;
-
-
-    
     mapping(uint => mapping(uint => bool)) departToUserBool;
     mapping(uint => uint[]) departIdToUserList;
 
+    function isUserFromOrg(address addr, uint orgId) public view returns(bool){
+        if (users.length == 0) return false;
+        if (!isUser(addr)) return false;
+        uint userId = addressToId[addr];
+        uint userOrg = userList[userId].orgId;
+        return (userOrg == orgId);
+    }
+
+    function isUserFromDepart(address addr, uint departId) public view returns(bool){
+        if (users.length == 0) return false;
+        if (!isUser(addr)) return false;
+        uint userId = addressToId[addr];
+        return (departToUserBool[departId][userId]);
+    }
+
+    function isAdminFromOrg(address addr, uint orgId) public view returns (bool){
+        Main mainInstance = Main(mainAddr);
+        return mainInstance.isAdminFromOrg(addr, orgId);
+    }
 
     function insertDepartment(string memory name,
         string memory description,
         uint32 telephone,
-        uint orgId
+        uint orgId,
+        address addr
         ) public {
+            if(!(isAdminFromOrg(addr, orgId) || isUserFromOrg(addr, orgId))) revert();         
             uint departId = departList.length;
             departList.push(Department(name, description, telephone, orgId, departId));
             orgIdToDepartList[orgId].push(departId);
@@ -164,14 +169,13 @@ contract Users {
         return departFromOrg;
     }
 
-
-
     //USERS from department
     function insertUserToDepartment(uint departId, uint[] memory userIds) public {
+        //if(!isAdminFromOrg(addr, orgId)) revert(");
         uint cont = userIds.length;
         for (uint i = 0; i < cont; i++) {
             if(departToUserBool[departId][userIds[i]] == true) {
-                revert("User already in department");
+                revert("User in dep");
             } else {
                 departIdToUserList[departId].push(userIds[i]);
                 departToUserBool[departId][userIds[i]] = true;
@@ -202,13 +206,10 @@ contract Users {
         }
     }
 
-
     function getUsersIdsFromDepart(uint departId) public view returns(uint[] memory){
         return departIdToUserList[departId];
         
     }
-
-
 
     function getUsersFromDepart(uint departId) public view returns(User[] memory){
         uint[] memory idList = departIdToUserList[departId];
@@ -229,7 +230,7 @@ contract Users {
         uint cont = assetsIds.length;
         for (uint i = 0; i < cont; i++) {
             if(departToAssetBool[departId][assetsIds[i]] == true) {
-                revert("Asset already in department");
+                revert("Asset in dep");
             } else {
                 departIdToAssetList[departId].push(assetsIds[i]);
                 departToAssetBool[departId][assetsIds[i]] = true;
@@ -266,7 +267,6 @@ contract Users {
         
     }
 
-
     function insertNewSAssetWithDepartment(string memory name,
         uint256 organizationId,
         uint256 adquireDate,
@@ -275,15 +275,16 @@ contract Users {
         uint256 assetDepart,
         string memory version, 
         string memory provider, 
-        uint8 stype) public {
+        uint8 stype,
+        address addr) public {
+            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
             Main mainInstance = Main(mainAddr);
             uint id = mainInstance.getIdAsset();
             mainInstance.insertNewSoftAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, version, provider, stype);
             departIdToAssetList[assetDepart].push(id);
             departToAssetBool[assetDepart][id] = true;
         }
-
-    
+ 
     function insertNewHAssetWithDepartment(string memory name,
         uint256 organizationId,
         uint256 adquireDate,
@@ -293,7 +294,9 @@ contract Users {
         string memory model, 
         string memory provider, 
         string memory serialNumber, 
-        uint8 htype) public {
+        uint8 htype,
+        address addr) public {
+            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
             Main mainInstance = Main(mainAddr);
             uint id = mainInstance.getIdAsset();
             mainInstance.insertNewHardAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, model, provider, serialNumber, htype);
@@ -309,7 +312,9 @@ contract Users {
         uint256 assetDepart,
         string memory description,
         string memory location,
-        uint8 doctype) public {
+        uint8 doctype,
+        address addr) public {
+            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
             Main mainInstance = Main(mainAddr);
             uint id = mainInstance.getIdAsset();
             mainInstance.insertNewDocAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, description, location, doctype);
@@ -324,14 +329,15 @@ contract Users {
         uint8 assetType,
         uint256 assetDepart,
         string memory location, 
-        bool local) public {
+        bool local,
+        address addr) public {
+            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
             Main mainInstance = Main(mainAddr);
             uint id = mainInstance.getIdAsset();
             mainInstance.insertNewDataAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, location, local);
             departIdToAssetList[assetDepart].push(id);
             departToAssetBool[assetDepart][id] = true;
         }
-
 
     function insertNewNAssetWithDepartment(string memory name,
         uint256 organizationId,
@@ -340,14 +346,15 @@ contract Users {
         uint8 assetType,
         uint256 assetDepart,
         string memory cidrblock, 
-        bool nat) public {
+        bool nat,
+        address addr) public {
+            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
             Main mainInstance = Main(mainAddr);
             uint id = mainInstance.getIdAsset();
             mainInstance.insertNewNetworkAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, cidrblock, nat);
             departIdToAssetList[assetDepart].push(id);
             departToAssetBool[assetDepart][id] = true;
         }
-
 
     function insertNewCAssetWithDepartment(string memory name,
         uint256 organizationId,
@@ -356,7 +363,9 @@ contract Users {
         uint8 assetType,
         uint256 assetDepart,
         string memory url, 
-        string memory domain) public {
+        string memory domain,
+        address addr) public {
+            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
             Main mainInstance = Main(mainAddr);
             uint id = mainInstance.getIdAsset();
             mainInstance.insertNewCloudAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, url, domain);
@@ -370,7 +379,9 @@ contract Users {
         uint256 creationDate,
         uint8 assetType,
         uint256 assetDepart,
-        string memory description) public {
+        string memory description,
+        address addr) public {
+            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
             Main mainInstance = Main(mainAddr);
             uint id = mainInstance.getIdAsset();
             mainInstance.insertNewOtherAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, description);
@@ -378,7 +389,44 @@ contract Users {
             departToAssetBool[assetDepart][id] = true;
         }
 
-        
+    //COMMENTS
+    struct Comment {
+        string description;
+        uint userId;
+        uint date;
+    }
 
+    Comment[] commentList;
+    mapping(uint => uint[]) assetIdToCommentList; 
 
+    function insertComment(string memory description, uint date, uint assetId, uint orgId, address addr) public {
+        if(isAdminFromOrg(addr, orgId)) revert("is Administrator");
+        if(!isUserFromOrg(addr, orgId)) revert("User isn't in org");
+        uint userId = addressToId[addr];
+        uint comId = commentList.length;
+        commentList.push(Comment(description, userId, date));
+        assetIdToCommentList[assetId].push(comId);
+    }
+
+    function getCommentsByAsset(uint assetId) public view returns(Comment[] memory){
+        uint[] memory ids = assetIdToCommentList[assetId];
+        Comment[] memory comments = new Comment[](ids.length);
+        for (uint256 i = 0; i < ids.length; i++) {
+            comments[i] = commentList[ids[i]];
+        }
+        return comments;
+    }
+
+    function getNumberOfCommentsByAsset(uint assetId) public view returns(uint){
+        uint[] memory ids = assetIdToCommentList[assetId];
+        return ids.length;
+    }
+
+    function getUsersById(uint[] memory usersId) public view returns(User[] memory){
+        User[] memory container = new User[](usersId.length);
+        for (uint256 i = 0; i < usersId.length; i++) {
+            container[i] = userList[usersId[i]];
+        }
+        return container;
+    }
 }

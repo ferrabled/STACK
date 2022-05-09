@@ -14,17 +14,48 @@ const contract = new ethers.Contract(
             mainABI,
             provider.getSigner());
         
-export async function CallInsertOrg(props: any) {
+export async function CallInsertOrg(input: any) {
     const signer = provider.getSigner();
     let signerAddress = await signer.getAddress();
+    console.log(input);
+    
 
-    const input = props.data;
-    console.log(signerAddress, input.firstName, input.lastName, input.email, input.telephoneA,
-        input.orgName, input.address, input.telephoneOrg);
-
-    contract.insertOrgAndAdmin(
-        signerAddress, input.firstName, input.lastName, input.email, input.telephoneA,
-        input.orgName, input.address, input.telephoneOrg);
+    try {
+        await contract.insertOrgAndAdmin(
+            signerAddress, input.firstName, input.lastName, input.email, input.telephoneA,
+            input.orgName, input.address, input.telephoneOrg);
+        const text = "Organización creada correctamente. Guardando datos en la Blockchain...";
+        const notify = {
+            isOpen: true,
+            message: text,
+            type: "success",
+          };
+        return notify
+    } catch (e:any) {
+        try {
+            if(e.data.message.includes("revert")){
+            console.log(e.data.message);
+            const errorM = "Ya existe un administrador con esta billetera, por favor, elige otra";
+            const notify = {
+                isOpen: true,
+                message: errorM,
+                type: "error",
+            };
+            return notify;
+            }
+        } catch {
+            console.log(e);
+            const errorM = "Por favor, acepta la transacción en metamask";
+            const notify = {
+                isOpen: true,
+                message: errorM,
+                type: "error",
+            };
+            return notify;
+        }
+        
+    }
+    
 }
 
 

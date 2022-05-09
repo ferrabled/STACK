@@ -13,14 +13,6 @@ contract DataStructs {
         uint8 stype;
     }
     
-    /* //TODO
-    struct License {
-        string name;
-        string key;
-        uint adquireDate;
-        uint expirationDate;
-        uint8 licenseType;
-    } */
 
     struct Hardware {
         string model;
@@ -202,5 +194,36 @@ contract DataStructs {
         uint otherId = assetOther[assetId];
         Other storage _other = otherList[otherId];
         _other.description = description;
+    }
+
+
+    struct License {
+        string name;
+        string key;
+        uint adquireDate;
+        uint expirationDate;
+        uint8 licenseType;
+    }
+
+    License[] licenseList;
+    mapping(uint => uint[]) softAssetToLicense;
+
+    function insertLicenseToSoft(string memory name,
+        string memory key,
+        uint adquireDate,
+        uint expirationDate,
+        uint8 licenseType,
+        uint assetId) public {
+        licenseList.push(License(name, key, adquireDate, expirationDate, licenseType));
+        softAssetToLicense[assetId].push(licenseList.length-1);
+    }
+
+    function getLicenseByAsset(uint assetId) public view returns(License[] memory) {
+        uint[] memory ids = softAssetToLicense[assetId];
+        License[] memory container = new License[](ids.length);
+        for (uint256 i = 0; i < ids.length; i++) {
+            container[i] = licenseList[ids[i]];
+        }
+        return container;
     }
 }

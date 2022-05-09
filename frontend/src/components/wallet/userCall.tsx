@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
-import { Asset, Users } from "types";
+import { Asset, Comment, Users } from "types";
 import addresses from "../../assets/addresses.json";
 
 declare var window: any;
@@ -103,10 +103,15 @@ export async function CallGetNumUsersFromOrg(assetId: number){
   return contract.getNumUsersFromOrg(assetId);
 }
 
-
+//TODO notifications
 //DEPARTMENTS
 export async function CallInsertDepartment(props: any) {
-  contract.insertDepartment(props.name, props.description, props.telephone, props.orgId);
+  let signerAddress = await provider.getSigner().getAddress();
+  try {
+    contract.insertDepartment(props.name, props.description, props.telephone, props.orgId, signerAddress);
+  } catch (e: any){
+    console.log(e);
+  }
 }
 
 export async function CallGetDepartment(props: number){
@@ -147,37 +152,62 @@ export async function CallGetAssetsIdsFromDepart(departId: number) {
 
 //NEW ASSETS WITH DEPARTMENT
 export async function CallInsertNewSAssetWithDepartment(asset:Asset, props: any){
+  let signerAddress = await provider.getSigner().getAddress();
   contract.insertNewSAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-      asset.assetType, asset.assetDepart, props.version, props.provider, props.stype); 
+      asset.assetType, asset.assetDepart, props.version, props.provider, props.stype, signerAddress); 
 }
 
 export async function CallInsertNewHAssetWithDepartment(asset:Asset, props: any){
+  let signerAddress = await provider.getSigner().getAddress();
   contract.insertNewHAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-      asset.assetType, asset.assetDepart, props.model, props.provider, props.serialNumber, props.htype); 
+      asset.assetType, asset.assetDepart, props.model, props.provider, props.serialNumber, props.htype, signerAddress); 
 }
 
 export async function CallInsertNewDocAssetWithDepartment(asset:Asset, props: any){
-  console.log("Insertar doc")
+  let signerAddress = await provider.getSigner().getAddress();
   contract.insertNewDocAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-      asset.assetType,  asset.assetDepart,props.name, props.location, props.doctype); 
+      asset.assetType,  asset.assetDepart,props.name, props.location, props.doctype, signerAddress); 
 }
 
 export async function CallInsertNewDataAssetWithDepartment(asset:Asset, props: any){
+  let signerAddress = await provider.getSigner().getAddress();
   contract.insertNewDataAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-      asset.assetType, asset.assetDepart, props.location, props.local); 
+      asset.assetType, asset.assetDepart, props.location, props.local, signerAddress); 
 }
 
 export async function CallInsertNewNAssetWithDepartment(asset:Asset, props: any){
+  let signerAddress = await provider.getSigner().getAddress();
   contract.insertNewNAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-      asset.assetType, asset.assetDepart, props.cidrblock, props.nat); 
+      asset.assetType, asset.assetDepart, props.cidrblock, props.nat, signerAddress); 
 }
 
 export async function CallInsertNewCAssetWithDepartment(asset:Asset, props: any){
+  let signerAddress = await provider.getSigner().getAddress();
   contract.insertNewCAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-      asset.assetType, asset.assetDepart, props.url, props.domain); 
+      asset.assetType, asset.assetDepart, props.url, props.domain, signerAddress); 
 }
 
 export async function CallInsertNewOAssetWithDepartment(asset:Asset, props: any){
+  let signerAddress = await provider.getSigner().getAddress();
   contract.insertNewOAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-      asset.assetType, asset.assetDepart, props.description); 
+      asset.assetType, asset.assetDepart, props.description, signerAddress); 
+}
+
+
+//COMMENTS
+export async function CallInsertComment(comment:Comment, assetId:number, orgId:number){
+  let signerAddress = await provider.getSigner().getAddress();
+  contract.insertComment(comment.description, comment.date, assetId, orgId, signerAddress)
+}
+
+export async function CallGetCommentsByAsset(assetId:number){
+  return contract.getCommentsByAsset(assetId);
+}
+
+export async function CallGetNumberOfCommentsByAsset(assetId:number){
+  return contract.getNumberOfCommentsByAsset(assetId);
+}
+
+export async function CallGetUsersById(usersIds:number[]){
+  return contract.getUsersById(usersIds);
 }

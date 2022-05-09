@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { TextField, Button, Checkbox, Typography } from "@mui/material";
-import { AdminFormValues } from "types";
+import { AdminFormValues, Notify } from "types";
 import { Field, FieldAttributes, Form, Formik } from "formik";
 import * as Yup from "yup";
-import ButtonSOrganization from "components/atoms/Buttons/submitOrgButton";
+import { CallInsertOrg } from "components/wallet/contractCall";
+import Notification from "components/notification";
 
-
-//formik
-// const OrganizationSchema = yup.schema({
-//   name: Yup.string(),
-//   telephone: Yup.number().minLength(20)
-// });
 
 const OrganizationForm = () => {
+  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
+
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
@@ -26,20 +23,27 @@ const OrganizationForm = () => {
     telephoneA: Yup.string()
       .matches(phoneRegExp, "Introduce un teléfono válido")
       .min(9, "Introduce un teléfono válido")
-      .max(9, "Introduce un teléfono válido"),
+      .max(9, "Introduce un teléfono válido")
+      .required("El teléfono del administrador es obligatorio"),
     orgName: Yup.string().required("El nombre de la organización es obligatorio").max(20),
     address: Yup.string().required("La dirección es obligatoria").max(70),
     telephoneOrg: Yup.string()
       .matches(phoneRegExp, "Introduce un teléfono válido")
       .min(9, "Introduce un teléfono válido")
-      .max(9, "Introduce un teléfono válido"),
+      .max(9, "Introduce un teléfono válido")
+      .required("El teléfono de la organización es obligatorio"),
   });
 
-  /* const CreateTextField: React.FC<FieldAttributes<{}>> = (
-    placeholder, ...props
-  )} => {
-    const [field, meta]
-  } */
+  const handleSubmit = async (input: any) => {
+    console.log(input);
+    console.log("Create Organization"); 
+    await CallInsertOrg(input).then((r)=> {
+      const notify:Notify = r!; 
+      setNotify(notify);
+    });
+
+    };
+
   const [formIndex, setFormIndex] = useState(0);
 
   return (
@@ -49,7 +53,6 @@ const OrganizationForm = () => {
           firstName: "",
           lastName: "",
           email: "",
-          isEmail: false,
           telephoneA: "",
           orgName: "",
           address: "",
@@ -60,7 +63,6 @@ const OrganizationForm = () => {
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
           console.log(data);
-          //make async call
           setFormIndex(formIndex + 1)
         }}
       >
@@ -96,8 +98,7 @@ const OrganizationForm = () => {
                     as={TextField}
                   />
                 </div>
-                <div className="mb-5 lg:flex flex-row items-center">
-                  <div className="lg:w-1/2 min-w-1/2">
+                <div className="mb-6">
                     <Field
                       name="email"
                       label="Correo Electrónico"
@@ -108,14 +109,6 @@ const OrganizationForm = () => {
                       error={Boolean(errors.email)}
                       as={TextField}
                     />
-                  </div>
-                  <div className="flex flex-row items-center mt-3 lg:pl-6 lg:mt-0 ">
-                    <Field type="checkbox" name="isEmail" as={Checkbox} />
-                    <Typography variant="body2">
-                      Deseo recibir actualizaciones sobre los activos de mi
-                      organización
-                    </Typography>
-                  </div>
                 </div>
                 <div className="mb-6">
                   <Field
@@ -123,6 +116,7 @@ const OrganizationForm = () => {
                     label="Teléfono"
                     inputProps={{ maxLength: 255 }}
                     fullWidth
+                    required
                     error={Boolean(errors.telephoneA)}
                     helperText={errors.telephoneA ? errors.telephoneA : " "}
                     as={TextField}
@@ -188,6 +182,7 @@ const OrganizationForm = () => {
                     inputProps={{ maxLength: 255 }}
                     value={values.telephoneOrg}
                     fullWidth
+                    required
                     error={Boolean(errors.telephoneOrg)}
                     helperText={errors.telephoneOrg ? errors.telephoneOrg : " "}
                     as={TextField}
@@ -233,8 +228,7 @@ const OrganizationForm = () => {
                     className="h-44 w-44 my-5"
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png"
                   />
-                  
-                  <ButtonSOrganization data={values}></ButtonSOrganization>
+                  <Button variant="contained" onClick={()=> handleSubmit(values)}>Finalizar</Button>
                   <a
                     className="mt-5"
                     href="https://metamask.io/"
@@ -253,6 +247,7 @@ const OrganizationForm = () => {
           </Form>
         )}
       </Formik>
+      <Notification {...notify}></Notification>
     </div>
   );
 };

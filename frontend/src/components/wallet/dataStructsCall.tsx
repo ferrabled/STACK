@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { License } from "types";
 import addresses from "../../assets/addresses.json";
 
 declare var window: any;
@@ -39,4 +40,13 @@ export async function CallGetCloudAsset(props: any){
 
 export async function CallGetOtherAsset(props: any){
     return contract2.getOtherAsset(props);
+}
+
+
+export async function CallInsertLicenseToSoft(license:License, assetId:number){
+    contract2.insertLicenseToSoft(license.name, license.key, license.adquireDate, license.expirationDate, license.licenseType, assetId);
+}
+
+export async function CallGetLicenseByAsset(assetId: number){
+    return contract2.getLicenseByAsset(assetId);
 }

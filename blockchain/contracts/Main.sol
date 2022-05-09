@@ -114,6 +114,12 @@ contract Main {
             userAddress);
     }
 
+    function isAdminFromOrg(address addr, uint orgId) public view returns(bool){
+        if (admins.length == 0) return false;
+        if (!isAdministrator(addr)) return false;
+        return(addressToOrganizationIndex[addr] == orgId);
+    }
+
     function getOrg(uint256 _orgId) public view returns (Organization memory) {
         return organizations[_orgId];
     }
