@@ -173,7 +173,8 @@ export async function CallInsertUserToDepartment(departId: number, userIds: numb
 } 
 
 export async function CallDeleteUsersFromDepartment(departId: number, userIds: number[]) {
-  contract.deleteAssetFromDepartment(departId, userIds);
+  console.log("Delete users: "+userIds+ " from department "+departId);
+  contract.deleteUsersFromDepartment(departId, userIds);
 }
 
 

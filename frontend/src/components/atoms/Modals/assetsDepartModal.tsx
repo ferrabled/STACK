@@ -129,7 +129,7 @@ const AssetsDepartModal = (props: any) => {
                   activos desde la vista detallada de cualquier activo.
                 </Typography>
               )}
-              {!isEmpty && <SimpleSelectAssetsTable {...assets!} />}
+              {!isEmpty && <SimpleSelectAssetsTable assets={assets!} deleteB={false} />}
             </>
           )}
         </Box>

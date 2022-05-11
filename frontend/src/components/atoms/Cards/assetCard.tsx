@@ -18,6 +18,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const AssetCard = (props: any) => {
   const [showModal, setShowModal] = useState(false);
+
   const [assetId, setAssetId] = useState("");
   //const [asset, setAsset] = useState<any>("");
   const [usersIds, setUsersIds] = useState<Number[]>([]);
@@ -165,13 +166,17 @@ const AssetCard = (props: any) => {
         
       </section>
       <section>
-          <CommentsCard assetId={Number(assetId)}></CommentsCard>
+      {isLoading && (<Skeleton variant="rectangular" height={230}/>)}
+      {!isLoading && (
+        <CommentsCard assetId={Number(assetId)}></CommentsCard> 
+        )}
 
       </section>
       <section>
         <Card className="p-5 m-5">
           <div className="flex flex-row justify-between content-evenly p-1 mb-3">
             <Typography variant="h6">Usuarios del Activo</Typography>
+            <div className="flex flex-row gap-4">
             <Button
               variant="contained"
               color="primary"
@@ -179,6 +184,8 @@ const AssetCard = (props: any) => {
             >
               <AddBoxIcon className="mr-2"/>Añadir Nuevo
             </Button>
+            </div>
+            
           </div>
           {isLoading && (<Skeleton variant="rectangular" height={230}/>)}
           {!isLoading && (<>

@@ -1,13 +1,13 @@
 import { Button, IconButton } from "@mui/material";
 import { DataGrid, GridColDef, GridRowParams, GridSelectionModel } from "@mui/x-data-grid"
-import { CallInsertUsersToAsset, CallInsertUserToDepartment } from "components/wallet/userCall";
+import { CallDeleteUsersFromDepartment, CallInsertUsersToAsset, CallInsertUserToDepartment } from "components/wallet/userCall";
 import { useEffect, useState } from "react";
 import { Users } from "types"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BasicModal from "../Modals/assetsFromUser";
 
 
-const SimpleUserTable = ({users, depart, idList}:{users: Users[], depart:boolean, idList:number[]}) => {
+const SimpleUserTable = ({users, depart, idList, deleteB}:{users: Users[], depart:boolean, idList:number[], deleteB:boolean}) => {
 
     const [rows, setRows] = useState<any>([]);
     const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
@@ -44,9 +44,16 @@ const SimpleUserTable = ({users, depart, idList}:{users: Users[], depart:boolean
             ids.push(item.index);
         }
         if(depart === true) {
-          console.log("add users to department");
-          const departId = window.sessionStorage.getItem("departId");
-          CallInsertUserToDepartment(Number(departId), ids);
+          if(deleteB === true){
+            console.log("delete users from department");
+            const departId = window.sessionStorage.getItem("departId");
+            CallDeleteUsersFromDepartment(Number(departId), ids);
+          } else {
+            console.log("add users to department");
+            const departId = window.sessionStorage.getItem("departId");
+            CallInsertUserToDepartment(Number(departId), ids);
+          }
+          
         }
         else{
           console.log("add users to asset");

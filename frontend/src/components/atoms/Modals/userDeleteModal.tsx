@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
-import { CallGetAllUsersFromOrg } from "components/wallet/userCall";
+import { CallGetAllUsersFromOrg, CallGetUsersFromDepart } from "components/wallet/userCall";
 import { UsersCard } from "../Cards";
 import { Users } from "types";
 import EnhancedTable from "../Table/simpleUserTable";
@@ -22,16 +22,15 @@ const style = {
   p: 4,
 };
 
-const UserSelectModal = (props: any) => {
+const UserDeleteModal = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<Users[]>();
 
   useEffect(() => {
-    const orgId = window.localStorage.getItem("orgId");
     console.log("QUE HEMOS RECIBIDO " + props.usersIds);
     console.log(props.usersIds);
 
-    CallGetAllUsersFromOrg(Number(orgId!)).then((response) => {
+    CallGetUsersFromDepart(Number(props.departId!)).then((response) => {
       const cont = response.length;
       let container: Users[] = [];
       for (var i = 0; i < cont; i++) {
@@ -65,12 +64,13 @@ const UserSelectModal = (props: any) => {
           {props.depart === true && (
             <>
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                Añadir Usuario al Departamento
+                Eliminar usuarios del Departamento
               </Typography>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Selecciona a continuación qué usuarios quieres añadir al
-                departamento. Estos usuarios tendrán permisos para editar y
-                eliminar los activos asignados al departamento.
+                Selecciona a continuación qué usuarios quieres eliminar del
+                departamento. Estos usuarios ya no pertenecerán al departamento y dejarán 
+                de tener permisos para editar y
+                eliminar los activos.
               </Typography>
             </>
           )}
@@ -93,8 +93,8 @@ const UserSelectModal = (props: any) => {
             <SimpleUserTable
               users={users!}
               depart = {props.depart}
-              idList={props.usersIds}
-              deleteB ={false}
+              idList={[]}
+              deleteB
             ></SimpleUserTable>
           )}
         </Box>
@@ -102,4 +102,4 @@ const UserSelectModal = (props: any) => {
     </div>
   );
 };
-export default UserSelectModal;
+export default UserDeleteModal;

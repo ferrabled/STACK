@@ -212,7 +212,7 @@ const AssetTypeCard = (props:any) => {
               }[Number(props.assetType)]
             }
             <Button variant="contained" color="primary">
-              Añadir Nuevo
+              Editar tipo
             </Button>
           </Card>
       )

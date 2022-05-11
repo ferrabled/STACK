@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { formatDate } from "utils";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { AssetsInList } from "types";
-import { CallInsertAssetToDepartment } from "components/wallet/userCall";
+import { CallDeleteAssetFromDepartment, CallInsertAssetToDepartment } from "components/wallet/userCall";
 
-const SimpleSelectAssetsTable = (props:AssetsInList[]) => {
+const SimpleSelectAssetsTable = ({assets, deleteB}:{assets:AssetsInList[], deleteB:boolean}) => {
     const navigate = useNavigate();
     const [rows, setRows] = useState<any>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +19,7 @@ const SimpleSelectAssetsTable = (props:AssetsInList[]) => {
     useEffect(() => {
   
       const FormatData = () => {
-        const listAssets = props;
+        const listAssets = assets;
         const cont = Object.keys(listAssets).length;
         const tempRow: any[] = []; 
         for (var i = 0; i < cont; i++) {
@@ -44,8 +44,13 @@ const SimpleSelectAssetsTable = (props:AssetsInList[]) => {
           console.log(item.index);
           ids.push(item.index);
       }
-        console.log("add assets to department");
-        CallInsertAssetToDepartment(Number(departId), ids);
+        if(deleteB){
+          console.log("delete assets from department");
+          CallDeleteAssetFromDepartment(Number(departId), ids);
+        } else {
+          console.log("add assets to department");
+          CallInsertAssetToDepartment(Number(departId), ids);
+        }
       } 
 
     
@@ -120,9 +125,6 @@ const SimpleSelectAssetsTable = (props:AssetsInList[]) => {
       
     ];
   
-  
-      console.log(rows);
-  
     if (isLoading) return <CircularProgress />
     else return (
       <>
@@ -130,8 +132,7 @@ const SimpleSelectAssetsTable = (props:AssetsInList[]) => {
           className="w-full h-full"
           rows={rows}
           columns={columns}
-          //TODO ONLY SELECT ASSETS THAT DOES NOT HAVE A DEPARTMENT
-          //isRowSelectable={(params: GridRowParams) => (params.row.asset)}
+          isRowSelectable={(deleteB ? ((params: GridRowParams)=>(true)) : ((params: GridRowParams) => (params.row.assetDepart) == 0))}
           checkboxSelection
           onSelectionModelChange={(ids) => {
               const selectedIDs = new Set(ids);
@@ -146,7 +147,11 @@ const SimpleSelectAssetsTable = (props:AssetsInList[]) => {
           rowsPerPageOptions={[5]}
           autoHeight
         ></DataGrid>
-        <Button color="primary" variant="contained" onClick={()=> handleSubmit()}>Añadir</Button></>
+        {deleteB && (<Button color="primary" variant="contained" onClick={()=> handleSubmit()}>Eliminar</Button>)}
+        {!deleteB && (<Button color="primary" variant="contained" onClick={()=> handleSubmit()}>Añadir</Button>)}
+
+        
+        </>
 
     );
   };

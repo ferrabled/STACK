@@ -24,7 +24,7 @@ const CommentsTable = (comments: CommentInTable[]) => {
         }
         setRows(departmentList);
         setIsLoading(false);
-      }, [])
+      }, [comments])
     
     const columns: GridColDef[] = [
         { field: "id", headerName: "ID", width: 50 },

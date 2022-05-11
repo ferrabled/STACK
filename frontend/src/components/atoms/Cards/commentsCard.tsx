@@ -8,23 +8,21 @@ import AddCommentIcon from '@mui/icons-material/AddComment';
 
 const CommentsCard = ({assetId}:{assetId:number}) => {
 
-  const [comments, setComments] = useState<Comment[]>();
+  //const [comments, setComments] = useState<Comment[]>();
   const [finalComments, setFinalComments] = useState<CommentInTable[]>();
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleCommentModal = () => {
-    console.log("Add user");
+    console.log("Add Comment");
     setShowCommentModal(true);
   };
 
   useEffect(() => {
-    
+    console.log("Retrieving assetId: "+ assetId +' comments')
     CallGetCommentsByAsset(assetId).then((r)=> {
       const comments:Comment[] = [];
-      const userIds:number[] = [];
-
-      
+      const userIds:number[] = [];    
       const num = r.length;
       for(var i = 0; i < num; i++){
         let descr =  r[i].description
@@ -40,8 +38,6 @@ const CommentsCard = ({assetId}:{assetId:number}) => {
       }
       const finalComments:CommentInTable[] = [];
       CallGetUsersById(userIds).then(res => {
-        console.log("USER")
-        console.log(res)
         for(var i=0; i<res.length; i++){
           const fullComment:CommentInTable={
             description: comments[i].description,
@@ -54,14 +50,14 @@ const CommentsCard = ({assetId}:{assetId:number}) => {
         finalComments.push(fullComment);       
         }
         setFinalComments(finalComments);
-        console.log(comments);
+        console.log(finalComments);
         setIsLoading(false);
       })
 
       
     })
 
-  },[])
+  },[assetId])
 
     return (
       <Card className="p-5 m-5">
@@ -76,7 +72,18 @@ const CommentsCard = ({assetId}:{assetId:number}) => {
              <AddCommentIcon className="mr-2"/> Añadir Nuevo 
             </Button>
             </div>
-            {!isLoading && (<CommentsTable {...finalComments!} ></CommentsTable>)}
+            {!isLoading && (<>
+              {finalComments!.length == 0 && ( <>
+                <div className="mb-5 mx-48"><Typography>Aún no hay comentarios en el activo. Cualquier usuario puede añadir un comentario nuevo.</Typography>
+                <div className='m-2'></div><Typography align="center">Puedes crear un comentario nuevo haciendo click en el siguiente botón</Typography></div>
+                </>
+              )}
+
+              {finalComments!.length !== 0 && (
+                <CommentsTable {...finalComments!} ></CommentsTable> 
+              )}
+
+            </>)}
           </div>
           <AddCommentModal
           show={showCommentModal!}

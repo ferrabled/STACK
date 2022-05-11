@@ -9,6 +9,10 @@ import { Button, Card, Skeleton, Typography } from "@mui/material";
 import { AssetsDepartModal, UserSelectModal } from "components/atoms/Modals";
 import { CallRetrieveListOfAsset } from "components/wallet/contractCall";
 import SimpleAssetsTable from "components/atoms/Table/simpleAssetsTable";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import UserDeleteModal from "components/atoms/Modals/userDeleteModal";
+import AssetsDeleteModal from "components/atoms/Modals/assetsDeleteModal";
+
 
 const DepartmentPage = () => {
   const navigate = useNavigate();
@@ -19,6 +23,10 @@ const DepartmentPage = () => {
   const [assets, setAssets] = useState<AssetsInList[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showModalA, setShowModalA] = useState(false);
+  const [showDeleteUserModal, setShowDeleteUserModal] = useState(false);
+  const [showDeleteAssetsModal, setShowDeleteAssetsModal] = useState(false);
+
+
 
 
 
@@ -133,8 +141,18 @@ const DepartmentPage = () => {
     }
   }, []);
 
-  const handleUserModal = () => {
+  const handleDeleteUserModal = () => {
     console.log("Add user");
+    setShowDeleteUserModal(true);
+  }
+
+  const handleDeleteAssetModal = () => {
+    console.log("Delete user");
+    setShowDeleteAssetsModal(true);
+  }
+
+  const handleUserModal = () => {
+    console.log("Delete Assets");
     setShowModal(true);
   };
 
@@ -148,13 +166,23 @@ const DepartmentPage = () => {
             <Card className="p-5 m-5">
             <div className="flex flex-row justify-between content-evenly p-1 mb-3">
                 <Typography variant="h6">Usuarios del Departamento</Typography>
-                <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleUserModal()}
+                <div className="flex flex-row gap-4">
+                {!isLoading && (users!.length !== 0) && ( <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => handleDeleteUserModal()}
                 >
-                Añadir Usuario
+                  <AddBoxIcon className="mr-2"/>Eliminar
+                </Button> )}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleUserModal()}
+                  >
+                  <AddBoxIcon className="mr-2"/> Añadir Usuario
                 </Button>
+                </div>
+                
             </div>
             {isLoading && (<Skeleton variant="rectangular" height={230}/>)}
             {!isLoading && (<>
@@ -167,6 +195,13 @@ const DepartmentPage = () => {
             )}
             </Card>
         </section>
+        <UserDeleteModal
+          show={showDeleteUserModal!}
+          close={() => setShowDeleteUserModal(false)}
+          depart
+          usersIds={usersIds}
+          departId={Number(window.sessionStorage.getItem("departId"))}
+        />
         <UserSelectModal
             show={showModal!}
             depart
@@ -177,13 +212,22 @@ const DepartmentPage = () => {
             <Card className="p-5 m-5">
             <div className="flex flex-row justify-between content-evenly p-1 mb-3">
                 <Typography variant="h6"> Activos del Departamento</Typography>
+                <div className="flex flex-row gap-4">
+                {!isLoading && (assets!.length !== 0) && ( <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => handleDeleteAssetModal()}
+                >
+                  <AddBoxIcon className="mr-2"/>Eliminar
+                </Button> )}
                 <Button
                 variant="contained"
                 color="primary"
                 onClick={() => setShowModalA(true)}
                 >
-                Añadir Activo
-                </Button>
+                <AddBoxIcon className="mr-2"/> Añadir Activo
+                </Button></div>
+                
             </div>
             {isLoading && (<Skeleton variant="rectangular" height={230}/>)}
             {!isLoading && (<>
@@ -197,6 +241,13 @@ const DepartmentPage = () => {
             </>
             )}
             </Card>
+            <AssetsDeleteModal
+              show={showDeleteAssetsModal!}
+              close={() => setShowDeleteAssetsModal(false)}
+              depart
+              departId={Number(window.sessionStorage.getItem("departId"))}
+            />
+
             <AssetsDepartModal 
               show={showModalA!}
               close={() => setShowModalA(false)}
