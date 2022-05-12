@@ -7,6 +7,8 @@ import { Button, Card, CircularProgress, containerClasses, Typography } from "@m
 import { CallGetOrganizationAssets } from "components/wallet/contractCall";
 import { AssetsInList, AssetTypes } from "types"
 import PageLoged from "pages/pageCheckLogin";
+import { CallGetAllDepartmentsFromOrg, CallGetNumberOfCommentsByAsset } from "components/wallet/userCall";
+import { convertToObject } from "typescript";
 
 declare var window: Window & { ethereum: any };
 
@@ -14,14 +16,28 @@ const AssetsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<any>({});
   const navigate = useNavigate();
+  const [departNames, setDepartNames] = useState<String[]>();
+  const [numComments, setNumComments] = useState<Number[]>();
 
-  useEffect(() => {
+  useEffect(() => {      
+    const idOrg = Number(localStorage.getItem('idOrg'));
+
+    const getDepartmentNames= () => {
+      CallGetAllDepartmentsFromOrg(idOrg).then((r)=> {
+        const cont = r.length;
+        let container: String[] = ['Sin departamento'];
+        for (var i = 0; i < cont; i++) {
+          container.push(r[i].name)
+        }
+        setDepartNames(container);
+      })
+    }
+
+
     const GetAssets = () => {
-      const idOrg = Number(localStorage.getItem('idOrg'));
       CallGetOrganizationAssets(idOrg).then((response) => {
         const cont = response[0].length;
         const contEdit = response[1].length;
-
         let container: AssetsInList[] = [];
         //let object = new container;
         for (var i = 0; i < cont; i++) {
@@ -42,7 +58,6 @@ const AssetsPage = () => {
           }
           
         }
-
         for (var o = 0; o < contEdit; o++) {
           console.log(response[1][o]);
           const asset: AssetsInList = {
@@ -63,6 +78,11 @@ const AssetsPage = () => {
           }
           
         }
+        let commentCont:Number[] = [];
+        for (var e = 0; e < container.length; e++){
+          CallGetNumberOfCommentsByAsset(container[e].originalId).then((r)=> commentCont.push(Number(r)));
+        }
+        setNumComments(commentCont);
         setAssets(container);
         setIsLoading(false);
       });
@@ -80,8 +100,8 @@ const AssetsPage = () => {
         if (!addr) {
           //navigate("/login");
         } else {
-          //RETRIEVE ALL ASSETS FROM A ORGANIZATION
           // hacer request a contrato
+          getDepartmentNames();
           GetAssets();
           
         }
@@ -96,7 +116,7 @@ const AssetsPage = () => {
     <PageLoged>
     <div className="my-5"><Typography variant="h5">Todos los activos</Typography></div>
     {assets!.length !== 0 && (<div className="min-h-full h-full">
-      <AssetsCard props={assets} />
+      <AssetsCard props={assets} departNames={departNames} numComments={numComments} />
     </div>)}
     {assets!.length == 0 && (
     <Card>

@@ -8,7 +8,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { AssetsInList } from "types";
 import { CallDeleteAssetFromDepartment, CallInsertAssetToDepartment } from "components/wallet/userCall";
 
-const SimpleSelectAssetsTable = ({assets, deleteB}:{assets:AssetsInList[], deleteB:boolean}) => {
+const SimpleSelectAssetsTable = ({assets, deleteB, departNames}:{assets:AssetsInList[], deleteB:boolean, departNames:String[]}) => {
     const navigate = useNavigate();
     const [rows, setRows] = useState<any>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -111,7 +111,10 @@ const SimpleSelectAssetsTable = ({assets, deleteB}:{assets:AssetsInList[], delet
         field: "assetDepart",
         headerName: "Departamento",
         type: "string",
-        width: 90,
+        width: 150,
+      renderCell: (params) => {
+        return <>{departNames[params.row.assetDepart]}</>
+    }
       }
       /* {
         field: "fullName",

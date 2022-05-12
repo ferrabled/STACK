@@ -4,6 +4,7 @@ import { CallGetAsset, CallGetAssetEdited, CallGetLastAssetEdited } from "compon
 import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { AssetEdited } from "types";
+import PageLoged from "pages/pageCheckLogin";
 
 
 
@@ -96,7 +97,9 @@ const AssetDetailPage = () => {
       
   },[]);
 
-  return <AssetCard props={asset}></AssetCard>;
+  return (<PageLoged>
+    <AssetCard props={asset}></AssetCard>
+    </PageLoged>)
 };
 
 export default AssetDetailPage;

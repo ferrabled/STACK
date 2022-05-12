@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Skeleton } from "@mui/material";
-import { CallGetUserAssets } from "components/wallet/userCall";
+import { CallGetAllDepartmentsFromOrg, CallGetUserAssets } from "components/wallet/userCall";
 import { CallGetOrganizationAssets, CallRetrieveListOfAsset } from "components/wallet/contractCall";
 import { useEffect, useState } from "react";
 import { AssetsInList, AssetTypes } from "types";
@@ -27,11 +27,24 @@ const AssetsDepartModal = (props: any) => {
   const [assetId, setAssetId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>();
+  const [departNames, setDepartNames] = useState<String[]>();
+
 
   useEffect(() => {
     console.log(props);
     if (!props.show) return;
     setIsLoading(true);
+
+    const getDepartmentNames= () => {
+      CallGetAllDepartmentsFromOrg(Number(orgId)).then((r)=> {
+        const cont = r.length;
+        let container: String[] = ['Sin departamento'];
+        for (var i = 0; i < cont; i++) {
+          container.push(r[i].name)
+        }
+        setDepartNames(container);
+      })
+    }
 
     const refactorAssets = (response: any) => {
       console.log(response);
@@ -76,8 +89,8 @@ const AssetsDepartModal = (props: any) => {
       setIsLoading(false);
     };
 
-    console.log(props.show);
     const orgId = window.localStorage.getItem("orgId");
+    getDepartmentNames();
     CallGetOrganizationAssets(Number(orgId)).then((r) => {
         console.log(r);
         if (r[0].length !== 0 || r[1].length !== 0) {
@@ -89,23 +102,6 @@ const AssetsDepartModal = (props: any) => {
           }
     });
 
-    /* if (props.show) {
-      setAssetId(props.userId);
-      if (props.userId !== "") {
-        CallGetOrganizationAssets(Number(props.userId)).then((r) => {
-          console.log(r);
-          CallRetrieveListOfAsset(r).then((response) => {
-            if (response[0].length !== 0 || response[1].length !== 0) {
-              setIsEmpty(false);
-              refactorAssets(response);
-            } else {
-              setIsEmpty(true);
-              setIsLoading(false);
-            }
-          });
-        });
-      }
-    } */
   }, [props.show, props.userId]);
 
   return (
@@ -129,7 +125,7 @@ const AssetsDepartModal = (props: any) => {
                   activos desde la vista detallada de cualquier activo.
                 </Typography>
               )}
-              {!isEmpty && <SimpleSelectAssetsTable assets={assets!} deleteB={false} />}
+              {!isEmpty && <SimpleSelectAssetsTable departNames={departNames!} assets={assets!} deleteB={false} />}
             </>
           )}
         </Box>

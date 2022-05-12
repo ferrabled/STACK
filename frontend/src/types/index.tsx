@@ -72,6 +72,7 @@ export type AssetsInList = {
   //Index from list 
   //on the blockchain
   index:number;
+  comments?:number;
 }
 
 export const AssetTypes = ["Software", "Hardware", "Documento", "Datos", "Red", "Nube", "No determinado"];

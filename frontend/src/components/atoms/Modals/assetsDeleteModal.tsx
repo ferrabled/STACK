@@ -5,6 +5,7 @@ import Modal from "@mui/material/Modal";
 import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
+  CallGetAllDepartmentsFromOrg,
   CallGetAllUsersFromOrg,
   CallGetAssetsIdsFromDepart,
   CallGetUsersFromDepart,
@@ -31,10 +32,22 @@ const style = {
 const AssetsDeleteModal = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>();
+  const [departNames, setDepartNames] = useState<String[]>();
+
 
   useEffect(() => {
     console.log("QUE HEMOS RECIBIDO " + props.usersIds);
     console.log(props.usersIds);
+    const orgId = window.localStorage.getItem("orgId");
+
+    CallGetAllDepartmentsFromOrg(Number(orgId)).then((r)=> {
+      const cont = r.length;
+      let container: String[] = ['Sin departamento'];
+      for (var i = 0; i < cont; i++) {
+        container.push(r[i].name)
+      }
+      setDepartNames(container);
+    })
 
     CallGetAssetsIdsFromDepart(Number(props.departId!)).then((r) => {
       console.log(r);
@@ -129,11 +142,9 @@ const AssetsDeleteModal = (props: any) => {
           {!isLoading && (
             <>
               <SimpleSelectAssetsTable
+                departNames={departNames!}
                 assets={assets!}
                 deleteB
-                /*  depart = {props.depart}
-                idList={[]}
-                deleteB */
             ></SimpleSelectAssetsTable>
             </>
           )}

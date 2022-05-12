@@ -156,8 +156,18 @@ const AssetsCard = (props:any) => {
       field: "assetDepart",
       headerName: "Departamento",
       type: "string",
-      width: 90,
-    },
+      width: 150,
+      renderCell: (params) => {
+        return <>{props.departNames[params.row.assetDepart]}</>
+    }},
+    {
+      field: "numComments",
+      headerName: "Comentarios",
+      type: "string",
+      width: 150,
+      renderCell: (params) => {
+        return <>{props.numComments[params.row.id]}</>
+    }}
     
   ];
 
