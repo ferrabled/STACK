@@ -5,6 +5,9 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Button, TextField, Typography } from "@mui/material";
 import { CallInsertComment } from "components/wallet/userCall";
+import { Notify } from "types";
+import Notification from "components/notification";
+
 
 const style = {
   position: "absolute" as "absolute",
@@ -24,10 +27,13 @@ const validationSchema = Yup.object({
 
 const AddCommentModal = (props: any) => {
 
+  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
+
   useEffect(() => {}, []);
 
   return (
     <div>
+      <Notification {...notify}></Notification>
       <Modal
         open={props.show}
         onClose={props.close}
@@ -46,7 +52,10 @@ const AddCommentModal = (props: any) => {
                 const orgId = window.localStorage.getItem("orgId")!;
                 data.date = Date.now();
                 console.log(data);
-                CallInsertComment(data, props.assetId, Number(orgId));
+                CallInsertComment(data, props.assetId, Number(orgId)).then((r)=> {
+                  const notify:Notify = r!; 
+                  setNotify(notify);
+                });
                 setSubmitting(true);
             }}
           >
@@ -77,6 +86,7 @@ const AddCommentModal = (props: any) => {
                 >
                   Guardar Comentario
                 </Button>
+                
               </Form>
             )}
           </Formik>

@@ -5,9 +5,13 @@ import { useEffect, useState } from "react";
 import { Users } from "types"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BasicModal from "../Modals/assetsFromUser";
+import { Notify } from "types";
+import Notification from "components/notification";
 
 
 const SimpleUserTable = ({users, depart, idList, deleteB}:{users: Users[], depart:boolean, idList:number[], deleteB:boolean}) => {
+
+  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
 
     const [rows, setRows] = useState<any>([]);
     const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
@@ -47,11 +51,17 @@ const SimpleUserTable = ({users, depart, idList, deleteB}:{users: Users[], depar
           if(deleteB === true){
             console.log("delete users from department");
             const departId = window.sessionStorage.getItem("departId");
-            CallDeleteUsersFromDepartment(Number(departId), ids);
+            CallDeleteUsersFromDepartment(Number(departId), ids).then((r)=> {
+              const notify:Notify = r!; 
+              setNotify(notify);
+            });
           } else {
             console.log("add users to department");
             const departId = window.sessionStorage.getItem("departId");
-            CallInsertUserToDepartment(Number(departId), ids);
+            CallInsertUserToDepartment(Number(departId), ids).then((r)=> {
+              const notify:Notify = r!; 
+              setNotify(notify);
+            });
           }
           
         }
@@ -98,6 +108,10 @@ const SimpleUserTable = ({users, depart, idList, deleteB}:{users: Users[], depar
 
     return(
         <>
+        {/* TODO CHECK NOTIFICATION */}
+        <div className="absolute top-0 right-0 m-50">
+          <Notification {...notify}></Notification>
+        </div>
         <DataGrid
             rows={rows}
             columns={columns}
@@ -119,7 +133,8 @@ const SimpleUserTable = ({users, depart, idList, deleteB}:{users: Users[], depar
             />
             <BasicModal show={showModal!} close={()=> setShowModal(false)} userId={userId}></BasicModal>
             <div className="flex flex-row items-center justify-center mt-6">
-        <Button color="primary" variant="contained" onClick={()=> handleSubmit()}>Aceptar</Button></div></>
+        <Button color="primary" variant="contained" onClick={()=> handleSubmit()}>Aceptar</Button></div>
+        </>
     )
 } 
 

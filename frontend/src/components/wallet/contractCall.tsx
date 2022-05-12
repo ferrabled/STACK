@@ -72,39 +72,168 @@ export async function CallGetAdminToOrg(props: number) {
 }
 
 export async function CallInsertNewSoftAsset(asset:Asset, props: any){
-    contract.insertNewSoftAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, asset.assetDepart, props.version, props.provider, props.stype); 
+    try{
+        await contract.insertNewSoftAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+            asset.assetType, asset.assetDepart, props.version, props.provider, props.stype); 
+            const correctText = "Activo creado correctamente";
+
+            const notify = {
+                isOpen: true,
+                message: correctText,
+                type: "success",
+            };
+        return notify;
+    } catch{
+        const errorM = "Por favor, acepta la transacción en metamask";
+        const notify = {
+                isOpen: true,
+                message: errorM,
+                type: "error",
+            };
+        return notify
+    }
+    
 }
 
 export async function CallInsertNewHardAsset(asset:Asset, props: any){
-    contract.insertNewHardAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, asset.assetDepart, props.model, props.provider, props.serialNumber, props.htype); 
+        try{
+            await contract.insertNewHardAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+                asset.assetType, asset.assetDepart, props.model, props.provider, props.serialNumber, props.htype);
+                const correctText = "Activo creado correctamente";
+    
+                const notify = {
+                    isOpen: true,
+                    message: correctText,
+                    type: "success",
+                };
+            return notify;
+        } catch{
+            const errorM = "Por favor, acepta la transacción en metamask";
+            const notify = {
+                    isOpen: true,
+                    message: errorM,
+                    type: "error",
+                };
+            return notify
+        }
 }
 
 export async function CallInsertNewDocAsset(asset:Asset, props: any){
     console.log("Insertar doc")
-    contract.insertNewDocAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType,  asset.assetDepart,props.name, props.location, props.doctype); 
+    try{
+        await contract.insertNewDocAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+            asset.assetType,  asset.assetDepart,props.name, props.location, props.doctype); 
+            const correctText = "Activo creado correctamente";
+
+            const notify = {
+                isOpen: true,
+                message: correctText,
+                type: "success",
+            };
+        return notify;
+    } catch{
+        const errorM = "Por favor, acepta la transacción en metamask";
+        const notify = {
+                isOpen: true,
+                message: errorM,
+                type: "error",
+            };
+        return notify
+    }
 }
 
 export async function CallInsertNewDataAsset(asset:Asset, props: any){
-    contract.insertNewDataAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, asset.assetDepart, props.location, props.local); 
+    try{
+        await contract.insertNewDataAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+            asset.assetType, asset.assetDepart, props.location, props.local); 
+            const correctText = "Activo creado correctamente";
+
+            const notify = {
+                isOpen: true,
+                message: correctText,
+                type: "success",
+            };
+        return notify;
+    } catch{
+        const errorM = "Por favor, acepta la transacción en metamask";
+        const notify = {
+                isOpen: true,
+                message: errorM,
+                type: "error",
+            };
+        return notify
+    }
 }
 
 export async function CallInsertNewNetworkAsset(asset:Asset, props: any){
-    contract.insertNewNetworkAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, asset.assetDepart, props.cidrblock, props.nat); 
+    
+        try{
+            await contract.insertNewNetworkAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+                asset.assetType, asset.assetDepart, props.cidrblock, props.nat); 
+                const correctText = "Activo creado correctamente";
+    
+                const notify = {
+                    isOpen: true,
+                    message: correctText,
+                    type: "success",
+                };
+            return notify;
+        } catch{
+            const errorM = "Por favor, acepta la transacción en metamask";
+            const notify = {
+                    isOpen: true,
+                    message: errorM,
+                    type: "error",
+                };
+            return notify
+        }
 }
 
 export async function CallInsertNewCloudAsset(asset:Asset, props: any){
-    contract.insertNewCloudAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, asset.assetDepart, props.url, props.domain); 
+    
+        try{
+            await contract.insertNewCloudAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+                asset.assetType, asset.assetDepart, props.url, props.domain); 
+                const correctText = "Activo creado correctamente";
+    
+                const notify = {
+                    isOpen: true,
+                    message: correctText,
+                    type: "success",
+                };
+            return notify;
+        } catch{
+            const errorM = "Por favor, acepta la transacción en metamask";
+            const notify = {
+                    isOpen: true,
+                    message: errorM,
+                    type: "error",
+                };
+            return notify
+        }
 }
 
 export async function CallInsertNewOtherAsset(asset:Asset, props: any){
-    contract.insertNewOtherAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, asset.assetDepart, props.description); 
+    try{
+            await contract.insertNewOtherAsset(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+                asset.assetType, asset.assetDepart, props.description); 
+                const correctText = "Activo creado correctamente";
+    
+                const notify = {
+                    isOpen: true,
+                    message: correctText,
+                    type: "success",
+                };
+            return notify;
+        } catch{
+            const errorM = "Por favor, acepta la transacción en metamask";
+            const notify = {
+                    isOpen: true,
+                    message: errorM,
+                    type: "error",
+                };
+            return notify
+        }
 }
 
 

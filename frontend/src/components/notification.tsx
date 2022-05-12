@@ -13,6 +13,7 @@ const Notification = (props: any) => {
             open={open}
             autoHideDuration={5000}
             anchorOrigin={{vertical:'top', horizontal:'right'}}
+            //sx={{position:'absolute', top:"500px",right:'0px', left:'100%'}}
             onClose={() => {setOpen(false)}}
             >
                 <Alert severity={props.type}>
