@@ -9,9 +9,7 @@ import { Notify } from "types";
 import Notification from "components/notification";
 
 
-const SimpleUserTable = ({users, depart, idList, deleteB}:{users: Users[], depart:boolean, idList:number[], deleteB:boolean}) => {
-
-  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
+const SimpleUserTable = ({users, depart, idList, deleteB, setNotifyParent}:{users: Users[], depart:boolean, idList:number[], deleteB:boolean, setNotifyParent:any}) => {
 
     const [rows, setRows] = useState<any>([]);
     const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
@@ -53,21 +51,24 @@ const SimpleUserTable = ({users, depart, idList, deleteB}:{users: Users[], depar
             const departId = window.sessionStorage.getItem("departId");
             CallDeleteUsersFromDepartment(Number(departId), ids).then((r)=> {
               const notify:Notify = r!; 
-              setNotify(notify);
+              setNotifyParent(notify);
             });
           } else {
             console.log("add users to department");
             const departId = window.sessionStorage.getItem("departId");
             CallInsertUserToDepartment(Number(departId), ids).then((r)=> {
               const notify:Notify = r!; 
-              setNotify(notify);
+              setNotifyParent(notify);
             });
           }
           
         }
         else{
           console.log("add users to asset");
-          CallInsertUsersToAsset(Number(assetId), ids);
+          CallInsertUsersToAsset(Number(assetId), ids).then((r)=> {
+            const notify:Notify = r!; 
+            setNotifyParent(notify);
+          });
         } 
 
     }
@@ -109,8 +110,8 @@ const SimpleUserTable = ({users, depart, idList, deleteB}:{users: Users[], depar
     return(
         <>
         {/* TODO CHECK NOTIFICATION */}
-        <div className="absolute top-0 right-0 m-50">
-          <Notification {...notify}></Notification>
+        <div className="">
+          
         </div>
         <DataGrid
             rows={rows}

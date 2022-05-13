@@ -19,19 +19,12 @@ const SimpleAssetsTable = (props:AssetsInList[]) => {
   
       const FormatData = () => {
         const listAssets = props;
-        // console.log("Recibimos los datos");
-        // console.log(listAssets);
-  
-        // console.log(listAssets.length);
         const cont = Object.keys(listAssets).length;
         const tempRow: any[] = []; 
         for (var i = 0; i < cont; i++) {
-          // console.log(listAssets[i]);
           listAssets[i].id = i;
           tempRow.push(listAssets[i]);
         }
-        // console.log("ROWWWWWWWWW");
-        // console.log(rows);
         setRows(tempRow);
         setIsLoading(false)
       }
@@ -68,17 +61,10 @@ const SimpleAssetsTable = (props:AssetsInList[]) => {
               navigate("/asset/");
               }
             )
-            //const api: GridApi = params.api;
-            //sessionStorage.removeItem("editId");
-            
-           
-  
           };
   
           const onClickEdit = (e:any) => {
             e.stopPropagation(); // don't select this row after clicking
-            console.log("orignianl")
-            console.log(params.row);
             const originalId = params.row.originalId;
             CallGetIsAssetEdited(originalId).then(
               (response) => {
@@ -95,13 +81,7 @@ const SimpleAssetsTable = (props:AssetsInList[]) => {
                 }   
               navigate("/asset/edit");
               }
-            )
-            
-            //const api: GridApi = params.api;
-            //sessionStorage.removeItem("editId");
-  
-            
-  
+            ) 
           };
   
           const onClickDelete = (e:any) => {
@@ -154,16 +134,6 @@ const SimpleAssetsTable = (props:AssetsInList[]) => {
         type: "string",
         width: 90,
       }
-      /* {
-        field: "fullName",
-        headerName: "Departamento",
-        description: "This column has a value getter and is not sortable.",
-        sortable: false,
-        width: 160,
-        valueGetter: (params: GridValueGetterParams) =>
-          `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-      }, */
-      
     ];
   
   

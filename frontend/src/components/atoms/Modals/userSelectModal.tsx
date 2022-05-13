@@ -9,6 +9,9 @@ import { UsersCard } from "../Cards";
 import { Users } from "types";
 import EnhancedTable from "../Table/simpleUserTable";
 import SimpleUserTable from "../Table/simpleUserTable";
+import { Notify } from "types";
+import Notification from "components/notification";
+
 
 const style = {
   position: "absolute" as "absolute",
@@ -25,6 +28,8 @@ const style = {
 const UserSelectModal = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<Users[]>();
+  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
+ 
 
   useEffect(() => {
     const orgId = window.localStorage.getItem("orgId");
@@ -55,12 +60,13 @@ const UserSelectModal = (props: any) => {
 
   return (
     <div>
+      <Notification {...notify}></Notification>
       <Modal
         open={props.show}
         onClose={props.close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-      >
+      >  
         <Box sx={style}>
           {props.depart === true && (
             <>
@@ -91,6 +97,7 @@ const UserSelectModal = (props: any) => {
           {/* TODO SEND data */}
           {!isLoading && (
             <SimpleUserTable
+              setNotifyParent={setNotify}
               users={users!}
               depart = {props.depart}
               idList={props.usersIds}

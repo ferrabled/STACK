@@ -263,7 +263,7 @@ export async function CallInsertAssetToDepartment(departId: number, assetsIds: n
 export async function CallDeleteAssetFromDepartment(departId: number, assetsIds: number[]) {
   try{
     await contract.deleteAssetFromDepartment(departId, assetsIds);
-    const correctText = "Activo introducido en departamento correctamente";
+    const correctText = "Activo retirado del departamento correctamente";
     const notify = {
         isOpen: true,
         message: correctText,

@@ -1,14 +1,12 @@
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
-import { CallGetAllUsersFromOrg, CallGetUsersFromDepart } from "components/wallet/userCall";
-import { UsersCard } from "../Cards";
+import { CallGetUsersFromDepart } from "components/wallet/userCall";
 import { Users } from "types";
-import EnhancedTable from "../Table/simpleUserTable";
 import SimpleUserTable from "../Table/simpleUserTable";
+import Notification from "components/notification";
 
 const style = {
   position: "absolute" as "absolute",
@@ -25,10 +23,10 @@ const style = {
 const UserDeleteModal = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<Users[]>();
+  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
+
 
   useEffect(() => {
-    console.log("QUE HEMOS RECIBIDO " + props.usersIds);
-    console.log(props.usersIds);
 
     CallGetUsersFromDepart(Number(props.departId!)).then((response) => {
       const cont = response.length;
@@ -45,7 +43,6 @@ const UserDeleteModal = (props: any) => {
           index: Number(response[i].index),
         };
         container.push(user);
-        console.log(container);
         setUsers(container);
         setIsLoading(false);
       }
@@ -54,6 +51,7 @@ const UserDeleteModal = (props: any) => {
 
   return (
     <div>
+      <Notification {...notify}></Notification>
       <Modal
         open={props.show}
         onClose={props.close}
@@ -91,6 +89,7 @@ const UserDeleteModal = (props: any) => {
           {/* TODO SEND data */}
           {!isLoading && (
             <SimpleUserTable
+              setNotifyParent={setNotify}
               users={users!}
               depart = {props.depart}
               idList={[]}

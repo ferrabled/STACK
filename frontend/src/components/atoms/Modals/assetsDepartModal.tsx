@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { AssetsInList, AssetTypes } from "types";
 import SimpleAssetsTable from "../Table/simpleAssetsTable";
 import { SimpleSelectAssetsTable } from "../Table";
+import Notification from "components/notification";
+
 
 const style = {
   position: "absolute" as "absolute",
@@ -28,6 +30,8 @@ const AssetsDepartModal = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>();
   const [departNames, setDepartNames] = useState<String[]>();
+  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
+
 
 
   useEffect(() => {
@@ -106,6 +110,7 @@ const AssetsDepartModal = (props: any) => {
 
   return (
     <div>
+      <Notification {...notify}></Notification>
       <Modal
         open={props.show}
         onClose={props.close}
@@ -125,7 +130,11 @@ const AssetsDepartModal = (props: any) => {
                   activos desde la vista detallada de cualquier activo.
                 </Typography>
               )}
-              {!isEmpty && <SimpleSelectAssetsTable departNames={departNames!} assets={assets!} deleteB={false} />}
+              {!isEmpty && <SimpleSelectAssetsTable 
+              setNotifyParent={setNotify}
+              departNames={departNames!} 
+              assets={assets!} 
+              deleteB={false} />}
             </>
           )}
         </Box>

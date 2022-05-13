@@ -16,6 +16,8 @@ import EnhancedTable from "../Table/simpleUserTable";
 import SimpleUserTable from "../Table/simpleUserTable";
 import { CallRetrieveListOfAsset } from "components/wallet/contractCall";
 import { SimpleSelectAssetsTable } from "../Table";
+import Notification from "components/notification";
+
 
 const style = {
   position: "absolute" as "absolute",
@@ -33,6 +35,8 @@ const AssetsDeleteModal = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>();
   const [departNames, setDepartNames] = useState<String[]>();
+  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
+
 
 
   useEffect(() => {
@@ -105,6 +109,7 @@ const AssetsDeleteModal = (props: any) => {
 
   return (
     <div>
+      <Notification {...notify}></Notification>
       <Modal
         open={props.show}
         onClose={props.close}
@@ -142,6 +147,7 @@ const AssetsDeleteModal = (props: any) => {
           {!isLoading && (
             <>
               <SimpleSelectAssetsTable
+                setNotifyParent={setNotify}
                 departNames={departNames!}
                 assets={assets!}
                 deleteB

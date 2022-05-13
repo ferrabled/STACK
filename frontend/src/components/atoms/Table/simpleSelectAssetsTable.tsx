@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "utils";
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { AssetsInList } from "types";
+import { AssetsInList, Notify } from "types";
 import { CallDeleteAssetFromDepartment, CallInsertAssetToDepartment } from "components/wallet/userCall";
 
-const SimpleSelectAssetsTable = ({assets, deleteB, departNames}:{assets:AssetsInList[], deleteB:boolean, departNames:String[]}) => {
+const SimpleSelectAssetsTable = ({assets, deleteB, departNames, setNotifyParent}:{assets:AssetsInList[], deleteB:boolean, departNames:String[], setNotifyParent:any}) => {
     const navigate = useNavigate();
     const [rows, setRows] = useState<any>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -46,10 +46,16 @@ const SimpleSelectAssetsTable = ({assets, deleteB, departNames}:{assets:AssetsIn
       }
         if(deleteB){
           console.log("delete assets from department");
-          CallDeleteAssetFromDepartment(Number(departId), ids);
+          CallDeleteAssetFromDepartment(Number(departId), ids).then((r)=> {
+            const notify:Notify = r!; 
+            setNotifyParent(notify);
+          });
         } else {
           console.log("add assets to department");
-          CallInsertAssetToDepartment(Number(departId), ids);
+          CallInsertAssetToDepartment(Number(departId), ids).then((r)=> {
+            const notify:Notify = r!; 
+            setNotifyParent(notify);
+          });
         }
       } 
 
