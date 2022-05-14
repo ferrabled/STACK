@@ -20,7 +20,6 @@ const AssetCard = (props: any) => {
   const [showModal, setShowModal] = useState(false);
 
   const [assetId, setAssetId] = useState("");
-  //const [asset, setAsset] = useState<any>("");
   const [usersIds, setUsersIds] = useState<Number[]>([]);
   const [assetType, setAssetType] = useState("");
 
@@ -57,7 +56,7 @@ const AssetCard = (props: any) => {
                 {" "}
                 Editar{" "}
               </Button>
-              <Button variant="contained" color="primary" onClick={deleteAsset}>
+              <Button variant="contained" color="error" onClick={deleteAsset}>
                 {" "}
                 Eliminar{" "}
               </Button>
@@ -84,14 +83,10 @@ const AssetCard = (props: any) => {
       const id = window.sessionStorage.getItem('detailId')!;
       console.log("EN SERIO DE VRD" + id)
       CallGetAssetUsers(Number(id)).then((response) => {
-        
-        console.log("USUARIOS DEL ASSET " + response.length);
-        console.log(window.sessionStorage.getItem("detailId"));
         const cont = response.length;
         let userIds: Number[] = [];
         let container: Users[] = [];
         for (var i = 0; i < cont; i++) {
-          console.log(response[i]);
           const user: Users = {
             addr: response[i].addr,
             name: response[i].name,
@@ -105,12 +100,10 @@ const AssetCard = (props: any) => {
           userIds.push(user.index!);
         }
         setUsersIds(userIds);
-        console.log(container)
         setUsers(container);
         setIsLoading(false);
       });
     };
-    
     getUsers();
   }, []);
 

@@ -11,11 +11,6 @@ import {
 } from "@mui/material";
 
 import { SoftwareForm, HardwareForm, DocumentForm, DataForm, NetworkForm, OtherForm, SubmitAsset, CloudForm } from "./formTypes";
-
-import DateAdapter from "@mui/lab/AdapterDayjs";
-import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
-import { date } from "yup/lib/locale";
-import { CallInsertAsset } from "components/wallet/contractCall";
 import { Asset, Department } from "types";
 import { useNavigate } from "react-router-dom";
 import { CallGetAllDepartmentsFromOrg } from "components/wallet/userCall";
@@ -27,11 +22,8 @@ const AssetForm = () => {
   const [isLoading, setIsLoading] = useState(true);
 
 
-
-
   useEffect(()=>{
     CallGetAllDepartmentsFromOrg(Number(window.localStorage.getItem('orgId')!)).then(r=> {
-      console.log(r);
       const cont = r.length;
       let container: Department[] = [];
       for (var i = 0; i < cont; i++) {
@@ -50,10 +42,6 @@ const AssetForm = () => {
     })
   }, []);
 
-
-  
-
-
   const navigate = useNavigate(); 
 
   const validationSchema = Yup.object({
@@ -67,8 +55,6 @@ const AssetForm = () => {
   });
 
   const [asset, setAsset] = useState<Asset>()
-
-  //TODO CHANGE ORG ID
   const [formIndex, setFormIndex] = useState(0);
 
   return (
@@ -85,39 +71,20 @@ const AssetForm = () => {
           creationDate: 100,
           assetType: "1",
           department:"0",
-
         }}
         validationSchema={validationSchema}
         onSubmit={(data, { setSubmitting }) => {
-          var now = new Date();
-          var timeOffset = now.getTimezoneOffset();
-
           data.creationDate = Date.now();
-          //let diff = data.creationDate.getTimezoneOffset();
-          //console.log(data.creationDate.toUTCString())
-
-          //TODO GUARDAR WITH TIMEZONE DIFFERENCE OR WITHOUT
-
           var dateString = data.adquireDateString; // Oct 23
           var dateParts: Array<String> = dateString.split("-");
-          // month is 0-based, that's why we need dataParts[1] - 1
           var dateObject = new Date(
             +dateParts[0],
             +dateParts[1] - 1,
             +dateParts[2]
           );
-          console.log(dateObject.getTime());
-          data.adquireDate = dateObject.getTime();
-
           const offset = dateObject.getTimezoneOffset();
           dateObject = new Date(dateObject.getTime() - offset * 60 * 1000);
-
-          //data.creationDate = dateObject;
-          //var dateAgain = dateObject.toISOString().split('T')[0];
-          //console.log(dateAgain);
-          
-          console.log(data);
-          console.log("Enviar");
+          data.adquireDate = dateObject.getTime();
           const asset: Asset = {
             name: data.name,
             orgId: data.organizationId,
@@ -241,13 +208,13 @@ const AssetForm = () => {
       )}
       {formIndex === 1 && (
               <>
-              {asset!.assetType === 0 && (<SoftwareForm {...asset!} />)}
-              {asset!.assetType === 1 && (<HardwareForm {...asset!} />)}
-              {asset!.assetType === 2 && (<DocumentForm {...asset!} />)}
-              {asset!.assetType === 3 && (<DataForm {...asset!} />)}
-              {asset!.assetType === 4 && (<NetworkForm {...asset!} />)}
-              {asset!.assetType === 5 && (<CloudForm {...asset!} />)}
-              {asset!.assetType === 6 && (<OtherForm {...asset!} />)}
+              {asset!.assetType === 0 && (<SoftwareForm asset={asset!} edit={false}/>)}
+              {asset!.assetType === 1 && (<HardwareForm asset={asset!} edit={false}/>)}
+              {asset!.assetType === 2 && (<DocumentForm asset={asset!} edit={false} />)}
+              {asset!.assetType === 3 && (<DataForm asset={asset!} edit={false}/>)}
+              {asset!.assetType === 4 && (<NetworkForm asset={asset!} edit={false} />)}
+              {asset!.assetType === 5 && (<CloudForm asset={asset!} edit={false} />)}
+              {asset!.assetType === 6 && (<OtherForm asset={asset!} edit={false} />)}
               <div className="lg:mx-56 xl:mx-64 2xl:mx-80 2xl:gap-40 flex flex-row gap-24 items-center justify-center">
                 <Button
                   fullWidth

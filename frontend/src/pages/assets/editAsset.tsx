@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { CallGetAsset, CallGetLastAssetEdited } from "components/wallet/contractCall";
 import { ethers } from "ethers";
 import { AssetEdited } from "types";
+import PageLoged from "pages/pageCheckLogin";
+import { Card } from "@mui/material";
 
 const EditAssetPage = () => {
   const navigate = useNavigate();
@@ -31,13 +33,11 @@ const EditAssetPage = () => {
             assetType: response["assetType"],
             originalAssetId: Number(itemId),
           };
-          console.log(asset);
           setAsset(asset);
           setIsLoading(false);
         });
       } else {
-        console.log("Asset ya editado anteriormente")
-        console.log(itemId)
+
         CallGetLastAssetEdited(Number(itemId)).then((response) => {
           const asset: AssetEdited = {
             name: response["name"],
@@ -59,10 +59,13 @@ const EditAssetPage = () => {
   }, []);
 
   return (
-    <Page title="">
-      <div>{itemId}</div>
-      {!isLoading && <EditAssetForm data={asset!} />}
-    </Page>
+    <PageLoged>
+      {!isLoading &&
+        <Card className="my-3">
+          <EditAssetForm data={asset!} />
+        </Card>
+        }
+    </PageLoged>
   );
 };
 

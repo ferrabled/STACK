@@ -292,9 +292,27 @@ export async function CallInsertEditedAsset(props: any) {
     const input = props;
     const signer = provider.getSigner();
     let signerAddress = await signer.getAddress();
-    console.log(input);
-    contract.insertEditedAsset(input.originalAssetId, input.name, input.organizationId, input.adquireDate, 
-       input.creationDate, input.deleted, input.assetType);
+    try {
+        await contract.insertEditedAsset(input.originalAssetId, input.name, input.organizationId, input.adquireDate, 
+            input.creationDate, input.deleted, input.assetType, signerAddress);
+            const correctText = "Activo editado correctamente";
+
+            const notify = {
+                isOpen: true,
+                message: correctText,
+                type: "success",
+            };
+        return notify;
+    } catch{
+        const errorM = "Por favor, acepta la transacción en metamask";
+        const notify = {
+                isOpen: true,
+                message: errorM,
+                type: "error",
+            };
+        return notify
+    }
+    
 }
 
 export async function CallDeleteAsset(props: number) {

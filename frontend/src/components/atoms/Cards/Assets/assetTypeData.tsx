@@ -1,6 +1,7 @@
 import { Button, Card, Skeleton, Typography } from "@mui/material";
 import { CallGetCloudAsset, CallGetDataAsset, CallGetDocAsset, CallGetHardwareAsset, CallGetNetworkAsset, CallGetOtherAsset, CallGetSoftwareAsset } from "components/wallet/dataStructsCall";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { HardwareTypes, SoftwareTypes, DocTypes } from "types";
 
 
@@ -8,6 +9,8 @@ const AssetTypeCard = (props:any) => {
 
     const [data, setData] = useState<any>("");
     const [isLoading, setIsLoading] = useState(true);
+
+    const navigate = useNavigate();
 
 
     useEffect(()=> {
@@ -23,11 +26,7 @@ const AssetTypeCard = (props:any) => {
             case 1:
                 CallGetHardwareAsset(assetId).then((r)=> {
                     setData(r)
-                    console.log(r)
-                    console.log("QUE");
                     setIsLoading(false)
-                    
-
                     });
                 break;
             case 2:
@@ -211,7 +210,7 @@ const AssetTypeCard = (props:any) => {
 
               }[Number(props.assetType)]
             }
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={()=> {navigate('/asset/type/'+Number(props.assetType)+'/edit')}}>
               Editar tipo
             </Button>
           </Card>

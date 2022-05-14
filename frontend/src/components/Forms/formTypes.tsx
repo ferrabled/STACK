@@ -17,6 +17,7 @@ import * as Yup from "yup";
 
 import { Notify } from "types";
 import Notification from "components/notification";
+import { CallUpdateCloudAsset, CallUpdateDataAsset, CallUpdateDocAsset, CallUpdateHardwareAsset, CallUpdateNetworkAsset, CallUpdateSoftwareAsset } from "components/wallet/dataStructsCall";
 
 
 
@@ -79,7 +80,7 @@ export const SubmitAsset = (props:any) => {
   )
 }
 
-export const SoftwareForm = (asset:Asset) => {
+export const SoftwareForm = ({asset, edit, typeData}:{asset?:Asset, edit:boolean, typeData?:any}) => {
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
 
 
@@ -88,17 +89,23 @@ export const SoftwareForm = (asset:Asset) => {
       <Notification {...notify}></Notification>
       <Formik
         initialValues={{
-          version: "",
-          provider: "",
-          stype: "",
+          version: edit ? typeData.version:"",
+          provider: edit ? typeData.provider:"",
+          stype: edit ? typeData.stype:"",
         }}
         validationSchema={validationSchemaSoft}
         onSubmit={(data, { setSubmitting }) => {
-          if(asset.assetDepart !== 0) CallInsertNewSAssetWithDepartment(asset, data).then((r)=> {
+          if(edit) {
+            const assetId = Number(window.sessionStorage.getItem('detailId'));
+            CallUpdateSoftwareAsset(data, assetId).then((r)=> {
+              const notify:Notify = r!; 
+              setNotify(notify);
+            });
+          } else if(asset!.assetDepart !== 0) CallInsertNewSAssetWithDepartment(asset!, data).then((r)=> {
             const notify:Notify = r!; 
             setNotify(notify);
           });
-          else CallInsertNewSoftAsset(asset, data).then((r)=> {
+          else CallInsertNewSoftAsset(asset!, data).then((r)=> {
             const notify:Notify = r!; 
             setNotify(notify);
           })
@@ -166,7 +173,7 @@ export const SoftwareForm = (asset:Asset) => {
   );
 };
 
-export const HardwareForm = (asset:Asset) => {
+export const HardwareForm = ({asset, edit, typeData}:{asset?:Asset, edit:boolean, typeData?:any}) => {
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
 
   return (
@@ -175,19 +182,25 @@ export const HardwareForm = (asset:Asset) => {
       <Formik
         initialValues={{
           //TODO initial values
-          model: "model",
-          provider: "2",
-          serialNumber: "12",
-          htype: "",
+          model: edit ? typeData.model:"",
+          provider: edit ? typeData.provider:"",
+          serialNumber: edit ? typeData.serialNumber:"",
+          htype: edit ? typeData.htype:"",
         }}
         validationSchema={validationSchemaHard}
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
-          if(asset.assetDepart !== 0) CallInsertNewHAssetWithDepartment(asset, data).then((r)=> {
+          if(edit) {
+            const assetId = Number(window.sessionStorage.getItem('detailId'));
+            CallUpdateHardwareAsset(data, assetId).then((r)=> {
+              const notify:Notify = r!; 
+              setNotify(notify);
+            });
+          } else if(asset!.assetDepart !== 0) CallInsertNewHAssetWithDepartment(asset!, data).then((r)=> {
             const notify:Notify = r!; 
             setNotify(notify);
           });
-          else CallInsertNewHardAsset(asset, data).then((r)=> {
+          else CallInsertNewHardAsset(asset!, data).then((r)=> {
             const notify:Notify = r!; 
             setNotify(notify);
           });
@@ -268,26 +281,33 @@ export const HardwareForm = (asset:Asset) => {
   );
 };
 
-export const DocumentForm = (asset:Asset) => {
+export const DocumentForm = ({asset, edit, typeData}:{asset?:Asset, edit:boolean, typeData?:any}) => {
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
 
   return (
     <div>
+        <Notification {...notify}></Notification>
         <Formik
           initialValues={{
-            name: "",
-            location: "",
-            doctype: ""
+            name: edit ? typeData.name:"",
+            location:  edit ? typeData.location:"",
+            doctype:  edit ? typeData.doctype:""
           }}
           validationSchema={validationSchemaDoc}
           onSubmit={(data, { setSubmitting }) => {
             console.log(data);
             setSubmitting(true);
-            if(asset.assetDepart !== 0) CallInsertNewDocAssetWithDepartment(asset, data).then((r)=> {
+            if(edit) {
+              const assetId = Number(window.sessionStorage.getItem('detailId'));
+              CallUpdateDocAsset(data, assetId).then((r)=> {
+                const notify:Notify = r!; 
+                setNotify(notify);
+              });
+            } else if(asset!.assetDepart !== 0) CallInsertNewDocAssetWithDepartment(asset!, data).then((r)=> {
               const notify:Notify = r!; 
               setNotify(notify);
             });
-            else CallInsertNewDocAsset(asset, data).then((r)=> {
+            else CallInsertNewDocAsset(asset!, data).then((r)=> {
               const notify:Notify = r!; 
               setNotify(notify);
             });
@@ -350,24 +370,31 @@ export const DocumentForm = (asset:Asset) => {
     );
 };
 
-export const DataForm = (asset:Asset) => {
+export const DataForm = ({asset, edit, typeData}:{asset?:Asset, edit:boolean, typeData?:any}) => {
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
 
   return (
     <div>
+      <Notification {...notify}></Notification>
       <Formik
         initialValues={{
-          location: "",
-          local: false,
+          location: edit ? typeData.location:"",
+          local: edit ? typeData.local:false,
         }}
         validationSchema={validationSchemaData}
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
-          if(asset.assetDepart !== 0) CallInsertNewDataAssetWithDepartment(asset, data).then((r)=> {
+          if(edit) {
+            const assetId = Number(window.sessionStorage.getItem('detailId'));
+            CallUpdateDataAsset(data, assetId).then((r)=> {
+              const notify:Notify = r!; 
+              setNotify(notify);
+            });
+          } else if(asset!.assetDepart !== 0) CallInsertNewDataAssetWithDepartment(asset!, data).then((r)=> {
             const notify:Notify = r!; 
             setNotify(notify);
           });
-          else CallInsertNewDataAsset(asset, data).then((r)=> {
+          else CallInsertNewDataAsset(asset!, data).then((r)=> {
             const notify:Notify = r!; 
             setNotify(notify);
           });
@@ -408,26 +435,32 @@ export const DataForm = (asset:Asset) => {
   );
 };
 
-export const NetworkForm = (asset:Asset) => {
+export const NetworkForm = ({asset, edit, typeData}:{asset?:Asset, edit:boolean, typeData?:any}) => {
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
 
   return (
     <div>
+      <Notification {...notify}></Notification>
         <Formik
          initialValues={{
-          cidrblock: "",
-          nat: false,
+          cidrblock:  edit ? typeData.cidrblock:"",
+          nat:  edit ? typeData.nat:false,
         }}
           validationSchema={validationSchemaNetwork}
           onSubmit={(data, { setSubmitting }) => {
-            //TODO SETS SUBMITTINGS
             //setSubmitting(true);
             console.log(data);
-            if(asset.assetDepart !== 0) CallInsertNewNAssetWithDepartment(asset, data).then((r)=> {
+            if(edit) {
+              const assetId = Number(window.sessionStorage.getItem('detailId'));
+              CallUpdateNetworkAsset(data, assetId).then((r)=> {
+                const notify:Notify = r!; 
+                setNotify(notify);
+              });
+          } else if(asset!.assetDepart !== 0) CallInsertNewNAssetWithDepartment(asset!, data).then((r)=> {
               const notify:Notify = r!; 
               setNotify(notify);
             });
-            else CallInsertNewNetworkAsset(asset, data).then((r)=> {
+            else CallInsertNewNetworkAsset(asset!, data).then((r)=> {
               const notify:Notify = r!; 
               setNotify(notify);
             });
@@ -468,23 +501,30 @@ export const NetworkForm = (asset:Asset) => {
     );
   };
 
-export const CloudForm = (asset:Asset) => {
+export const CloudForm = ({asset, edit, typeData}:{asset?:Asset, edit:boolean, typeData?:any}) => {
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
 
   return (
     <div>
+      <Notification {...notify}></Notification>
         <Formik
           initialValues={{
-            url: "",
-            domain: "",
+            url: edit ? typeData.url:"",
+            domain: edit ? typeData.domain:"",
           }}
           validationSchema={validationSchemaCloud}
           onSubmit={(data, { setSubmitting }) => {
-            if(asset.assetDepart !== 0) CallInsertNewCAssetWithDepartment(asset, data).then((r)=> {
+            if(edit) {
+              const assetId = Number(window.sessionStorage.getItem('detailId'));
+              CallUpdateCloudAsset(data, assetId).then((r)=> {
+                const notify:Notify = r!; 
+                setNotify(notify);
+              });
+            } else if(asset!.assetDepart !== 0) CallInsertNewCAssetWithDepartment(asset!, data).then((r)=> {
               const notify:Notify = r!; 
               setNotify(notify);
             });
-            else CallInsertNewCloudAsset(asset, data).then(()=> setSubmitting(true)).then((r)=> {
+            else CallInsertNewCloudAsset(asset!, data).then(()=> setSubmitting(true)).then((r)=> {
               const notify:Notify = r!; 
               setNotify(notify);
             });   
@@ -528,23 +568,30 @@ export const CloudForm = (asset:Asset) => {
     );
   };
 
-export const OtherForm = (asset:Asset) => {
+export const OtherForm = ({asset, edit, typeData}:{asset?:Asset, edit:boolean, typeData?:any}) => {
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
 
   return (
     <div>
+      <Notification {...notify}></Notification>
         <Formik
           initialValues={{
-            description: "",
+            description: edit ? typeData.description:"",
           }}
           validationSchema={validationSchemaOther}
           onSubmit={(data, { setSubmitting }) => {
             setSubmitting(true);
-            if(asset.assetDepart !== 0) CallInsertNewOAssetWithDepartment(asset, data).then((r)=> {
+            if(edit) {
+              const assetId = Number(window.sessionStorage.getItem('detailId'));
+              CallUpdateCloudAsset(data, assetId).then((r)=> {
+                const notify:Notify = r!; 
+                setNotify(notify);
+              });
+            } else if(asset!.assetDepart !== 0) CallInsertNewOAssetWithDepartment(asset!, data).then((r)=> {
               const notify:Notify = r!; 
               setNotify(notify);
             });
-            else CallInsertNewOtherAsset(asset, data).then((r)=> {
+            else CallInsertNewOtherAsset(asset!, data).then((r)=> {
               const notify:Notify = r!; 
               setNotify(notify);
             });
