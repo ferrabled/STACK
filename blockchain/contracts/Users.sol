@@ -38,6 +38,11 @@ contract Users {
         return (users[addressToId[userAddress]] == userAddress);
     } 
 
+    function getUserFromAddr(address addr) public view returns(User memory){
+        uint userId = addressToId[addr];
+        return userList[userId];
+    }
+    
     function insertUser(
         address addr, 
         string memory name, 
@@ -267,127 +272,10 @@ contract Users {
         
     }
 
-    function insertNewSAssetWithDepartment(string memory name,
-        uint256 organizationId,
-        uint256 adquireDate,
-        uint256 creationDate,
-        uint8 assetType,
-        uint256 assetDepart,
-        string memory version, 
-        string memory provider, 
-        uint8 stype,
-        address addr) public {
-            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
-            Main mainInstance = Main(mainAddr);
-            uint id = mainInstance.getIdAsset();
-            mainInstance.insertNewSoftAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, version, provider, stype);
-            departIdToAssetList[assetDepart].push(id);
-            departToAssetBool[assetDepart][id] = true;
-        }
- 
-    function insertNewHAssetWithDepartment(string memory name,
-        uint256 organizationId,
-        uint256 adquireDate,
-        uint256 creationDate,
-        uint8 assetType,
-        uint256 assetDepart,
-        string memory model, 
-        string memory provider, 
-        string memory serialNumber, 
-        uint8 htype,
-        address addr) public {
-            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
-            Main mainInstance = Main(mainAddr);
-            uint id = mainInstance.getIdAsset();
-            mainInstance.insertNewHardAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, model, provider, serialNumber, htype);
-            departIdToAssetList[assetDepart].push(id);
-            departToAssetBool[assetDepart][id] = true;
-        }
-
-    function insertNewDocAssetWithDepartment(string memory name,
-        uint256 organizationId,
-        uint256 adquireDate,
-        uint256 creationDate,
-        uint8 assetType,
-        uint256 assetDepart,
-        string memory description,
-        string memory location,
-        uint8 doctype,
-        address addr) public {
-            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
-            Main mainInstance = Main(mainAddr);
-            uint id = mainInstance.getIdAsset();
-            mainInstance.insertNewDocAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, description, location, doctype);
-            departIdToAssetList[assetDepart].push(id);
-            departToAssetBool[assetDepart][id] = true;
-        }
-
-    function insertNewDataAssetWithDepartment(string memory name,
-        uint256 organizationId,
-        uint256 adquireDate,
-        uint256 creationDate,
-        uint8 assetType,
-        uint256 assetDepart,
-        string memory location, 
-        bool local,
-        address addr) public {
-            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
-            Main mainInstance = Main(mainAddr);
-            uint id = mainInstance.getIdAsset();
-            mainInstance.insertNewDataAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, location, local);
-            departIdToAssetList[assetDepart].push(id);
-            departToAssetBool[assetDepart][id] = true;
-        }
-
-    function insertNewNAssetWithDepartment(string memory name,
-        uint256 organizationId,
-        uint256 adquireDate,
-        uint256 creationDate,
-        uint8 assetType,
-        uint256 assetDepart,
-        string memory cidrblock, 
-        bool nat,
-        address addr) public {
-            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
-            Main mainInstance = Main(mainAddr);
-            uint id = mainInstance.getIdAsset();
-            mainInstance.insertNewNetworkAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, cidrblock, nat);
-            departIdToAssetList[assetDepart].push(id);
-            departToAssetBool[assetDepart][id] = true;
-        }
-
-    function insertNewCAssetWithDepartment(string memory name,
-        uint256 organizationId,
-        uint256 adquireDate,
-        uint256 creationDate,
-        uint8 assetType,
-        uint256 assetDepart,
-        string memory url, 
-        string memory domain,
-        address addr) public {
-            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
-            Main mainInstance = Main(mainAddr);
-            uint id = mainInstance.getIdAsset();
-            mainInstance.insertNewCloudAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, url, domain);
-            departIdToAssetList[assetDepart].push(id);
-            departToAssetBool[assetDepart][id] = true;
-        }
-
-    function insertNewOAssetWithDepartment(string memory name,
-        uint256 organizationId,
-        uint256 adquireDate,
-        uint256 creationDate,
-        uint8 assetType,
-        uint256 assetDepart,
-        string memory description,
-        address addr) public {
-            if(!(isAdminFromOrg(addr, organizationId) || isUserFromDepart(addr, organizationId))) revert();
-            Main mainInstance = Main(mainAddr);
-            uint id = mainInstance.getIdAsset();
-            mainInstance.insertNewOtherAsset(name, organizationId, adquireDate, creationDate, assetType, assetDepart, description);
-            departIdToAssetList[assetDepart].push(id);
-            departToAssetBool[assetDepart][id] = true;
-        }
+    function insertNewAssetWithDepartment(uint assetDepart, uint id) public{
+        departIdToAssetList[assetDepart].push(id);
+        departToAssetBool[assetDepart][id] = true;    
+    }
 
     //COMMENTS
     struct Comment {

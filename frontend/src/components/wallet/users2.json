@@ -1,0 +1,432 @@
+[
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_usersAddr",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_mainAddr",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "mainAddr",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "usersAddr",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "organizationId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "adquireDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "creationDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "assetType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "assetDepart",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "version",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "provider",
+          "type": "string"
+        },
+        {
+          "internalType": "uint8",
+          "name": "stype",
+          "type": "uint8"
+        },
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "insertNewSAssetWithDepartment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "organizationId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "adquireDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "creationDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "assetType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "assetDepart",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "model",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "provider",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "serialNumber",
+          "type": "string"
+        },
+        {
+          "internalType": "uint8",
+          "name": "htype",
+          "type": "uint8"
+        },
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "insertNewHAssetWithDepartment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "organizationId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "adquireDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "creationDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "assetType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "assetDepart",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "location",
+          "type": "string"
+        },
+        {
+          "internalType": "uint8",
+          "name": "doctype",
+          "type": "uint8"
+        },
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "insertNewDocAssetWithDepartment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "organizationId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "adquireDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "creationDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "assetType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "assetDepart",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "location",
+          "type": "string"
+        },
+        {
+          "internalType": "bool",
+          "name": "local",
+          "type": "bool"
+        },
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "insertNewDataAssetWithDepartment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "organizationId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "adquireDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "creationDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "assetType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "assetDepart",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "cidrblock",
+          "type": "string"
+        },
+        {
+          "internalType": "bool",
+          "name": "nat",
+          "type": "bool"
+        },
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "insertNewNAssetWithDepartment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "organizationId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "adquireDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "creationDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "assetType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "assetDepart",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "url",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "domain",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "insertNewCAssetWithDepartment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "organizationId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "adquireDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "creationDate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "assetType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "assetDepart",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "insertNewOAssetWithDepartment",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]

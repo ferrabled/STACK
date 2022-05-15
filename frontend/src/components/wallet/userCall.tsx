@@ -6,11 +6,18 @@ import addresses from "../../assets/addresses.json";
 declare var window: any;
 
 const usersABI = require("./users.json");
+const users2ABI = require("./users2.json");
+
 const contractAddress = addresses.Users;
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const contract = new ethers.Contract(
   contractAddress,
   usersABI,
+  provider.getSigner()
+);
+const contract2 = new ethers.Contract(
+  contractAddress,
+  users2ABI,
   provider.getSigner()
 );
 
@@ -291,7 +298,7 @@ export async function CallGetAssetsIdsFromDepart(departId: number) {
 export async function CallInsertNewSAssetWithDepartment(asset:Asset, props: any){
   try{
         let signerAddress = await provider.getSigner().getAddress();
-      await contract.insertNewSAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      await contract2.insertNewSAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
         asset.assetType, asset.assetDepart, props.version, props.provider, props.stype, signerAddress); 
             const correctText = "Activo creado correctamente";
     
@@ -316,7 +323,7 @@ export async function CallInsertNewHAssetWithDepartment(asset:Asset, props: any)
   
   try{
     let signerAddress = await provider.getSigner().getAddress();
-  await contract.insertNewHAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+  await contract2.insertNewHAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
       asset.assetType, asset.assetDepart, props.model, props.provider, props.serialNumber, props.htype, signerAddress);  
         const correctText = "Activo creado correctamente";
 
@@ -342,7 +349,7 @@ export async function CallInsertNewHAssetWithDepartment(asset:Asset, props: any)
 export async function CallInsertNewDocAssetWithDepartment(asset:Asset, props: any){ 
       try{
         let signerAddress = await provider.getSigner().getAddress();
-      await  contract.insertNewDocAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      await  contract2.insertNewDocAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
         asset.assetType,  asset.assetDepart,props.name, props.location, props.doctype, signerAddress); 
             const correctText = "Activo creado correctamente";
     
@@ -367,7 +374,7 @@ export async function CallInsertNewDocAssetWithDepartment(asset:Asset, props: an
 export async function CallInsertNewDataAssetWithDepartment(asset:Asset, props: any){ 
       try{
         let signerAddress = await provider.getSigner().getAddress();
-      await  contract.insertNewDataAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      await  contract2.insertNewDataAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
         asset.assetType, asset.assetDepart, props.location, props.local, signerAddress);   
             const correctText = "Activo creado correctamente";
     
@@ -391,7 +398,7 @@ export async function CallInsertNewDataAssetWithDepartment(asset:Asset, props: a
 export async function CallInsertNewNAssetWithDepartment(asset:Asset, props: any){
       try{
         let signerAddress = await provider.getSigner().getAddress();
-      await  contract.insertNewNAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      await  contract2.insertNewNAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
         asset.assetType, asset.assetDepart, props.cidrblock, props.nat, signerAddress); 
             const correctText = "Activo creado correctamente";
     
@@ -415,7 +422,7 @@ export async function CallInsertNewNAssetWithDepartment(asset:Asset, props: any)
 export async function CallInsertNewCAssetWithDepartment(asset:Asset, props: any){
     try{
         let signerAddress = await provider.getSigner().getAddress();
-      await  contract.insertNewCAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      await  contract2.insertNewCAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
         asset.assetType, asset.assetDepart, props.url, props.domain, signerAddress); 
             const correctText = "Activo creado correctamente";
     
@@ -439,7 +446,7 @@ export async function CallInsertNewCAssetWithDepartment(asset:Asset, props: any)
 export async function CallInsertNewOAssetWithDepartment(asset:Asset, props: any){
       try{
         let signerAddress = await provider.getSigner().getAddress();
-      await  contract.insertNewOAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
+      await  contract2.insertNewOAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
         asset.assetType, asset.assetDepart, props.description, signerAddress); 
             const correctText = "Activo creado correctamente";
     
@@ -518,4 +525,16 @@ export async function CallGetNumberOfCommentsByAsset(assetId:number){
 
 export async function CallGetUsersById(usersIds:number[]){
   return contract.getUsersById(usersIds);
+}
+
+export async function CallIsUser(addr:number){
+  return contract.isUser(addr);
+}
+
+export async function CallGetUserData(addr:number){
+  return contract.getUserData(addr);
+}
+
+export async function CallGetUserFromAddr(addr:number){
+  return contract.getUserFromAddr(addr);
 }
