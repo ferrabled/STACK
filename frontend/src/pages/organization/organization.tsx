@@ -8,6 +8,7 @@ import { Admin, Organization } from "types";
 import { useNavigate } from "react-router-dom";
 import DashboardData from "components/organisms/dashboardData";
 import { CallGetAllDepartmentsFromOrg, CallGetNumUsersFromOrg } from "components/wallet/userCall";
+import PageLoged from "pages/pageCheckLogin";
 
 const MyOrganizationPage = () => {
     const navigate = useNavigate();
@@ -68,7 +69,7 @@ const MyOrganizationPage = () => {
 
     
     return (
-        <Page>
+        <PageLoged>
             <div className="flex flex-col gap-6">
             {isLoading && (
             <div className="flex flex-row w-full justify-center gap-5">
@@ -86,7 +87,7 @@ const MyOrganizationPage = () => {
                 )}</>
            </div>
              
-        </Page>     
+        </PageLoged>     
         
     )
 

@@ -111,7 +111,7 @@ const AssetsPage = () => {
       });
   },[]);
 
-  if (isLoading === true) return <CircularProgress />
+  if (isLoading === true) return <PageLoged><CircularProgress /></PageLoged>
   else return (
     <PageLoged>
     <div className="my-5"><Typography variant="h5">Todos los activos</Typography></div>
