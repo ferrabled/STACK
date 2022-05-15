@@ -1,57 +1,48 @@
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { HomeCard } from "components/atoms";
+import { CallGetAdminData } from "components/wallet/contractCall";
+import { CallGetUserFromAddr } from "components/wallet/userCall";
 import { ethers } from "ethers";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageLoged from "./pageCheckLogin";
 
 declare var window: any
 
 const HomePage = () => {
+  const [userData, setUserData] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+
+  useEffect(()=> {
+    const isAdmin = window.localStorage.getItem('isAdmin');
+    if(isAdmin == "false"){
+      const addr = window.localStorage.getItem('userAddress');
+      CallGetUserFromAddr(addr).then((r)=> {
+        setUserData(r);
+        setIsLoading(false)
+      })
+    } else {
+      const orgId = window.localStorage.getItem('orgId');
+      CallGetAdminData(orgId).then((r)=> {
+        setUserData(r);
+        setIsLoading(false)
+      })
+    } 
+        
+  }, [])
     
-    const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate();
 
-
-    // Ethers login
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner()
-    signer.getAddress().then(addr => {
-      console.log(addr);
-      if (!addr) {
-          navigate("/login");
-      } else {
-          setIsLoading(false);
-          // TODO ASK IF USER HAS ORG.
-        }
-      }).catch(() =>
-      {
-          navigate("/login");
-      });
 
   
 
-  if (isLoading) return <CircularProgress />
-
-
-    /* async function handleConnectWallet() {
-        const signer = provider.getSigner();
-        await provider.send("eth_requestAccounts", []);
-        console.log("Account:", signer.getAddress());
-        if (signer){
-            setCheckWallet(true);
-        }   
-    } */
-
-  return signer ? (
+  if (isLoading) return <PageLoged><CircularProgress /></PageLoged>
+  else return (
     <div>
         <PageLoged>
-        {/* <Typography>Conectado</Typography> */}
-        <HomeCard></HomeCard>
+          <HomeCard data={userData}></HomeCard>
         </PageLoged>
     </div> 
-  ) : (
-    <Button className='w-80 h-24' variant="contained" color="primary" /* onClick={handleConnectWallet} */><Typography variant="h6">Conectar Billetera</Typography></Button>
   );
 }
 

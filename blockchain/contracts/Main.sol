@@ -10,7 +10,8 @@ contract Main {
     }
 
     //EVENTS
-    event NewOrganization(address user, string name);
+    event NewOrg(address user, string orgName);
+
     event LogNewUser(
         address indexed userAddress,
         uint256 index,
@@ -101,6 +102,7 @@ contract Main {
         //Create the mapping with 0 assets edited and 0 deleted
         organizationNumberOfAssetsED[id].push(0);
         organizationNumberOfAssetsED[id].push(0);
+        emit NewOrg(userAddress, name);
     }
 
     // Check if the address has created a org, == is an administrator.

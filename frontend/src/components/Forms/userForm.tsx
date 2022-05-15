@@ -1,5 +1,6 @@
 import { Button, TextField, Typography } from "@mui/material";
 import Notification from "components/notification";
+import { CallIsAdministrator } from "components/wallet/contractCall";
 import { CallInsertUser, WaitForInsertUser } from "components/wallet/userCall";
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";

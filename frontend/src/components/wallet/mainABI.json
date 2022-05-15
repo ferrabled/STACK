@@ -53,11 +53,11 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "name",
+        "name": "orgName",
         "type": "string"
       }
     ],
-    "name": "NewOrganization",
+    "name": "NewOrg",
     "type": "event"
   },
   {

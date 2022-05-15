@@ -56,7 +56,7 @@ const PageLoged = (props: {children?: React.ReactNode;}) => {
         connect();
         listenMMAccount();    
         const orgId = window.localStorage.getItem('orgId')
-        if(orgId == null) navigate('/login')
+        //if(orgId == null) navigate('/login')
     },[])
    
 

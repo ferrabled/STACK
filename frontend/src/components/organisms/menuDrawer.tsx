@@ -111,7 +111,9 @@ export default function MenuDrawer() {
         </ListItem>
 
         <Divider />
-        <ListItem button key={'Salir'} onClick={()=> navigate('/login')}>
+        <ListItem button key={'Salir'} onClick={()=> {
+          window.localStorage.clear();
+          navigate('/login');}}>
           <ListItemIcon>
             <LogoutIcon color="primary" />
           </ListItemIcon>

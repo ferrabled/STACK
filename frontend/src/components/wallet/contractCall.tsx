@@ -58,15 +58,52 @@ export async function CallInsertOrg(input: any) {
     
 }
 
+export async function WaitForInsertOrg(data: any) {
+    //const navigate = useNavigate()
+  
+    const handleNewOrg = (address: any, orgName: string) => {
+      console.log("Registro");
+      console.log(address, orgName);
+      console.log(data);
+      provider
+        .getSigner()
+        .getAddress()
+        .then((myaddress) => {
+          if (
+            data === orgName &&
+            address == myaddress
+          ) {
+            console.log("Registro nuevo");
+            window.localStorage.setItem('userAddress', address);
+            window.localStorage.setItem('isAdmin', "true");
+            CallGetAdminToOrg(myaddress).then((r)=> {
+                window.localStorage.setItem('orgId', String(r));
+                window.location.replace("/home");
+            })
 
-export async function CallIsAdministrator(props: number) {
+            
+          }
+          return () => {
+            contract.removeAllListeners("NewOrg");
+          };
+        });
+    };
+
+    console.log("Listening to the blockchain");
+    contract.on("NewOrg", (address, orgName) =>
+        handleNewOrg(address, orgName)
+  );
+}
+
+
+export async function CallIsAdministrator(props: any) {
     console.log("Is administrator " + props);
     const isAdmin: Boolean = contract.isAdministrator(props)
     return isAdmin;
 }
 
 
-export async function CallGetAdminToOrg(props: number) {
+export async function CallGetAdminToOrg(props: any) {
     const orgId = contract.getAdminToOrg(props)
     return orgId;
 }

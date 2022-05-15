@@ -3,7 +3,7 @@ import { TextField, Button, Checkbox, Typography } from "@mui/material";
 import { AdminFormValues, Notify } from "types";
 import { Field, FieldAttributes, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { CallInsertOrg } from "components/wallet/contractCall";
+import { CallInsertOrg, WaitForInsertOrg } from "components/wallet/contractCall";
 import Notification from "components/notification";
 
 
@@ -41,6 +41,7 @@ const OrganizationForm = () => {
       const notify:Notify = r!; 
       setNotify(notify);
     });
+    WaitForInsertOrg(input.orgName)
 
     };
 

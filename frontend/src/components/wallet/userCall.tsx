@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { Asset, Comment, Users } from "types";
 import addresses from "../../assets/addresses.json";
+import { CallGetAdminToOrg, CallIsAdministrator } from "./contractCall";
 
 declare var window: any;
 
@@ -9,16 +10,21 @@ const usersABI = require("./users.json");
 const users2ABI = require("./users2.json");
 
 const contractAddress = addresses.Users;
+const contractAddress2 = addresses.Users2;
+
 const provider = new ethers.providers.Web3Provider(window.ethereum);
+const provider2 = new ethers.providers.Web3Provider(window.ethereum);
+
 const contract = new ethers.Contract(
   contractAddress,
   usersABI,
   provider.getSigner()
 );
+
 const contract2 = new ethers.Contract(
-  contractAddress,
+  contractAddress2,
   users2ABI,
-  provider.getSigner()
+  provider2.getSigner()
 );
 
 export async function WaitForInsertUser(data: any) {
@@ -36,6 +42,9 @@ export async function WaitForInsertUser(data: any) {
           address == myaddress
         ) {
           console.log("Registro nuevo");
+          window.localStorage.setItem('orgId', String(data.orgId));
+          window.localStorage.setItem('userAddress', address);
+          window.localStorage.setItem('isAdmin', "false");
           window.location.replace("/home");
         }
         return () => {
@@ -44,6 +53,7 @@ export async function WaitForInsertUser(data: any) {
       });
   };
 
+  console.log("Listening to the blockchain");
   contract.on("Register", (address, name, surname) =>
     handleRegister(address, name, surname)
   );
@@ -54,6 +64,17 @@ export async function CallInsertUser(user: any) {
   const signer = provider.getSigner();
   let signerAddress = await signer.getAddress();
   try {
+    const isIndeed = await CallIsAdministrator((signerAddress))
+    console.log(isIndeed);
+    if(isIndeed) {
+      const text = "Esta billetera pertenece a un administrador";
+      const notify = {
+        isOpen: true,
+        message: text,
+        type: "error",
+      };
+      return notify;
+    } 
     await contract.insertUser(
       signerAddress,
       user.name,
@@ -62,7 +83,7 @@ export async function CallInsertUser(user: any) {
       user.telephone,
       user.orgId
     );
-    const text = "Usuario creado correctamente. Guardando datos en la Blockchain...";
+    const text = "Usuario registrado correctamente. Guardando datos en la blockchain...";
     const notify = {
         isOpen: true,
         message: text,
@@ -292,181 +313,6 @@ export async function CallDeleteAssetFromDepartment(departId: number, assetsIds:
 export async function CallGetAssetsIdsFromDepart(departId: number) {
   return contract.getAssetsIdsFromDepart(departId);
 }
-
-
-//NEW ASSETS WITH DEPARTMENT
-export async function CallInsertNewSAssetWithDepartment(asset:Asset, props: any){
-  try{
-        let signerAddress = await provider.getSigner().getAddress();
-      await contract2.insertNewSAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, asset.assetDepart, props.version, props.provider, props.stype, signerAddress); 
-            const correctText = "Activo creado correctamente";
-    
-            const notify = {
-                isOpen: true,
-                message: correctText,
-                type: "success",
-            };
-        return notify;
-    } catch{
-        const errorM = "Por favor, acepta la transacción en metamask";
-        const notify = {
-                isOpen: true,
-                message: errorM,
-                type: "error",
-            };
-        return notify
-    }
-}
-
-export async function CallInsertNewHAssetWithDepartment(asset:Asset, props: any){
-  
-  try{
-    let signerAddress = await provider.getSigner().getAddress();
-  await contract2.insertNewHAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-      asset.assetType, asset.assetDepart, props.model, props.provider, props.serialNumber, props.htype, signerAddress);  
-        const correctText = "Activo creado correctamente";
-
-        const notify = {
-            isOpen: true,
-            message: correctText,
-            type: "success",
-        };
-    return notify;
-} catch{
-    const errorM = "Por favor, acepta la transacción en metamask";
-    const notify = {
-            isOpen: true,
-            message: errorM,
-            type: "error",
-        };
-    return notify
-}
-  
-  
-}
-
-export async function CallInsertNewDocAssetWithDepartment(asset:Asset, props: any){ 
-      try{
-        let signerAddress = await provider.getSigner().getAddress();
-      await  contract2.insertNewDocAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType,  asset.assetDepart,props.name, props.location, props.doctype, signerAddress); 
-            const correctText = "Activo creado correctamente";
-    
-            const notify = {
-                isOpen: true,
-                message: correctText,
-                type: "success",
-            };
-        return notify;
-    } catch{
-        const errorM = "Por favor, acepta la transacción en metamask";
-        const notify = {
-                isOpen: true,
-                message: errorM,
-                type: "error",
-            };
-        return notify
-    }
-
-    }
-
-export async function CallInsertNewDataAssetWithDepartment(asset:Asset, props: any){ 
-      try{
-        let signerAddress = await provider.getSigner().getAddress();
-      await  contract2.insertNewDataAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, asset.assetDepart, props.location, props.local, signerAddress);   
-            const correctText = "Activo creado correctamente";
-    
-            const notify = {
-                isOpen: true,
-                message: correctText,
-                type: "success",
-            };
-        return notify;
-    } catch{
-        const errorM = "Por favor, acepta la transacción en metamask";
-        const notify = {
-                isOpen: true,
-                message: errorM,
-                type: "error",
-            };
-        return notify
-    }
-}
-
-export async function CallInsertNewNAssetWithDepartment(asset:Asset, props: any){
-      try{
-        let signerAddress = await provider.getSigner().getAddress();
-      await  contract2.insertNewNAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, asset.assetDepart, props.cidrblock, props.nat, signerAddress); 
-            const correctText = "Activo creado correctamente";
-    
-            const notify = {
-                isOpen: true,
-                message: correctText,
-                type: "success",
-            };
-        return notify;
-    } catch{
-        const errorM = "Por favor, acepta la transacción en metamask";
-        const notify = {
-                isOpen: true,
-                message: errorM,
-                type: "error",
-            };
-        return notify
-    }
-}
-
-export async function CallInsertNewCAssetWithDepartment(asset:Asset, props: any){
-    try{
-        let signerAddress = await provider.getSigner().getAddress();
-      await  contract2.insertNewCAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, asset.assetDepart, props.url, props.domain, signerAddress); 
-            const correctText = "Activo creado correctamente";
-    
-            const notify = {
-                isOpen: true,
-                message: correctText,
-                type: "success",
-            };
-        return notify;
-    } catch{
-        const errorM = "Por favor, acepta la transacción en metamask";
-        const notify = {
-                isOpen: true,
-                message: errorM,
-                type: "error",
-            };
-        return notify
-    }
-}
-
-export async function CallInsertNewOAssetWithDepartment(asset:Asset, props: any){
-      try{
-        let signerAddress = await provider.getSigner().getAddress();
-      await  contract2.insertNewOAssetWithDepartment(asset.name, asset.orgId, asset.adquireDate, asset.creationDate, 
-        asset.assetType, asset.assetDepart, props.description, signerAddress); 
-            const correctText = "Activo creado correctamente";
-    
-            const notify = {
-                isOpen: true,
-                message: correctText,
-                type: "success",
-            };
-        return notify;
-    } catch{
-        const errorM = "Por favor, acepta la transacción en metamask";
-        const notify = {
-                isOpen: true,
-                message: errorM,
-                type: "error",
-            };
-        return notify
-    }
-}
-
 
 //COMMENTS
 export async function CallInsertComment(comment:any, assetId:number, orgId:number){

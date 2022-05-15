@@ -23,9 +23,9 @@ const UsersPage = () => {
 
   useEffect(() => {
     const GetUsers = () => {
-      const idOrg = Number(localStorage.getItem('idOrg'));
-      console.log("obteniendo assets")
-      CallGetAllUsersFromOrg(idOrg).then((response) => {
+      const orgId = Number(localStorage.getItem('orgId'));
+      console.log("obteniendo Usuarios de la org"+ orgId)
+      CallGetAllUsersFromOrg(orgId).then((response) => {
         console.log(response.length);
         const cont = response.length;
         let container: Users[] = [];
@@ -44,10 +44,7 @@ const UsersPage = () => {
         console.log(container);
         }
         setUsers(container);
-        setIsLoading(false);
-    
-        
-    
+        setIsLoading(false);    
       });
       
       

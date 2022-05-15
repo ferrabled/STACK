@@ -1,4 +1,3 @@
-// ConnectButton.tsx
 import { Button, Card, Typography } from "@mui/material";
 import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
@@ -8,22 +7,6 @@ import { CallGetUserFromAddr, CallIsUser } from "components/wallet/userCall";
 
 const ConnectButton = ({setNotifyParent}:{setNotifyParent:any}) => {
   const navigate = useNavigate();
-
-  //   const { activate, account, library, connector, active, deactivate } = useWeb3React()
-
-  //   const [isActive, setIsActive] = useState(false)
-  //   const [shouldDisable, setShouldDisable] = useState(false) // Should disable connect button while connecting to MetaMask
-  //   const [isLoading, setIsLoading] = useState(true)
-
-  //   useEffect(() => {
-  //     connect().then(val => {
-  //         setIsLoading(false)
-  //     })
-  // }, [])
-
-  const FlushLocalStorage = () => {
-    window.localStorage.clear();
-  }
 
   const GetData = async (provider: any) => {
     console.log("User Wallet: ");

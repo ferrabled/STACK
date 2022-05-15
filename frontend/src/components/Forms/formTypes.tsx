@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { CallInsertNewCloudAsset, CallInsertNewDataAsset, CallInsertNewDocAsset, CallInsertNewHardAsset, CallInsertNewNetworkAsset, CallInsertNewOtherAsset, CallInsertNewSoftAsset } from "components/wallet/contractCall";
-import { CallInsertNewCAssetWithDepartment, CallInsertNewDataAssetWithDepartment, CallInsertNewDocAssetWithDepartment, CallInsertNewHAssetWithDepartment, CallInsertNewNAssetWithDepartment, CallInsertNewOAssetWithDepartment, CallInsertNewSAssetWithDepartment } from "components/wallet/userCall";
+import { CallInsertNewCAssetWithDepartment, CallInsertNewDataAssetWithDepartment, CallInsertNewDocAssetWithDepartment, CallInsertNewHAssetWithDepartment, CallInsertNewNAssetWithDepartment, CallInsertNewOAssetWithDepartment, CallInsertNewSAssetWithDepartment } from "components/wallet/users2Call";
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { Asset } from "types";
@@ -64,7 +64,7 @@ const validationSchemaCloud = Yup.object({
 
 const validationSchemaOther = Yup.object({
     //other
-    description: Yup.string().required("La descripción es obligatoria").max(20),
+    description: Yup.string().required("La descripción es obligatoria").max(150),
 })
 
 export const SubmitAsset = (props:any) => {

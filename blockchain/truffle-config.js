@@ -19,10 +19,10 @@
  */
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
-const infuraKey = "7a202c9027ca4574947c829bb6fa0ed4";
+/* const infuraKey = "7a202c9027ca4574947c829bb6fa0ed4";
 
 const fs = require('fs');
-const mnemonic = fs.readFileSync(".secret").toString().trim();
+const mnemonic = fs.readFileSync(".secret").toString().trim(); */
 
 module.exports = {
   /**
@@ -59,16 +59,16 @@ module.exports = {
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
     ropsten: {
-      provider: () => new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/${infuraKey}`),
+      /* provider: () => new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/${infuraKey}`),
       network_id: 3,       // Ropsten's id
       gas: 8000000,        // Ropsten has a lower block limit than mainnet
       confirmations: 2,    // # of confs to wait between deployments. (default: 0)
       timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
-      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
+      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets ) */
       },
 
       kovan: {
-        provider: function() {
+        /* provider: function() {
           const endpointUrl = 'https://kovan.infura.io/v3/7a202c9027ca4574947c829bb6fa0ed4';
           return new HDWalletProvider(
             //private keys array
@@ -79,7 +79,7 @@ module.exports = {
         },
         gas: 12500000,
         gasPrice: 25000000000,
-        network_id: 42
+        network_id: 42 */
       }
     // Useful for private networks
     // private: {
