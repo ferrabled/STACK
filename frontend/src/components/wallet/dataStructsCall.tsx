@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { License } from "types";
+import { Licence } from "types";
 import addresses from "../../assets/addresses.json";
 
 declare var window: any;
@@ -43,8 +43,28 @@ export async function CallGetOtherAsset(props: any){
 }
 
 
-export async function CallInsertLicenseToSoft(license:License, assetId:number){
-    contract2.insertLicenseToSoft(license.name, license.key, license.adquireDate, license.expirationDate, license.licenseType, assetId);
+export async function CallInsertLicenseToSoft(license:Licence, assetId:number){
+    try{
+        await contract2.insertLicenseToSoft(license.name, license.key, license.adquireDate, license.expirationDate, license.licenseType, assetId);        ;
+              const correctText = "Licencia añadida correctamente.";
+      
+              const notify = {
+                  isOpen: true,
+                  message: correctText,
+                  type: "success",
+              };
+        return notify;
+
+      } catch{
+          const errorM = "Por favor, acepta la transacción en metamask";
+          const notify = {
+                  isOpen: true,
+                  message: errorM,
+                  type: "error",
+              };
+          return notify
+      }
+    
 }
 
 export async function CallGetLicenseByAsset(assetId: number){

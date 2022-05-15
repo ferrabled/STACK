@@ -42,10 +42,10 @@ const UserDeleteModal = (props: any) => {
           orgId: Number(response[i].orgId),
           index: Number(response[i].index),
         };
-        container.push(user);
-        setUsers(container);
-        setIsLoading(false);
+        container.push(user);  
       }
+      setUsers(container);
+      setIsLoading(false);
     });
   }, []);
 

@@ -1,4 +1,6 @@
 import { Button, Card, Skeleton, Typography } from "@mui/material";
+import { LicencesModal } from "components/atoms/Modals";
+import AddLicenceModal from "components/atoms/Modals/addLicenceModal";
 import { CallGetCloudAsset, CallGetDataAsset, CallGetDocAsset, CallGetHardwareAsset, CallGetNetworkAsset, CallGetOtherAsset, CallGetSoftwareAsset } from "components/wallet/dataStructsCall";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -68,6 +70,11 @@ const AssetTypeCard = (props:any) => {
 
     const SoftwareCard = () => {
         
+      const [showLicenceModal, setShowLicenceModal] = useState(false);
+      const [showAddLicenceModal, setShowAddLicenceModal] = useState(false);
+
+
+
       return (
           <div className="flex flex-col mb-5">
             <div className="flex flex-row justify-between content-evenly">
@@ -82,6 +89,23 @@ const AssetTypeCard = (props:any) => {
             <div className="flex flex-row justify-between content-evenly">
               <Typography variant="h6">Tipo</Typography>
               <Typography variant="h6">{SoftwareTypes[data.stype]}</Typography>
+            </div>
+            <div>
+            <div className="flex flex-row justify-between content-evenly mt-3">
+              <Button variant="outlined" color="primary" onClick={()=> setShowLicenceModal(true)}>licencias</Button>
+              <Button variant="outlined" color="primary" onClick={()=> setShowAddLicenceModal(true)}>Añadir</Button>
+            </div>
+              
+              <LicencesModal
+                show={showLicenceModal!}
+                close={() => setShowLicenceModal(false)}
+                assetId={props.assetId}
+                />
+              <AddLicenceModal
+                show={showAddLicenceModal!}
+                close={() => setShowAddLicenceModal(false)}
+                assetId={props.assetId}
+                />
             </div>
           </div>
         )

@@ -29,9 +29,9 @@ const AssetCard = (props: any) => {
   const DataCard = () => {
 
     return (
-      <Card className="p-5 m-5 w-1/2">
-          <div className="flex flex-col mb-5">
-            <div className="flex flex-row justify-between content-evenly">
+      <Card className="p-5 m-5 w-1/2 flex flex-col justify-between content-evenly">
+          <div className="flex flex-col mb-5 gap-2">
+            <div className="flex flex-row justify-between content-evenly  mt-2">
               <Typography variant="h6">Nombre</Typography>
               {(asset.name && <div>{asset.name}</div>) || (
                 <Skeleton variant="text" width={85} height={32} />
@@ -51,19 +51,16 @@ const AssetCard = (props: any) => {
             </div>
           </div>
           <div className="flex flex-row justify-between content-evenly">
-            <div className="gap-5">
+            <div className="flex gap-5">
               <Button variant="contained" color="primary" onClick={onClickEdit}>
-                {" "}
-                Editar{" "}
+                Editar
               </Button>
               <Button variant="contained" color="error" onClick={deleteAsset}>
-                {" "}
-                Eliminar{" "}
+                Eliminar
               </Button>
             </div>
             <Button variant="contained" color="primary" onClick={onClickRecord}>
-              {" "}
-              Historial de Cambios{" "}
+              Historial
             </Button>
           </div>
         </Card>

@@ -124,10 +124,15 @@ export type CommentInTable = {
   telephone: Number;
 }
 
-export type License = {
+export type Licence = {
   name: String;
   key: String;
   adquireDate: number;
   expirationDate: number;
-  licenseType: number; 
+  adquireDateString?: string;
+  expirationDateString?:string;
+  licenseType: string; 
+  id?:number;
 }
+
+export const LicenceTypes = ["Libre", "Comercial", "De prueba"];
