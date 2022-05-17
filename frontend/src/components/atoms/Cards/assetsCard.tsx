@@ -33,8 +33,6 @@ const AssetsCard = (props:any) => {
         //console.log("AAA")
         tempRow.push(listAssets[i]);
       }
-      console.log("ROWWWWWWWWW");
-      console.log(rows);
       setRows(tempRow);
     }
     FormatData();

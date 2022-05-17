@@ -331,7 +331,7 @@ export async function CallInsertEditedAsset(props: any) {
     let signerAddress = await signer.getAddress();
     try {
         await contract.insertEditedAsset(input.originalAssetId, input.name, input.organizationId, input.adquireDate, 
-            input.creationDate, input.deleted, input.assetType, signerAddress);
+            input.creationDate, input.deleted, input.assetType);
             const correctText = "Activo editado correctamente";
 
             const notify = {

@@ -181,7 +181,6 @@ contract Main {
         uint256 adquireDate;
         uint256 creationDate;
         uint8 assetType;
-        uint256 assetDepart;
         bool deleted;
         uint256 index;
 
@@ -408,8 +407,7 @@ contract Main {
         uint256 adquireDate,
         uint256 creationDate,
         bool deleted,
-        uint8 assetType,
-        uint256 assetDepart
+        uint8 assetType
     ) public {
         //CHECK IF THE ASSET IS ALREADY IN ASSETS EDITED LIST
         
@@ -422,7 +420,6 @@ contract Main {
                     adquireDate,
                     creationDate,
                     assetType,
-                    assetDepart,
                     deleted,
                     assetsEditedList.length
                 )

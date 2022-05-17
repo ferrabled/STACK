@@ -14,7 +14,7 @@ import {
   AssetsPage, NewAssetPage, AssetDetailPage, RegisterPage, UsersPage, AppHeader
 } from "pages";
 
-import { AssetHistoryPage, AssetsDeletedPage, EditAssetPage, EditTypePage } from "pages/assets";
+import { AssetHistoryPage, AssetsDeletedPage, EditAssetPage, EditTypePage, SearchAssetPage } from "pages/assets";
 import { DepartmentPage, DepartmentsPage, NewDepartmentPage } from "pages/departments";
 const AppRoutes = () => {
   return (
@@ -39,6 +39,7 @@ const AppRoutes = () => {
             <Route path="*" element={<Navigate to="/home" />} />
             <Route path="/assets" element={<AssetsPage/>}/>
             <Route path="/assets/new" element={<NewAssetPage />} />
+            <Route path="/assets/search" element={<SearchAssetPage />} />
             <Route path="/assets/deleted" element={<AssetsDeletedPage/>}/>
             <Route path="/asset/" element={<AssetDetailPage />} />
             <Route path="/asset/edit" element={<EditAssetPage />} />

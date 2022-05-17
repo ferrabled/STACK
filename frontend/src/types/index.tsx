@@ -62,9 +62,9 @@ export type AssetsInList = {
   name: string;
   adquireDate?: Number;
   creationDate?: Number;
-  assetType: string;
+  assetType: number;
   assetTS?:String;
-  assetDepart: string;
+  assetDepart: number;
   assetDS?: string;
   originalId:number;
   //Id shown in the list
@@ -136,3 +136,13 @@ export type Licence = {
 }
 
 export const LicenceTypes = ["Libre", "Comercial", "De prueba"];
+
+export type SearchObject = {
+  name?: String;
+  adquireDateI?: number,
+  adquireDateF?: number,
+  creationDateI?: number,
+  creationDateF?: number,
+  assetType?: number,
+  department?: number
+}

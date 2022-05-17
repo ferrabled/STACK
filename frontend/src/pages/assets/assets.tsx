@@ -4,7 +4,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { ethers } from "ethers";
 import { Button, Card, CircularProgress, containerClasses, Typography } from "@mui/material";
-import { CallGetOrganizationAssets } from "components/wallet/contractCall";
+import { CallGetAsset, CallGetOrganizationAssets } from "components/wallet/contractCall";
 import { AssetsInList, AssetTypes } from "types"
 import PageLoged from "pages/pageCheckLogin";
 import { CallGetAllDepartmentsFromOrg, CallGetNumberOfCommentsByAsset } from "components/wallet/userCall";
@@ -35,7 +35,7 @@ const AssetsPage = () => {
 
 
     const GetAssets = () => {
-      CallGetOrganizationAssets(idOrg).then((response) => {
+      CallGetOrganizationAssets(idOrg).then(async (response) => {
         const cont = response[0].length;
         const contEdit = response[1].length;
         let container: AssetsInList[] = [];
@@ -44,14 +44,13 @@ const AssetsPage = () => {
           const asset: AssetsInList = {
             name: response[0][i].name,
             assetType: response[0][i].assetType,
-            assetDepart: response[0][i].assetDepart,
+            assetDepart: Number(response[0][i].assetDepart),
             assetTS: AssetTypes[response[0][i].assetType],
             creationDate: Number(response[0][i].creationDate),
             adquireDate: Number(response[0][i].adquireDate),
             originalId: Number(response[0][i].index),
             index: Number(response[0][i].index)
           }
-          //TODO CHECK IF IT RETURNS ANY ASSET DELETED
           if(asset.creationDate === 0  && asset.adquireDate === 0) continue;
           else {
             container.push(asset);
@@ -59,32 +58,36 @@ const AssetsPage = () => {
           
         }
         for (var o = 0; o < contEdit; o++) {
-          console.log(response[1][o]);
+          const originalAsset = await CallGetAsset(response[1][o].originalAssetId);
+          console.log('depart'+Number(originalAsset.assetDepart))
           const asset: AssetsInList = {
             name: response[1][o].name,
             assetType: response[1][o].assetType,
             assetTS: AssetTypes[response[1][o].assetType],
-            assetDepart: response[1][o].assetDepart,
+            assetDepart:  Number(originalAsset.assetDepart),
             creationDate: Number(response[1][o].creationDate),
             adquireDate: Number(response[1][o].adquireDate),
             originalId: Number(response[1][o].originalAssetId),
             index: Number(response[1][o].index),
           }
+          console.log("DEPARTMENT ASSET"+ Number(response[1][o].assetDepart));
           if(asset.creationDate === 0  && asset.adquireDate === 0) continue;
           else {
             console.log("Añadido")
             console.log(asset);
             container.push(asset);
           }
-          
         }
         let commentCont:Number[] = [];
         for (var e = 0; e < container.length; e++){
-          CallGetNumberOfCommentsByAsset(container[e].originalId).then((r)=> commentCont.push(Number(r)));
+          CallGetNumberOfCommentsByAsset(container[e].originalId).then((r)=> {
+            commentCont.push(Number(r))
+            setIsLoading(false);
+
+          });
         }
         setNumComments(commentCont);
         setAssets(container);
-        setIsLoading(false);
       });
     };
 

@@ -21,7 +21,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { useNavigate } from "react-router-dom";
 import Identicon from "components/atoms/identicon";
-
+import FindInPageIcon from '@mui/icons-material/FindInPage';
 
 type Anchor = "right";
 
@@ -82,6 +82,12 @@ export default function MenuDrawer() {
             <InventoryIcon color="primary"/>
           </ListItemIcon>
           <ListItemText primary={'Activos'} />
+        </ListItem>
+        <ListItem button key={'Búsqueda'} onClick={()=> navigate('/assets/search')}>
+          <ListItemIcon>
+            <FindInPageIcon color="primary"/>
+          </ListItemIcon>
+          <ListItemText primary={'Búsqueda'} />
         </ListItem>
         <ListItem button key={'Nuevo Activo'} onClick={()=> navigate('/assets/new')}>
           <ListItemIcon>

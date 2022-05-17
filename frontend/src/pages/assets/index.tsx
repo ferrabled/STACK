@@ -5,6 +5,7 @@ import EditAssetPage from "./editAsset";
 import AssetHistoryPage from "./assetHistory";
 import AssetsDeletedPage from "./assetsDeleted";
 import EditTypePage from "./editType"
+import SearchAssetPage from "./searchAsset";
 
 export {
     AssetsPage, 
@@ -13,5 +14,6 @@ export {
     EditAssetPage,
     AssetHistoryPage,
     AssetsDeletedPage,
-    EditTypePage 
+    EditTypePage,
+    SearchAssetPage
 }

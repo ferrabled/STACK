@@ -1,13 +1,10 @@
 import { Button, Card, CircularProgress, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import React, { useEffect, useState } from "react";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import EditIcon from '@mui/icons-material/Edit';
+import { useEffect, useState } from "react";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "utils";
-import { AssetsInList, AssetsList } from "types";
-import { CallDeleteAsset, CallGetIsAssetEdited } from "components/wallet/contractCall";
+import { AssetsInList } from "types";
 
 
 
