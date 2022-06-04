@@ -1,4 +1,4 @@
-import { Button, Card, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { CallGetAdminToOrg, CallIsAdministrator } from "components/wallet/contractCall";

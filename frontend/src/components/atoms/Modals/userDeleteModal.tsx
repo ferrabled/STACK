@@ -9,7 +9,7 @@ import SimpleUserTable from "../Table/simpleUserTable";
 import Notification from "components/notification";
 
 const style = {
-  position: "absolute" as "absolute",
+  position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -30,8 +30,8 @@ const UserDeleteModal = (props: any) => {
 
     CallGetUsersFromDepart(Number(props.departId!)).then((response) => {
       const cont = response.length;
-      let container: Users[] = [];
-      for (var i = 0; i < cont; i++) {
+      const container: Users[] = [];
+      for (let i = 0; i < cont; i++) {
         console.log(response[i]);
         const user: Users = {
           addr: response[i].addr,
