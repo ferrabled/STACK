@@ -1,5 +1,15 @@
 import { ethers } from "ethers";
-import { Asset } from "types";
+import {
+  Asset,
+  CloudAssetProps,
+  DataAssetProps,
+  DocAssetProps,
+  HardwareAssetProps,
+  NetworkAssetProps,
+  OtherAssetProps,
+  SoftwareAssetProps,
+  TransactionError,
+} from "types";
 import addresses from "../../assets/addresses.json";
 
 import users2ABI from "./users2.json";
@@ -12,10 +22,27 @@ const contract2 = new ethers.Contract(
   provider.getSigner()
 );
 
+function handleTransactionError(e: TransactionError | unknown) {
+  console.log(e);
+  if (
+    (e as TransactionError).data?.message &&
+    (e as TransactionError).data.message.includes(" revert")
+  ) {
+    const errorM =
+      "Este usuario no pertenece a la organización o al departamento elegido";
+    const notify = { isOpen: true, message: errorM, type: "error" };
+    return notify;
+  } else {
+    const errorM = "Por favor, acepta la transacción en metamask";
+    const notify = { isOpen: true, message: errorM, type: "error" };
+    return notify;
+  }
+}
+
 //NEW ASSETS WITH DEPARTMENT
 export async function CallInsertNewSAssetWithDepartment(
   asset: Asset,
-  props: any
+  props: SoftwareAssetProps
 ) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
@@ -39,26 +66,14 @@ export async function CallInsertNewSAssetWithDepartment(
       type: "success",
     };
     return notify;
-  } catch (e: any) {
-    try {
-      console.log(e);
-      if (e.data.message.includes(" revert")) {
-        const errorM =
-          "Este usuario no pertenece a la organización o al departamento elegido";
-        const notify = { isOpen: true, message: errorM, type: "error" };
-        return notify;
-      }
-    } catch {
-      const errorM = "Por favor, acepta la transacción en metamask";
-      const notify = { isOpen: true, message: errorM, type: "error" };
-      return notify;
-    }
+  } catch (e) {
+    handleTransactionError(e);
   }
 }
 
 export async function CallInsertNewHAssetWithDepartment(
   asset: Asset,
-  props: any
+  props: HardwareAssetProps
 ) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
@@ -83,26 +98,14 @@ export async function CallInsertNewHAssetWithDepartment(
       type: "success",
     };
     return notify;
-  } catch (e: any) {
-    try {
-      console.log(e);
-      if (e.data.message.includes(" revert")) {
-        const errorM =
-          "Este usuario no pertenece a la organización o al departamento elegido";
-        const notify = { isOpen: true, message: errorM, type: "error" };
-        return notify;
-      }
-    } catch {
-      const errorM = "Por favor, acepta la transacción en metamask";
-      const notify = { isOpen: true, message: errorM, type: "error" };
-      return notify;
-    }
+  } catch (e) {
+    handleTransactionError(e);
   }
 }
 
 export async function CallInsertNewDocAssetWithDepartment(
   asset: Asset,
-  props: any
+  props: DocAssetProps
 ) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
@@ -126,26 +129,14 @@ export async function CallInsertNewDocAssetWithDepartment(
       type: "success",
     };
     return notify;
-  } catch (e: any) {
-    try {
-      console.log(e);
-      if (e.data.message.includes(" revert")) {
-        const errorM =
-          "Este usuario no pertenece a la organización o al departamento elegido";
-        const notify = { isOpen: true, message: errorM, type: "error" };
-        return notify;
-      }
-    } catch {
-      const errorM = "Por favor, acepta la transacción en metamask";
-      const notify = { isOpen: true, message: errorM, type: "error" };
-      return notify;
-    }
+  } catch (e) {
+    handleTransactionError(e);
   }
 }
 
 export async function CallInsertNewDataAssetWithDepartment(
   asset: Asset,
-  props: any
+  props: DataAssetProps
 ) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
@@ -168,26 +159,14 @@ export async function CallInsertNewDataAssetWithDepartment(
       type: "success",
     };
     return notify;
-  } catch (e: any) {
-    try {
-      console.log(e);
-      if (e.data.message.includes(" revert")) {
-        const errorM =
-          "Este usuario no pertenece a la organización o al departamento elegido";
-        const notify = { isOpen: true, message: errorM, type: "error" };
-        return notify;
-      }
-    } catch {
-      const errorM = "Por favor, acepta la transacción en metamask";
-      const notify = { isOpen: true, message: errorM, type: "error" };
-      return notify;
-    }
+  } catch (e) {
+    handleTransactionError(e);
   }
 }
 
 export async function CallInsertNewNAssetWithDepartment(
   asset: Asset,
-  props: any
+  props: NetworkAssetProps
 ) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
@@ -210,26 +189,14 @@ export async function CallInsertNewNAssetWithDepartment(
       type: "success",
     };
     return notify;
-  } catch (e: any) {
-    try {
-      console.log(e);
-      if (e.data.message.includes(" revert")) {
-        const errorM =
-          "Este usuario no pertenece a la organización o al departamento elegido";
-        const notify = { isOpen: true, message: errorM, type: "error" };
-        return notify;
-      }
-    } catch {
-      const errorM = "Por favor, acepta la transacción en metamask";
-      const notify = { isOpen: true, message: errorM, type: "error" };
-      return notify;
-    }
+  } catch (e) {
+    handleTransactionError(e);
   }
 }
 
 export async function CallInsertNewCAssetWithDepartment(
   asset: Asset,
-  props: any
+  props: CloudAssetProps
 ) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
@@ -252,26 +219,14 @@ export async function CallInsertNewCAssetWithDepartment(
       type: "success",
     };
     return notify;
-  } catch (e: any) {
-    try {
-      console.log(e);
-      if (e.data.message.includes(" revert")) {
-        const errorM =
-          "Este usuario no pertenece a la organización o al departamento elegido";
-        const notify = { isOpen: true, message: errorM, type: "error" };
-        return notify;
-      }
-    } catch {
-      const errorM = "Por favor, acepta la transacción en metamask";
-      const notify = { isOpen: true, message: errorM, type: "error" };
-      return notify;
-    }
+  } catch (e) {
+    handleTransactionError(e);
   }
 }
 
 export async function CallInsertNewOAssetWithDepartment(
   asset: Asset,
-  props: any
+  props: OtherAssetProps
 ) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
@@ -293,19 +248,7 @@ export async function CallInsertNewOAssetWithDepartment(
       type: "success",
     };
     return notify;
-  } catch (e: any) {
-    try {
-      console.log(e);
-      if (e.data.message.includes(" revert")) {
-        const errorM =
-          "Este usuario no pertenece a la organización o al departamento elegido";
-        const notify = { isOpen: true, message: errorM, type: "error" };
-        return notify;
-      }
-    } catch {
-      const errorM = "Por favor, acepta la transacción en metamask";
-      const notify = { isOpen: true, message: errorM, type: "error" };
-      return notify;
-    }
+  } catch (e) {
+    handleTransactionError(e);
   }
 }

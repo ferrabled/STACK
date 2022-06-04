@@ -1,3 +1,5 @@
+import { ChildProcessByStdio } from "child_process";
+
 export type AdminFormValues = {
   name: string;
   surname: string;
@@ -166,3 +168,47 @@ export type SearchObject = {
   assetType?: number;
   department?: number;
 };
+
+export type TransactionError = {
+  data: {
+    message: string;
+  };
+};
+
+export type SoftwareAssetProps = {
+  version: string;
+  provider: string;
+  stype: number;
+};
+
+export type HardwareAssetProps = {
+  model: string;
+  provider: string;
+  serialNumber: string;
+  htype: number;
+};
+
+export type DocAssetProps = {
+  name: string;
+  location: string;
+  doctype: number;
+};
+
+export type DataAssetProps = {
+  location: string;
+  local: string;
+}
+
+export type NetworkAssetProps = {
+  cidrblock: string;
+  nat: boolean;
+}
+
+export type CloudAssetProps = {
+  url: string;
+  domain: string;
+}
+
+export type OtherAssetProps = {
+  description: string;
+}
