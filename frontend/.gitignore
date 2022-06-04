@@ -11,6 +11,9 @@
 # production
 /build
 
+# addresses
+/src/assets/addresses.json
+
 # misc
 .DS_Store
 .env.local

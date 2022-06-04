@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useEthers, useEtherBalance } from "@usedapp/core";
 import { Box } from '@mui/system'; 
 import Identicon from './identicon';
 import { ethers } from "ethers";

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { useEffect, useRef } from "react";
-import { useEthers } from "@usedapp/core";
 import styled from "@emotion/styled";
 import { ethers } from "ethers";
 import Jazzicon from "@metamask/jazzicon";

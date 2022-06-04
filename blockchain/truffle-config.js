@@ -17,8 +17,6 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
-
-const HDWalletProvider = require('@truffle/hdwallet-provider');
 /* const infuraKey = "7a202c9027ca4574947c829bb6fa0ed4";
 
 const fs = require('fs');
@@ -44,8 +42,8 @@ module.exports = {
     //
      development: {
       host: "127.0.0.1",     // Localhost (default: none)
-      port: 7545,            // Standard Ethereum port (default: none)
-      network_id: 5777,       // Any network (default: none)
+      port: 8545,            // Standard Ethereum port (default: none)
+      network_id: 1654358982833,       // Any network (default: none)
     },
     // Another network with more advanced options...
     //advanced: {
