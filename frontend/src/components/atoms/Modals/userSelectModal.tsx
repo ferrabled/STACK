@@ -1,20 +1,18 @@
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
 import { CallGetAllUsersFromOrg } from "components/wallet/userCall";
 import { UsersCard } from "../Cards";
-import { Users } from "types";
 import EnhancedTable from "../Table/simpleUserTable";
 import SimpleUserTable from "../Table/simpleUserTable";
-import { Notify } from "types";
 import Notification from "components/notification";
+import { Users } from "types";
 
 
 const style = {
-  position: "absolute" as "absolute",
+  position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -38,8 +36,8 @@ const UserSelectModal = (props: any) => {
 
     CallGetAllUsersFromOrg(Number(orgId!)).then((response) => {
       const cont = response.length;
-      let container: Users[] = [];
-      for (var i = 0; i < cont; i++) {
+      const container: Users[] = [];
+      for (let i = 0; i < cont; i++) {
         console.log(response[i]);
         const user: Users = {
           addr: response[i].addr,

@@ -1,30 +1,16 @@
 import { ethers } from "ethers";
-import { useNavigate } from "react-router-dom";
-import { Asset, Comment, Users } from "types";
 import addresses from "../../assets/addresses.json";
-import { CallGetAdminToOrg, CallIsAdministrator } from "./contractCall";
-
-declare var window: any;
-
-const usersABI = require("./users.json");
-const users2ABI = require("./users2.json");
+import { CallIsAdministrator } from "./contractCall";
+import usersABI from "./users.json";
 
 const contractAddress = addresses.Users;
-const contractAddress2 = addresses.Users2;
 
 const provider = new ethers.providers.Web3Provider(window.ethereum);
-const provider2 = new ethers.providers.Web3Provider(window.ethereum);
 
 const contract = new ethers.Contract(
   contractAddress,
   usersABI,
   provider.getSigner()
-);
-
-const contract2 = new ethers.Contract(
-  contractAddress2,
-  users2ABI,
-  provider2.getSigner()
 );
 
 export async function WaitForInsertUser(data: any) {
@@ -42,9 +28,9 @@ export async function WaitForInsertUser(data: any) {
           address == myaddress
         ) {
           console.log("Registro nuevo");
-          window.localStorage.setItem('orgId', String(data.orgId));
-          window.localStorage.setItem('userAddress', address);
-          window.localStorage.setItem('isAdmin', "false");
+          window.localStorage.setItem("orgId", String(data.orgId));
+          window.localStorage.setItem("userAddress", address);
+          window.localStorage.setItem("isAdmin", "false");
           window.location.replace("/home");
         }
         return () => {
@@ -62,11 +48,11 @@ export async function WaitForInsertUser(data: any) {
 export async function CallInsertUser(user: any) {
   console.log("Add new user");
   const signer = provider.getSigner();
-  let signerAddress = await signer.getAddress();
+  const signerAddress = await signer.getAddress();
   try {
-    const isIndeed = await CallIsAdministrator((signerAddress))
+    const isIndeed = await CallIsAdministrator(signerAddress);
     console.log(isIndeed);
-    if(isIndeed) {
+    if (isIndeed) {
       const text = "Esta billetera pertenece a un administrador";
       const notify = {
         isOpen: true,
@@ -74,7 +60,7 @@ export async function CallInsertUser(user: any) {
         type: "error",
       };
       return notify;
-    } 
+    }
     await contract.insertUser(
       signerAddress,
       user.name,
@@ -83,26 +69,27 @@ export async function CallInsertUser(user: any) {
       user.telephone,
       user.orgId
     );
-    const text = "Usuario registrado correctamente. Guardando datos en la blockchain...";
+    const text =
+      "Usuario registrado correctamente. Guardando datos en la blockchain...";
     const notify = {
-        isOpen: true,
-        message: text,
-        type: "success",
-      };
+      isOpen: true,
+      message: text,
+      type: "success",
+    };
     return notify;
   } catch (e: any) {
     let errorM = "";
-    try{
+    try {
       if (e.data.message.includes("OrgId not found")) {
         errorM = "El id de la organización no existe";
       } else if (e.data.message.includes("user is admin")) {
-        errorM = "La billetera elegida es del administrador. Por favor elige otra";
+        errorM =
+          "La billetera elegida es del administrador. Por favor elige otra";
       } else if (e.data.message.includes("Address registered")) {
         errorM = "La dirección de la cartera ya se encuentra registrada";
-      } 
-    }catch {
+      }
+    } catch {
       errorM = "Por favor, acepta la transacción en metamask";
-    
     }
     const notify = {
       isOpen: true,
@@ -113,95 +100,99 @@ export async function CallInsertUser(user: any) {
   }
 }
 
-
-
-export async function CallGetAllUsersFromOrg(props: Number) {
-    console.log("Get all users");
-    const users = contract.getAllUsersFromOrg(props);
-    return users;
-  }
-
-  export async function CallGetUserAssets(props: Number) {
-    console.log("Get user "+props+" assets");
-    const assetsList = contract.getUserAssets(props);
-    return assetsList;
-  }
-
-  export async function CallInsertUsersToAsset(assetId: number, userIds: number[]){
-      console.log("Insert users: " + userIds + " to asset "+assetId);
-      try{
-        await contract.insertUsersToAsset(assetId, userIds);
-              const correctText = "Usuarios asignados al activo correctamente";
-      
-              const notify = {
-                  isOpen: true,
-                  message: correctText,
-                  type: "success",
-              };
-          return notify;
-      } catch{
-          const errorM = "Por favor, acepta la transacción en metamask";
-          const notify = {
-                  isOpen: true,
-                  message: errorM,
-                  type: "error",
-              };
-          return notify
-      }
-  }
-
-
-
-  export async function CallGetAssetUsers(assetId: number){
-    console.log("Get users from asset " + assetId);
-    return contract.getAssetUsers(assetId);
+export async function CallGetAllUsersFromOrg(props: number) {
+  console.log("Get all users");
+  const users = contract.getAllUsersFromOrg(props);
+  return users;
 }
 
+export async function CallGetUserAssets(props: number) {
+  console.log("Get user " + props + " assets");
+  const assetsList = contract.getUserAssets(props);
+  return assetsList;
+}
 
-export async function CallGetNumUsersFromOrg(assetId: number){
+export async function CallInsertUsersToAsset(
+  assetId: number,
+  userIds: number[]
+) {
+  console.log("Insert users: " + userIds + " to asset " + assetId);
+  try {
+    await contract.insertUsersToAsset(assetId, userIds);
+    const correctText = "Usuarios asignados al activo correctamente";
+
+    const notify = {
+      isOpen: true,
+      message: correctText,
+      type: "success",
+    };
+    return notify;
+  } catch {
+    const errorM = "Por favor, acepta la transacción en metamask";
+    const notify = {
+      isOpen: true,
+      message: errorM,
+      type: "error",
+    };
+    return notify;
+  }
+}
+
+export async function CallGetAssetUsers(assetId: number) {
+  console.log("Get users from asset " + assetId);
+  return contract.getAssetUsers(assetId);
+}
+
+export async function CallGetNumUsersFromOrg(assetId: number) {
   return contract.getNumUsersFromOrg(assetId);
 }
 
 //TODO notifications
 //DEPARTMENTS
 export async function CallInsertDepartment(props: any) {
-  let signerAddress = await provider.getSigner().getAddress();
+  const signerAddress = await provider.getSigner().getAddress();
   try {
-    await contract.insertDepartment(props.name, props.description, props.telephone, props.orgId, signerAddress);
-    const text = "Departamento creado correctamente. Guardando datos en la Blockchain...";
+    await contract.insertDepartment(
+      props.name,
+      props.description,
+      props.telephone,
+      props.orgId,
+      signerAddress
+    );
+    const text =
+      "Departamento creado correctamente. Guardando datos en la Blockchain...";
     const notify = {
-        isOpen: true,
-        message: text,
-        type: "success",
-      };
-    return notify
-} catch (e:any) {
+      isOpen: true,
+      message: text,
+      type: "success",
+    };
+    return notify;
+  } catch (e: any) {
     try {
-        if(e.data.message.includes("revert")){
+      if (e.data.message.includes("revert")) {
         console.log(e.data.message);
         const errorM = "La billetera conectada no pertenece a la organización";
         const notify = {
-            isOpen: true,
-            message: errorM,
-            type: "error",
+          isOpen: true,
+          message: errorM,
+          type: "error",
         };
         return notify;
-        }
+      }
     } catch {
-        console.log(e);
-        const errorM = "Por favor, acepta la transacción en metamask";
-        const notify = {
-            isOpen: true,
-            message: errorM,
-            type: "error",
-        };
-        return notify;
+      console.log(e);
+      const errorM = "Por favor, acepta la transacción en metamask";
+      const notify = {
+        isOpen: true,
+        message: errorM,
+        type: "error",
+      };
+      return notify;
     }
-    
-}
+  }
 }
 
-export async function CallGetDepartment(props: number){
+export async function CallGetDepartment(props: number) {
   return contract.getDepartment(props);
 }
 
@@ -213,101 +204,107 @@ export async function CallGetUsersFromDepart(props: number) {
   return contract.getUsersFromDepart(props);
 }
 
-export async function CallInsertUserToDepartment(departId: number, userIds: number[]) {
-  console.log("Introducir usuario "+ userIds + " a departamento "+ departId);
-  try{
+export async function CallInsertUserToDepartment(
+  departId: number,
+  userIds: number[]
+) {
+  console.log("Introducir usuario " + userIds + " a departamento " + departId);
+  try {
     await contract.insertUserToDepartment(departId, userIds);
-          const correctText = "Usuario introducido en el departamento correctamente.";
-  
-          const notify = {
-              isOpen: true,
-              message: correctText,
-              type: "success",
-          };
-      return notify;
-  } catch{
-      const errorM = "Por favor, acepta la transacción en metamask";
-      const notify = {
-              isOpen: true,
-              message: errorM,
-              type: "error",
-          };
-      return notify
-  }
-} 
+    const correctText = "Usuario introducido en el departamento correctamente.";
 
-export async function CallDeleteUsersFromDepartment(departId: number, userIds: number[]) {
-  
-  console.log("Delete users: "+userIds+ " from department "+departId);
-  
-
-  try{
-    await contract.deleteUsersFromDepartment(departId, userIds);
-          const correctText = "Usuarios retirados del departamento correctamente";
-  
-          const notify = {
-              isOpen: true,
-              message: correctText,
-              type: "success",
-          };
-      return notify;
-  } catch{
-      const errorM = "Por favor, acepta la transacción en metamask";
-      const notify = {
-              isOpen: true,
-              message: errorM,
-              type: "error",
-          };
-      return notify
+    const notify = {
+      isOpen: true,
+      message: correctText,
+      type: "success",
+    };
+    return notify;
+  } catch {
+    const errorM = "Por favor, acepta la transacción en metamask";
+    const notify = {
+      isOpen: true,
+      message: errorM,
+      type: "error",
+    };
+    return notify;
   }
 }
 
+export async function CallDeleteUsersFromDepartment(
+  departId: number,
+  userIds: number[]
+) {
+  console.log("Delete users: " + userIds + " from department " + departId);
 
+  try {
+    await contract.deleteUsersFromDepartment(departId, userIds);
+    const correctText = "Usuarios retirados del departamento correctamente";
+
+    const notify = {
+      isOpen: true,
+      message: correctText,
+      type: "success",
+    };
+    return notify;
+  } catch {
+    const errorM = "Por favor, acepta la transacción en metamask";
+    const notify = {
+      isOpen: true,
+      message: errorM,
+      type: "error",
+    };
+    return notify;
+  }
+}
 
 //Department assets
-export async function CallInsertAssetToDepartment(departId: number, assetsIds: number[]) {
-    try{
+export async function CallInsertAssetToDepartment(
+  departId: number,
+  assetsIds: number[]
+) {
+  try {
     await contract.insertAssetToDepartment(departId, assetsIds);
-          const correctText = "Activo introducido en departamento correctamente";
+    const correctText = "Activo introducido en departamento correctamente";
 
-          const notify = {
-              isOpen: true,
-              message: correctText,
-              type: "success",
-          };
-      return notify;
-  } catch{
-      const errorM = "Por favor, acepta la transacción en metamask";
-      const notify = {
-              isOpen: true,
-              message: errorM,
-              type: "error",
-          };
-      return notify
+    const notify = {
+      isOpen: true,
+      message: correctText,
+      type: "success",
+    };
+    return notify;
+  } catch {
+    const errorM = "Por favor, acepta la transacción en metamask";
+    const notify = {
+      isOpen: true,
+      message: errorM,
+      type: "error",
+    };
+    return notify;
   }
-  
 }
 
-export async function CallDeleteAssetFromDepartment(departId: number, assetsIds: number[]) {
-  try{
+export async function CallDeleteAssetFromDepartment(
+  departId: number,
+  assetsIds: number[]
+) {
+  try {
     await contract.deleteAssetFromDepartment(departId, assetsIds);
     const correctText = "Activo retirado del departamento correctamente";
     const notify = {
-        isOpen: true,
-        message: correctText,
-        type: "success",
+      isOpen: true,
+      message: correctText,
+      type: "success",
     };
     return notify;
-  } catch{
-      const errorM = "Por favor, acepta la transacción en metamask";
-      const notify = {
-              isOpen: true,
-              message: errorM,
-              type: "error",
-          };
-      return notify
+  } catch {
+    const errorM = "Por favor, acepta la transacción en metamask";
+    const notify = {
+      isOpen: true,
+      message: errorM,
+      type: "error",
+    };
+    return notify;
   }
-
 }
 
 export async function CallGetAssetsIdsFromDepart(departId: number) {
@@ -315,72 +312,80 @@ export async function CallGetAssetsIdsFromDepart(departId: number) {
 }
 
 //COMMENTS
-export async function CallInsertComment(comment:any, assetId:number, orgId:number){
+export async function CallInsertComment(
+  comment: any,
+  assetId: number,
+  orgId: number
+) {
   try {
-    let signerAddress = await provider.getSigner().getAddress();
-    await contract.insertComment(comment.description, comment.date, assetId, orgId, signerAddress)
+    const signerAddress = await provider.getSigner().getAddress();
+    await contract.insertComment(
+      comment.description,
+      comment.date,
+      assetId,
+      orgId,
+      signerAddress
+    );
     const correctText = "Activo creado correctamente";
-    
-            const notify = {
-                isOpen: true,
-                message: correctText,
-                type: "success",
-            };
-        return notify;
-  } catch (e:any){
+
+    const notify = {
+      isOpen: true,
+      message: correctText,
+      type: "success",
+    };
+    return notify;
+  } catch (e: any) {
     try {
-      if(e.data.message.includes('Administrator')){
+      if (e.data.message.includes("Administrator")) {
         const errorM = "El administrador no puede crear comentarios.";
         const notify = {
-                isOpen: true,
-                message: errorM,
-                type: "error",
-            };
-        return notify
+          isOpen: true,
+          message: errorM,
+          type: "error",
+        };
+        return notify;
       }
-      if(e.data.message.includes('User')){
+      if (e.data.message.includes("User")) {
         const errorM = "Esta billetera no pertenece a la organización.";
         const notify = {
-                isOpen: true,
-                message: errorM,
-                type: "error",
-            };
-        return notify
+          isOpen: true,
+          message: errorM,
+          type: "error",
+        };
+        return notify;
       }
     } catch {
       const errorM = "Por favor, acepta la transacción en metamask";
       const notify = {
-                isOpen: true,
-                message: errorM,
-                type: "error",
-            };
-      return notify
+        isOpen: true,
+        message: errorM,
+        type: "error",
+      };
+      return notify;
     }
-    
   }
-  
 }
 
-export async function CallGetCommentsByAsset(assetId:number){
+export async function CallGetCommentsByAsset(assetId: number) {
   return contract.getCommentsByAsset(assetId);
 }
 
-export async function CallGetNumberOfCommentsByAsset(assetId:number){
+export async function CallGetNumberOfCommentsByAsset(assetId: number) {
   return contract.getNumberOfCommentsByAsset(assetId);
 }
 
-export async function CallGetUsersById(usersIds:number[]){
+export async function CallGetUsersById(usersIds: number[]) {
   return contract.getUsersById(usersIds);
 }
 
-export async function CallIsUser(addr:number){
+export async function CallIsUser(addr: number) {
   return contract.isUser(addr);
 }
 
-export async function CallGetUserData(addr:number){
+export async function CallGetUserData(addr: number) {
   return contract.getUserData(addr);
 }
 
-export async function CallGetUserFromAddr(addr:number){
+export async function CallGetUserFromAddr(addr: number) {
   return contract.getUserFromAddr(addr);
 }

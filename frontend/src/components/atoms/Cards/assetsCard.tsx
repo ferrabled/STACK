@@ -27,7 +27,7 @@ const AssetsCard = (props:any) => {
       console.log(listAssets.length);
       const cont = listAssets.length;
       const tempRow: any[] = []; 
-      for (var i = 0; i < cont; i++) {
+      for (let i = 0; i < cont; i++) {
         console.log(listAssets[i]);
         listAssets[i].id = i;
         //console.log("AAA")

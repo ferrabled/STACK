@@ -11,7 +11,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import AddLicenceModal from "./addLicenceModal";
 
 const style = {
-  position: "absolute" as "absolute",
+  position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -39,8 +39,8 @@ const LicencesModal = (props: any) => {
     CallGetLicenseByAsset(Number(props.assetId!)).then((response) => {
         console.log(response)
       const cont = response.length;
-      let container: Licence[] = [];
-      for (var i = 0; i < cont; i++) {
+      const container: Licence[] = [];
+      for (let i = 0; i < cont; i++) {
         console.log(response[i]);
         const licencia: Licence = {
           name: response[i].name,

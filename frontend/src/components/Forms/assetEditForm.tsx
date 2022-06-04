@@ -20,7 +20,7 @@ const EditAssetForm = (props: {data: AssetEdited}) => {
   const navigate = useNavigate(); 
   const [departments, setDepartments] = useState<Department[]>();
   const [isLoading, setIsLoading] = useState(true);
-  const [assetDepart, setAssetDepart] = useState<Number>();
+  const [assetDepart, setAssetDepart] = useState<number>();
   const [assetEd, setAssetEd] = useState<AssetEdited>();
   const [fAdquireDate, setFAdqDate] = useState("");
 
@@ -36,8 +36,8 @@ const EditAssetForm = (props: {data: AssetEdited}) => {
     CallGetAllDepartmentsFromOrg(Number(window.localStorage.getItem('orgId')!)).then(r=> {
       console.log(r);
       const cont = r.length;
-      let container: Department[] = [];
-      for (var i = 0; i < cont; i++) {
+      const container: Department[] = [];
+      for (let i = 0; i < cont; i++) {
           const department: Department = {
             name: r[i].name,
             description: r[i].description,
@@ -94,9 +94,9 @@ const EditAssetForm = (props: {data: AssetEdited}) => {
         }}
         validationSchema={validationSchema}
         onSubmit={(data, { setSubmitting }) => {
-          var dateString = data.adquireDateString; 
-          var dateParts: Array<String> = dateString.split("-");
-          var dateObject = new Date(+dateParts[0], +dateParts[1] - 1, +dateParts[2]); 
+          const dateString = data.adquireDateString; 
+          const dateParts: Array<string> = dateString.split("-");
+          let dateObject = new Date(+dateParts[0], +dateParts[1] - 1, +dateParts[2]); 
           const offset = dateObject.getTimezoneOffset();
           dateObject = new Date(dateObject.getTime() - (offset*60*1000));
           data.adquireDate = dateObject.getTime();

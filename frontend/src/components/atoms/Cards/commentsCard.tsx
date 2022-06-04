@@ -24,10 +24,10 @@ const CommentsCard = ({assetId}:{assetId:number}) => {
       const comments:Comment[] = [];
       const userIds:number[] = [];    
       const num = r.length;
-      for(var i = 0; i < num; i++){
-        let descr =  r[i].description
-        let userId =  Number(r[i].userId)
-        let date = Number(r[i].date)
+      for(let i = 0; i < num; i++){
+        const descr =  r[i].description
+        const userId =  Number(r[i].userId)
+        const date = Number(r[i].date)
         const comment:Comment = {
           description: descr,
           userId: userId,
@@ -38,7 +38,7 @@ const CommentsCard = ({assetId}:{assetId:number}) => {
       }
       const finalComments:CommentInTable[] = [];
       CallGetUsersById(userIds).then(res => {
-        for(var i=0; i<res.length; i++){
+        for(let i=0; i<res.length; i++){
           const fullComment:CommentInTable={
             description: comments[i].description,
             userId: comments[i].userId,

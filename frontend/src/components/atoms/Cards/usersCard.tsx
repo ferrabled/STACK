@@ -20,7 +20,7 @@ const UsersCard = (users:Users[]) => {
   useEffect(() => {
     const userList:any[] = [];
     const cont = Object.keys(users).length;
-    for (var i = 0; i < cont; i++) {
+    for (let i = 0; i < cont; i++) {
         console.log(users[i]);
         users[i].id = (i+1);
         userList.push(users[i]);

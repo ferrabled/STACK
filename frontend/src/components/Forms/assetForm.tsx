@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import {
-  Button,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
-
-import { SoftwareForm, HardwareForm, DocumentForm, DataForm, NetworkForm, OtherForm, SubmitAsset, CloudForm } from "./formTypes";
-import { Asset, Department } from "types";
-import { useNavigate } from "react-router-dom";
+import
+  {
+    Button,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+    Typography
+  } from "@mui/material";
 import { CallGetAllDepartmentsFromOrg } from "components/wallet/userCall";
+import { Field, Form, Formik } from "formik";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Asset, Department } from "types";
+import * as Yup from "yup";
+import { CloudForm, DataForm, DocumentForm, HardwareForm, NetworkForm, OtherForm, SoftwareForm, SubmitAsset } from "./formTypes";
+
 
 
 const AssetForm = () => {
@@ -25,8 +26,8 @@ const AssetForm = () => {
   useEffect(()=>{
     CallGetAllDepartmentsFromOrg(Number(window.localStorage.getItem('orgId')!)).then(r=> {
       const cont = r.length;
-      let container: Department[] = [];
-      for (var i = 0; i < cont; i++) {
+      const container: Department[] = [];
+      for (let i = 0; i < cont; i++) {
           const department: Department = {
             name: r[i].name,
             description: r[i].description,
@@ -75,9 +76,9 @@ const AssetForm = () => {
         validationSchema={validationSchema}
         onSubmit={(data, { setSubmitting }) => {
           data.creationDate = Date.now();
-          var dateString = data.adquireDateString; // Oct 23
-          var dateParts: Array<String> = dateString.split("-");
-          var dateObject = new Date(
+          const dateString = data.adquireDateString; // Oct 23
+          const dateParts: Array<string> = dateString.split("-");
+          let dateObject = new Date(
             +dateParts[0],
             +dateParts[1] - 1,
             +dateParts[2]

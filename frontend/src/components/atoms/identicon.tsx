@@ -15,7 +15,6 @@ const StyledIdenticon = styled.div`
 
 export default function Identicon() {
   const [account, setAccount] = useState('');
-  //@ts-ignore
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   
   provider.send("eth_requestAccounts", []).then(

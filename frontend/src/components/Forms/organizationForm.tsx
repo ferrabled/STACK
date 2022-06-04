@@ -233,7 +233,7 @@ const OrganizationForm = () => {
                   <a
                     className="mt-5"
                     href="https://metamask.io/"
-                    target="_blank"
+                    target="_blank" rel="noreferrer"
                   >
                     <Typography
                       sx={{ textDecoration: "underline" }}

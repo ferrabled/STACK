@@ -1,19 +1,17 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import { Skeleton } from "@mui/material";
-import { CallGetAllDepartmentsFromOrg, CallGetUserAssets } from "components/wallet/userCall";
-import { CallGetOrganizationAssets, CallRetrieveListOfAsset } from "components/wallet/contractCall";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+import Notification from "components/notification";
+import { CallGetOrganizationAssets } from "components/wallet/contractCall";
+import { CallGetAllDepartmentsFromOrg } from "components/wallet/userCall";
 import { useEffect, useState } from "react";
 import { AssetsInList, AssetTypes } from "types";
-import SimpleAssetsTable from "../Table/simpleAssetsTable";
 import { SimpleSelectAssetsTable } from "../Table";
-import Notification from "components/notification";
 
 
 const style = {
-  position: "absolute" as "absolute",
+  position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -29,7 +27,7 @@ const AssetsDepartModal = (props: any) => {
   const [assetId, setAssetId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>();
-  const [departNames, setDepartNames] = useState<String[]>();
+  const [departNames, setDepartNames] = useState<string[]>();
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
 
 
@@ -42,8 +40,8 @@ const AssetsDepartModal = (props: any) => {
     const getDepartmentNames= () => {
       CallGetAllDepartmentsFromOrg(Number(orgId)).then((r)=> {
         const cont = r.length;
-        let container: String[] = ['Sin departamento'];
-        for (var i = 0; i < cont; i++) {
+        const container: string[] = ['Sin departamento'];
+        for (let i = 0; i < cont; i++) {
           container.push(r[i].name)
         }
         setDepartNames(container);
@@ -54,8 +52,8 @@ const AssetsDepartModal = (props: any) => {
       console.log(response);
       const cont = response[0].length;
       const contEdit = response[1].length;
-      let container: AssetsInList[] = [];
-      for (var i = 0; i < cont; i++) {
+      const container: AssetsInList[] = [];
+      for (let i = 0; i < cont; i++) {
         const asset: AssetsInList = {
           name: response[0][i].name,
           assetType: response[0][i].assetType,
@@ -73,7 +71,7 @@ const AssetsDepartModal = (props: any) => {
         }
       }
 
-      for (var o = 0; o < contEdit; o++) {
+      for (let o = 0; o < contEdit; o++) {
         const asset: AssetsInList = {
           name: response[1][o].name,
           assetType: response[1][o].assetType,

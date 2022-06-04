@@ -20,7 +20,7 @@ import Notification from "components/notification";
 
 
 const style = {
-  position: "absolute" as "absolute",
+  position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -34,7 +34,7 @@ const style = {
 const AssetsDeleteModal = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>();
-  const [departNames, setDepartNames] = useState<String[]>();
+  const [departNames, setDepartNames] = useState<string[]>();
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
 
 
@@ -46,8 +46,8 @@ const AssetsDeleteModal = (props: any) => {
 
     CallGetAllDepartmentsFromOrg(Number(orgId)).then((r)=> {
       const cont = r.length;
-      let container: String[] = ['Sin departamento'];
-      for (var i = 0; i < cont; i++) {
+      const container: string[] = ['Sin departamento'];
+      for (let i = 0; i < cont; i++) {
         container.push(r[i].name)
       }
       setDepartNames(container);
@@ -62,9 +62,9 @@ const AssetsDeleteModal = (props: any) => {
         const cont = response[0].length;
         const contEdit = response[1].length;
 
-        let container: AssetsInList[] = [];
+        const container: AssetsInList[] = [];
         //let object = new container;
-        for (var i = 0; i < cont; i++) {
+        for (let i = 0; i < cont; i++) {
           const asset: AssetsInList = {
             name: response[0][i].name,
             assetType: response[0][i].assetType,
@@ -82,7 +82,7 @@ const AssetsDeleteModal = (props: any) => {
           }
         }
 
-        for (var o = 0; o < contEdit; o++) {
+        for (let o = 0; o < contEdit; o++) {
           console.log(response[1][o]);
           const asset: AssetsInList = {
             name: response[1][o].name,

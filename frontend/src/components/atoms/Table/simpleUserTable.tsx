@@ -6,7 +6,6 @@ import { Users } from "types"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BasicModal from "../Modals/assetsFromUser";
 import { Notify } from "types";
-import Notification from "components/notification";
 
 
 const SimpleUserTable = ({users, depart, idList, deleteB, setNotifyParent}:{users: Users[], depart:boolean, idList:number[], deleteB:boolean, setNotifyParent:any}) => {
@@ -26,7 +25,7 @@ const SimpleUserTable = ({users, depart, idList, deleteB, setNotifyParent}:{user
         const userList:any[] = [];
         const cont = Object.keys(users).length;
     
-        for (var i = 0; i < cont; i++) {
+        for (let i = 0; i < cont; i++) {
             console.log(users[i]);
             users[i].id = (i+1);
             //console.log("AAA")
@@ -41,7 +40,7 @@ const SimpleUserTable = ({users, depart, idList, deleteB, setNotifyParent}:{user
         console.log(selectionModel)
         const cont = Object.keys(selectionModel).length;
         const ids:number[] = [];
-        for (var i = 0; i < cont; i++) {
+        for (let i = 0; i < cont; i++) {
             const item:any = selectionModel[i]; 
             ids.push(item.index);
         }

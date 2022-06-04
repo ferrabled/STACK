@@ -6,8 +6,6 @@ import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import * as React from "react";
 import { AccountWallet } from "components/atoms";
 import { ethers } from "ethers";
@@ -27,7 +25,6 @@ type Anchor = "right";
 
 export default function MenuDrawer() {
   const [account, setAccount] = React.useState('');
-  //@ts-ignore
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   
   provider.send("eth_requestAccounts", []).then(

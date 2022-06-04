@@ -12,7 +12,7 @@ const LicencesTable = (licences: Licence[]) => {
         const licencesList:any[] = [];
         const cont = Object.keys(licences).length;
         console.log("Número de licencias total: "+cont)
-        for (var i = 0; i < cont; i++) {
+        for (let i = 0; i < cont; i++) {
             licences[i].id = (i+1);
             licencesList.push(licences[i]);
         }

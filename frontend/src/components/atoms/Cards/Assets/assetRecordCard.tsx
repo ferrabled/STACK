@@ -58,7 +58,7 @@ const AssetRecordCard = (props:AssetsInList[]) => {
         const cont = Object.entries(listAssets).length;
 
         const tempRow: any[] = []; 
-        for (var i = 0; i < cont; i++) {
+        for (let i = 0; i < cont; i++) {
           listAssets[i].id = i;
           tempRow.push(listAssets[i]);
         }

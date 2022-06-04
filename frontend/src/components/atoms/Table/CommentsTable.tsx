@@ -18,7 +18,7 @@ const CommentsTable = (comments: CommentInTable[]) => {
         const departmentList:any[] = [];
         const cont = Object.keys(comments).length;
         console.log("Número de comentarios total: "+cont)
-        for (var i = 0; i < cont; i++) {
+        for (let i = 0; i < cont; i++) {
             comments[i].id = (i+1);
             departmentList.push(comments[i]);
         }

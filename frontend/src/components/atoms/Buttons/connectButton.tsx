@@ -70,7 +70,6 @@ const ConnectButton = ({setNotifyParent}:{setNotifyParent:any}) => {
   // Connect to MetaMask wallet
   const connect = () => {
     window.localStorage.clear();
-    //@ts-ignore
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     provider
       .send("eth_requestAccounts", [])

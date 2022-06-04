@@ -1,18 +1,17 @@
+import { Button, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useEffect, useState } from "react";
-import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { Button, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import { CallInsertComment } from "components/wallet/userCall";
-import { Notify } from "types";
 import Notification from "components/notification";
 import { CallInsertLicenseToSoft } from "components/wallet/dataStructsCall";
+import { Field, Form, Formik } from "formik";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Notify } from "types";
+import * as Yup from "yup";
 
 
 const style = {
-  position: "absolute" as "absolute",
+  position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -35,9 +34,6 @@ const AddLicenceModal = (props: any) => {
 
 
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
-
-  useEffect(() => {}, []);
-
   return (
     <div>
       <Notification {...notify}></Notification>
@@ -60,9 +56,9 @@ const AddLicenceModal = (props: any) => {
             }}
             validationSchema={validationSchema}
             onSubmit={(data, { setSubmitting }) => {
-                var dateString = data.adquireDateString; // Oct 23
-                var dateParts: Array<String> = dateString.split("-");
-                var dateObject = new Date(
+                const dateString = data.adquireDateString; // Oct 23
+                const dateParts: string[] = dateString.split("-");
+                let dateObject = new Date(
                     +dateParts[0],
                     +dateParts[1] - 1,
                     +dateParts[2]
@@ -71,9 +67,9 @@ const AddLicenceModal = (props: any) => {
                 dateObject = new Date(dateObject.getTime() - offset * 60 * 1000);
                 data.adquireDate = dateObject.getTime();
 
-                var dateString2 = data.expirationDateString; // Oct 23
-                var dateParts2: Array<String> = dateString2.split("-");
-                var dateObject2 = new Date(
+                const dateString2 = data.expirationDateString; // Oct 23
+                const dateParts2: string[] = dateString2.split("-");
+                let dateObject2 = new Date(
                     +dateParts2[0],
                     +dateParts2[1] - 1,
                     +dateParts2[2]

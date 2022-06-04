@@ -10,7 +10,7 @@ import { AssetsInList, AssetTypes } from "types";
 import SimpleAssetsTable from "../Table/simpleAssetsTable";
 
 const style = {
-  position: "absolute" as "absolute",
+  position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -36,8 +36,8 @@ const BasicModal = (props: any) => {
       console.log(response);
       const cont = response[0].length;
       const contEdit = response[1].length;
-      let container: AssetsInList[] = [];
-      for (var i = 0; i < cont; i++) {
+      const container: AssetsInList[] = [];
+      for (let i = 0; i < cont; i++) {
         const asset: AssetsInList = {
           name: response[0][i].name,
           assetType: response[0][i].assetType,
@@ -55,7 +55,7 @@ const BasicModal = (props: any) => {
         }
       }
 
-      for (var o = 0; o < contEdit; o++) {
+      for (let o = 0; o < contEdit; o++) {
         const asset: AssetsInList = {
           name: response[1][o].name,
           assetType: response[1][o].assetType,
