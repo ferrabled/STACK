@@ -1,21 +1,21 @@
 import { ethers } from "ethers";
-import
-  {
-    Asset,
-    AssetEdited,
-    BlockchainAdmin,
-    BlockchainOrganization,
-    CloudAsset,
-    DataAsset,
-    DocAsset,
-    HardwareAsset,
-    InputAssetEdited,
-    NetworkAsset,
-    Notify, OrganizationAndAdmin,
-    OtherAsset,
-    SoftwareAsset,
-    TransactionError
-  } from "types";
+import {
+  Asset,
+  AssetEdited,
+  BlockchainAdmin,
+  BlockchainOrganization,
+  CloudAsset,
+  DataAsset,
+  DocAsset,
+  HardwareAsset,
+  InputAssetEdited,
+  NetworkAsset,
+  Notify,
+  OrganizationAndAdmin,
+  OtherAsset,
+  SoftwareAsset,
+  TransactionError,
+} from "types";
 import addresses from "../../assets/addresses.json";
 import mainABI from "./mainABI.json";
 
@@ -394,8 +394,12 @@ export async function CallGetAsset(assetId: number): Promise<Asset> {
     provider.getSigner()
   );
 
-  const asset = contract.getAsset(assetId);
-  return asset;
+  const asset = await contract.getAsset(assetId);
+  return {
+    ...asset,
+    adquireDate: Number(asset.adquireDate),
+    creationDate: Number(asset.creationDate),
+  };
 }
 
 export async function CallGetOrganizationData(
@@ -494,14 +498,24 @@ export function CallGetIsAssetEdited(assetId: number): Promise<boolean> {
   return contract.getIsAssetEdited(assetId);
 }
 
-export function CallGetLastAssetEdited(assetId: number): Promise<AssetEdited> {
-  return contract.getLastAssetEdited(assetId);
+export async function CallGetLastAssetEdited(assetId: number): Promise<AssetEdited> {
+  const asset = await contract.getLastAssetEdited(assetId);
+  return {
+    ...asset,
+    adquireDate: Number(asset.adquireDate),
+    creationDate: Number(asset.creationDate),
+  };
 }
 
-export function CallGetAssetEdited(
+export async function CallGetAssetEdited(
   assetEditedId: number
 ): Promise<AssetEdited> {
-  return contract.getAssetEdited(assetEditedId);
+  const assetEdited = await contract.getAssetEdited(assetEditedId);
+  return {
+    ...assetEdited,
+    adquireDate: Number(assetEdited.adquireDate),
+    creationDate: Number(assetEdited.creationDate),
+  };
 }
 
 export function CallGetRecordList(

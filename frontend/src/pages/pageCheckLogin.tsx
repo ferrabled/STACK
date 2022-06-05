@@ -4,6 +4,7 @@ import useToast from "hooks/useNotify";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Notify } from "types";
+import AppFooter from "./footer";
 
 const PageLoged = (props: { children?: React.ReactNode }) => {
   const [toast, setToast] = useToast();
@@ -52,9 +53,10 @@ const PageLoged = (props: { children?: React.ReactNode }) => {
   }, []);
 
   return (
-    <section className="block w-full py-5 px-4 md:px-8 lg:px-24 xl:px-48">
+    <section className="block w-full py-5 px-16 md:px-8 lg:px-24 xl:px-48 mui:left-[250px] mui:w-[calc(100%-250px)] absolute flex flex-col items-center bg-[#f6f6f6]">
       {toast}
-      <Box>{props.children}</Box>
+      <Box className="w-full max-w-7xl mt-10">{props.children}</Box>
+      <AppFooter />
     </section>
   );
 };

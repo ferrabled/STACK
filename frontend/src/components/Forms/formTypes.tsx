@@ -139,7 +139,7 @@ export const SoftwareForm = ({
         onSubmit={(data, { setSubmitting }) => {
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateSoftwareAsset(asset, assetId).then((n) => {
+            CallUpdateSoftwareAsset(data, assetId).then((n) => {
               setToast(n);
             });
           } else if (asset.assetDepart !== 0)
@@ -355,15 +355,26 @@ export const DocumentForm = ({
           setSubmitting(true);
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateDocAsset(asset, assetId).then((n) => {
+            CallUpdateDocAsset(
+              { ...data, doctype: Number(data.doctype) },
+              assetId
+            ).then((n) => {
               setToast(n);
             });
           } else if (asset.assetDepart !== 0)
-            CallInsertNewDocAssetWithDepartment(asset).then((n) => {
+            CallInsertNewDocAssetWithDepartment({
+              ...asset,
+              ...data,
+              doctype: Number(data.doctype),
+            }).then((n) => {
               setToast(n);
             });
           else
-            CallInsertNewDocAsset(asset).then((n) => {
+            CallInsertNewDocAsset({
+              ...asset,
+              ...data,
+              doctype: Number(data.doctype),
+            }).then((n) => {
               setToast(n);
             });
         }}
@@ -451,15 +462,17 @@ export const DataForm = ({
           setSubmitting(true);
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateDataAsset(asset, assetId).then((n) => {
+            CallUpdateDataAsset(data, assetId).then((n) => {
               setToast(n);
             });
           } else if (asset.assetDepart !== 0)
-            CallInsertNewDataAssetWithDepartment(asset).then((n) => {
-              setToast(n);
-            });
+            CallInsertNewDataAssetWithDepartment({ ...asset, ...data }).then(
+              (n) => {
+                setToast(n);
+              }
+            );
           else
-            CallInsertNewDataAsset(asset).then((n) => {
+            CallInsertNewDataAsset({ ...asset, ...data }).then((n) => {
               setToast(n);
             });
         }}
@@ -522,15 +535,17 @@ export const NetworkForm = ({
           console.log(data);
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateNetworkAsset(asset, assetId).then((n) => {
+            CallUpdateNetworkAsset(data, assetId).then((n) => {
               setToast(n);
             });
           } else if (asset.assetDepart !== 0)
-            CallInsertNewNAssetWithDepartment(asset).then((n) => {
-              setToast(n);
-            });
+            CallInsertNewNAssetWithDepartment({ ...asset, ...data }).then(
+              (n) => {
+                setToast(n);
+              }
+            );
           else
-            CallInsertNewNetworkAsset(asset).then((n) => {
+            CallInsertNewNetworkAsset({ ...asset, ...data }).then((n) => {
               setToast(n);
             });
         }}
@@ -595,11 +610,13 @@ export const CloudForm = ({
               setToast(n);
             });
           } else if (asset.assetDepart !== 0)
-            CallInsertNewCAssetWithDepartment(asset).then((n) => {
-              setToast(n);
-            });
+            CallInsertNewCAssetWithDepartment({ ...asset, ...data }).then(
+              (n) => {
+                setToast(n);
+              }
+            );
           else
-            CallInsertNewCloudAsset({...asset, ...data}).then((n) => {
+            CallInsertNewCloudAsset({ ...asset, ...data }).then((n) => {
               setToast(n);
             });
         }}
@@ -667,11 +684,13 @@ export const OtherForm = ({
               setToast(n);
             });
           } else if (asset.assetDepart !== 0)
-            CallInsertNewOAssetWithDepartment(asset).then((n) => {
-              setToast(n);
-            });
-          else
-            CallInsertNewOtherAsset(asset)
+            CallInsertNewOAssetWithDepartment({ ...asset, ...data }).then(
+              (n) => {
+                setToast(n);
+              }
+            );
+          else {
+            CallInsertNewOtherAsset({ ...asset, ...data })
               .then(() => {
                 setToast({
                   message: "Activo creado correctamente",
@@ -679,13 +698,15 @@ export const OtherForm = ({
                   isOpen: true,
                 });
               })
-              .catch(() => {
+              .catch((e) => {
+                console.error(e);
                 setToast({
                   isOpen: true,
                   message: "Por favor, acepta la transacción en metamask",
                   type: "error",
                 });
               });
+          }
         }}
       >
         {({ values, errors }) => (

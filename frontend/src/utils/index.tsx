@@ -1,6 +1,7 @@
 import { CallGetOrganizationData } from "components/wallet/contractCall";
 
 export const formatDate = function formatDate(date: Date) {
+  console.log(date);
   // function for reusability
   let d = date.getUTCDate().toString(); // getUTCDate() returns 1 - 31
   let m = (date.getUTCMonth() + 1).toString(); // getUTCMonth() returns 0 - 11

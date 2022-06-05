@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import AppFooter from "./footer";
 
 const Page = (props: {
   title?: string;
@@ -17,6 +18,8 @@ const Page = (props: {
         )}
       </Box>
       <Box>{props.children}</Box>
+      <AppFooter />
+      
     </section>
   );
 };

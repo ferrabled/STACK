@@ -3,6 +3,9 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    screens: {
+      'mui': '900px',
+    },
     extend: {
       colors: {
         transparent: "transparent",

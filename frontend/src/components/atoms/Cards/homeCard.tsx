@@ -20,14 +20,16 @@ const HomeCard = ({ admin }: { admin: BlockchainAdmin }) => {
 
   return (
     <>
-      <Card className="gap-7 p-10 flex flex-col items-center">
-        <div className="h-56 items-center ">
-          <Typography className="p-8" variant="h4">
+      <Card className="gap-7 p-20 flex flex-col items-center">
+        <div className="items-center">
+          <h4 className="font-normal m-0 text-3xl">
             Bienvenido,{" "}
-          </Typography>
-          <Typography variant="h4">{admin.name} </Typography>
+          </h4>
+          <h4 className="font-extrabold mt-2 text-3xl">
+            {admin.name}{" "}
+          </h4>
         </div>
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-4 mt-5">
           <Button
             className="w-64 h-24"
             variant="contained"

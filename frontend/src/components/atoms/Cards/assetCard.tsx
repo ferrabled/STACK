@@ -123,6 +123,7 @@ const AssetCard = ({asset}: {asset: AssetEdited|Asset}) => {
     setShowModal(true);
   };
 
+  console.log(asset);
   const adquireDate = new Date(asset.adquireDate);
   const formattedADate = formatDate(adquireDate);
   const creationDate = new Date(asset.creationDate);

@@ -1,14 +1,14 @@
-import Page from "../page";
 import { Card } from "@mui/material";
 import { AssetForm } from "components/Forms";
+import PageLoged from "pages/pageCheckLogin";
 
 const NewAssetPage = () => {
   return (
-    <Page title="">
+    <PageLoged>
       <Card className="my-3">
         <AssetForm/>
       </Card>
-    </Page>
+    </PageLoged>
   );
 };
 

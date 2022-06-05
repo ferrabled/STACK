@@ -215,7 +215,7 @@ export type DocAssetProps = {
 
 export type DataAssetProps = {
   location: string;
-  local: string;
+  local: boolean;
 };
 
 export type NetworkAssetProps = {

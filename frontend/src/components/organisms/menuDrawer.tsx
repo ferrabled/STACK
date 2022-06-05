@@ -1,11 +1,11 @@
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import FindInPageIcon from '@mui/icons-material/FindInPage';
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import FindInPageIcon from "@mui/icons-material/FindInPage";
 //Icons
 import HomeIcon from "@mui/icons-material/Home";
-import HomeWorkIcon from '@mui/icons-material/HomeWork';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import LogoutIcon from '@mui/icons-material/Logout';
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import LogoutIcon from "@mui/icons-material/Logout";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -19,11 +19,9 @@ import Identicon from "components/atoms/identicon";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
-
 type Anchor = "right";
 
 export default function MenuDrawer() {
-
   const navigate = useNavigate();
   const [state, setState] = React.useState({
     right: false,
@@ -51,70 +49,96 @@ export default function MenuDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-      <div className="flex flex-col justify-center items-center my-5">
-        <Identicon></Identicon></div>
-      
+        <div className="flex flex-col justify-center items-center my-5">
+          <Identicon></Identicon>
+        </div>
+
         <Divider />
-        <ListItem button key={'Inicio'} onClick={()=> navigate('/home')}>
+        <ListItem button key={"Inicio"} onClick={() => navigate("/home")}>
           <ListItemIcon>
-            <HomeIcon color="primary"/>
+            <HomeIcon color="primary" />
           </ListItemIcon>
-          <ListItemText primary={'Inicio'} />
+          <ListItemText primary={"Inicio"} />
         </ListItem>
-        <ListItem button key={'Organización'} onClick={()=> navigate('/organization')}>
+        <ListItem
+          button
+          key={"Organización"}
+          onClick={() => navigate("/organization")}
+        >
           <ListItemIcon>
-            <HomeWorkIcon color="primary"/>
+            <HomeWorkIcon color="primary" />
           </ListItemIcon>
-          <ListItemText primary={'Organización'} />
-        </ListItem>
-        <Divider />
-        <ListItem button key={'Activos'} onClick={()=> navigate('/assets')}>
-          <ListItemIcon>
-            <InventoryIcon color="primary"/>
-          </ListItemIcon>
-          <ListItemText primary={'Activos'} />
-        </ListItem>
-        <ListItem button key={'Búsqueda'} onClick={()=> navigate('/assets/search')}>
-          <ListItemIcon>
-            <FindInPageIcon color="primary"/>
-          </ListItemIcon>
-          <ListItemText primary={'Búsqueda'} />
-        </ListItem>
-        <ListItem button key={'Nuevo Activo'} onClick={()=> navigate('/assets/new')}>
-          <ListItemIcon>
-            <AddBoxIcon color="primary"/>
-          </ListItemIcon>
-          <ListItemText primary={'Nuevo Activo'} />
+          <ListItemText primary={"Organización"} />
         </ListItem>
         <Divider />
-        <ListItem button key={'Departamentos'} onClick={()=> navigate('/departments')}>
+        <ListItem button key={"Activos"} onClick={() => navigate("/assets")}>
           <ListItemIcon>
-            <HomeWorkIcon color="primary"/>
+            <InventoryIcon color="primary" />
           </ListItemIcon>
-          <ListItemText primary={'Departamentos'} />
+          <ListItemText primary={"Activos"} />
         </ListItem>
-        <ListItem button key={'Nuevo Departamento'} onClick={()=> navigate('/departments/new')}>
+        <ListItem
+          button
+          key={"Búsqueda"}
+          onClick={() => navigate("/assets/search")}
+        >
           <ListItemIcon>
-            <AddBoxIcon color="primary"/>
+            <FindInPageIcon color="primary" />
           </ListItemIcon>
-          <ListItemText primary={'Nuevo Departamento'} />
+          <ListItemText primary={"Búsqueda"} />
+        </ListItem>
+        <ListItem
+          button
+          key={"Nuevo Activo"}
+          onClick={() => navigate("/assets/new")}
+        >
+          <ListItemIcon>
+            <AddBoxIcon color="primary" />
+          </ListItemIcon>
+          <ListItemText primary={"Nuevo Activo"} />
         </ListItem>
         <Divider />
-        <ListItem button key={'Usuarios'} onClick={()=> navigate('/users')}>
+        <ListItem
+          button
+          key={"Departamentos"}
+          onClick={() => navigate("/departments")}
+        >
+          <ListItemIcon>
+            <HomeWorkIcon color="primary" />
+          </ListItemIcon>
+          <ListItemText primary={"Departamentos"} />
+        </ListItem>
+        <ListItem
+          button
+          key={"Nuevo Departamento"}
+          onClick={() => navigate("/departments/new")}
+        >
+          <ListItemIcon>
+            <AddBoxIcon color="primary" />
+          </ListItemIcon>
+          <ListItemText primary={"Nuevo Departamento"} />
+        </ListItem>
+        <Divider />
+        <ListItem button key={"Usuarios"} onClick={() => navigate("/users")}>
           <ListItemIcon>
             <AssignmentIndIcon color="primary" />
           </ListItemIcon>
-          <ListItemText primary={'Usuarios'} />
+          <ListItemText primary={"Usuarios"} />
         </ListItem>
 
         <Divider />
-        <ListItem button key={'Salir'} onClick={()=> {
-          window.localStorage.clear();
-          navigate('/login');}}>
+        <ListItem
+          button
+          key={"Salir"}
+          onClick={() => {
+            window.localStorage.clear();
+            navigate("/login");
+          }}
+        >
           <ListItemIcon>
             <LogoutIcon color="primary" />
           </ListItemIcon>
-          <ListItemText primary={'Cerrar Sesión'} />
+          <ListItemText primary={"Cerrar Sesión"} />
         </ListItem>
       </List>
     </Box>
@@ -122,14 +146,35 @@ export default function MenuDrawer() {
 
   return (
     <div>
-      <Button onClick={toggleDrawer("right", true)}>
-        {"right"}
-        <AccountWallet />
-      </Button>
+      <div className="mui:hidden">
+        <Button onClick={toggleDrawer("right", true)}>
+          {"right"}
+          <AccountWallet showButton={true} />
+        </Button>
+      </div>
+      <div className="hidden mui:block">
+        <AccountWallet showButton={false} />
+      </div>
+
+      <Drawer
+        anchor={"left"}
+        open={state["right"]}
+        onClose={toggleDrawer("right", false)}
+        variant="permanent"
+        sx={{
+          display: { xs: "none", md: "block" },
+        }}
+      >
+        {list("right")}
+      </Drawer>
       <Drawer
         anchor={"right"}
         open={state["right"]}
         onClose={toggleDrawer("right", false)}
+        variant="temporary"
+        sx={{
+          display: { xs: "block", sm: "block", md: "none" },
+        }}
       >
         {list("right")}
       </Drawer>

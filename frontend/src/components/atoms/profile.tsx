@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 
-const AccountWallet = () => {
+const AccountWallet = ({ showButton }: { showButton: boolean }) => {
   const [account, setAccount] = useState("");
   useEffect(() => {
     const connect = () => {
@@ -33,8 +33,7 @@ const AccountWallet = () => {
               account.length - 4,
               account.length
             )}`}
-
-          <MenuOpenIcon />
+          {showButton && <MenuOpenIcon />}
         </div>
       </Box>
     </div>
