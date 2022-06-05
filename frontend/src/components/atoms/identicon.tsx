@@ -21,7 +21,7 @@ export default function Identicon() {
     () => provider.getSigner().getAddress().then((r)=> setAccount(r)))
 
 
-  const ref = useRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>(null);
 
 
   useEffect(() => {
@@ -31,5 +31,5 @@ export default function Identicon() {
     }
   }, [account]);
   
-  return <StyledIdenticon ref={ref as any} />
+  return <StyledIdenticon ref={ref} />
 }

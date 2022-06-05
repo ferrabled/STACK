@@ -2,6 +2,7 @@ import { Button, IconButton } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
+  GridRowId,
   GridRowParams,
   GridSelectionModel,
 } from "@mui/x-data-grid";
@@ -10,8 +11,8 @@ import {
   CallInsertUsersToAsset,
   CallInsertUserToDepartment,
 } from "components/wallet/userCall";
-import { useEffect, useState } from "react";
-import { TableUser } from "types";
+import { MouseEventHandler, useEffect, useState } from "react";
+import { GridTableElement, TableUser } from "types";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import BasicModal from "../Modals/assetsFromUser";
 import { Notify } from "types";
@@ -29,29 +30,17 @@ const SimpleUserTable = ({
   deleteB: boolean;
   setNotifyParent: (n: Notify) => void;
 }) => {
-  const [rows, setRows] = useState<TableUser[]>([]);
+  const [rows, setRows] = useState<GridTableElement<TableUser>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
   const [userId, setUserId] = useState("");
-
-  const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [assetId, setAssetId] = useState("");
 
   useEffect(() => {
     const assetId = window.sessionStorage.getItem("detailId");
     setAssetId(assetId);
-    const userList: TableUser[] = [];
-    const cont = Object.keys(users).length;
-
-    for (let i = 0; i < cont; i++) {
-      console.log(users[i]);
-      users[i].id = i + 1;
-      //console.log("AAA")
-      userList.push(users[i]);
-    }
-    console.log(Object.keys(users).length);
-    setRows(userList);
-    setIsLoading(false);
+    const usersList = users.map((x, i) => ({ ...x, id: i }));
+    setRows(usersList);
   }, []);
 
   const handleSubmit = () => {
@@ -59,14 +48,14 @@ const SimpleUserTable = ({
     const cont = Object.keys(selectionModel).length;
     const ids: number[] = [];
     for (let i = 0; i < cont; i++) {
-      const item = selectionModel[i];
-      ids.push(item.index);
+      const id = selectionModel[i] as number;
+      ids.push(id);
     }
     if (depart === true) {
       if (deleteB === true) {
         console.log("delete users from department");
         const departId = window.sessionStorage.getItem("departId");
-        CallDeleteUsersFromDepartment(Number(departId), ids).then((n) => {
+        CallDeleteUsersFromDepartment(Number(departId), ids.map(Number)).then((n) => {
           setNotifyParent(n);
         });
       } else {
@@ -96,7 +85,7 @@ const SimpleUserTable = ({
       sortable: false,
       width: 80,
       renderCell: (params) => {
-        const onClickDetails = (e) => {
+        const onClickDetails: MouseEventHandler = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log("HOLA");
           console.log(params.row.index);
@@ -134,7 +123,7 @@ const SimpleUserTable = ({
           const selectedIDs = new Set(ids);
           const selectionModel = rows.filter((row) => selectedIDs.has(row.id));
 
-          setSelectionModel(selectionModel);
+          setSelectionModel(selectionModel.map(x => x.id));
         }}
         //selectionModel={selectionModel}
 
@@ -148,11 +137,7 @@ const SimpleUserTable = ({
         userId={userId}
       ></BasicModal>
       <div className="flex flex-row items-center justify-center mt-6">
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={() => handleSubmit()}
-        >
+        <Button color="primary" variant="contained" onClick={handleSubmit}>
           Aceptar
         </Button>
       </div>

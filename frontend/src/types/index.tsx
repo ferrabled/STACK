@@ -29,11 +29,11 @@ export type OrganizationAndAdmin = {
   firstName: string;
   lastName: string;
   email: string;
-  telephoneAdmin: number
+  telephoneAdmin: number;
   organizationName: string;
   address: string;
   telephoneOrganization: number;
-}
+};
 
 export type Admin = {
   name: string;
@@ -223,7 +223,6 @@ export interface User {
 export interface TableUser extends User {
   addr: string;
   index?: number;
-  id?: number;
 }
 
 export type SoftwareAsset = Asset & SoftwareAssetProps;
@@ -233,3 +232,7 @@ export type DataAsset = Asset & DataAssetProps;
 export type NetworkAsset = Asset & NetworkAssetProps;
 export type CloudAsset = Asset & CloudAssetProps;
 export type OtherAsset = Asset & OtherAssetProps;
+
+export type GridTableElement<T> = T & {
+  id: number;
+};

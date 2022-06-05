@@ -6,11 +6,11 @@ import {
   GridSelectionModel,
 } from "@mui/x-data-grid";
 import { CallGetIsAssetEdited } from "components/wallet/contractCall";
-import { useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "utils";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { AssetsInList, Notify } from "types";
+import { Asset, AssetsInList, GridTableElement, Notify } from "types";
 import {
   CallDeleteAssetFromDepartment,
   CallInsertAssetToDepartment,
@@ -28,20 +28,14 @@ const SimpleSelectAssetsTable = ({
   setNotifyParent: (n: Notify) => void;
 }) => {
   const navigate = useNavigate();
-  const [rows, setRows] = useState<any>([]);
+  const [rows, setRows] = useState<GridTableElement<Asset>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
 
   useEffect(() => {
     const FormatData = () => {
-      const listAssets = assets;
-      const cont = Object.keys(listAssets).length;
-      const tempRow: any[] = [];
-      for (let i = 0; i < cont; i++) {
-        listAssets[i].id = i;
-        tempRow.push(listAssets[i]);
-      }
-      setRows(tempRow);
+      const assetsList = assets.map((x, i) => ({ ...x, id: i }));
+      setRows(assetsList);
       setIsLoading(false);
     };
     FormatData();
@@ -53,22 +47,20 @@ const SimpleSelectAssetsTable = ({
     const cont = Object.keys(selectionModel).length;
     const ids: number[] = [];
     for (let i = 0; i < cont; i++) {
-      const item: any = selectionModel[i];
+      const item = selectionModel[i] as number;
       console.log("Tabla");
-      console.log(item.index);
-      ids.push(item.index);
+      console.log(item);
+      ids.push(item);
     }
     if (deleteB) {
       console.log("delete assets from department");
-      CallDeleteAssetFromDepartment(Number(departId), ids).then((r) => {
-        const notify: Notify = r!;
-        setNotifyParent(notify);
+      CallDeleteAssetFromDepartment(Number(departId), ids).then((n) => {
+        setNotifyParent(n);
       });
     } else {
       console.log("add assets to department");
-      CallInsertAssetToDepartment(Number(departId), ids).then((r) => {
-        const notify: Notify = r!;
-        setNotifyParent(notify);
+      CallInsertAssetToDepartment(Number(departId), ids).then((n) => {
+        setNotifyParent(n);
       });
     }
   };
@@ -82,7 +74,7 @@ const SimpleSelectAssetsTable = ({
       sortable: false,
       width: 70,
       renderCell: (params) => {
-        const onClickDetails = (e: any) => {
+        const onClickDetails: MouseEventHandler = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log(params.row.originalId);
           const originalId = params.row.originalId;
@@ -133,15 +125,6 @@ const SimpleSelectAssetsTable = ({
         return <>{departNames[params.row.assetDepart]}</>;
       },
     },
-    /* {
-        field: "fullName",
-        headerName: "Departamento",
-        description: "This column has a value getter and is not sortable.",
-        sortable: false,
-        width: 160,
-        valueGetter: (params: GridValueGetterParams) =>
-          `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-      }, */
   ];
 
   if (isLoading) return <CircularProgress />;
@@ -160,11 +143,11 @@ const SimpleSelectAssetsTable = ({
           checkboxSelection
           onSelectionModelChange={(ids) => {
             const selectedIDs = new Set(ids);
-            const selectionModel = rows.filter((row: any) =>
+            const selectionModel = rows.filter((row) =>
               selectedIDs.has(row.id)
             );
 
-            setSelectionModel(selectionModel);
+            setSelectionModel(selectionModel.map(x => x.id));
           }}
           pageSize={5}
           rowsPerPageOptions={[5]}
