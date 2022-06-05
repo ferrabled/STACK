@@ -1,17 +1,32 @@
-import
-  {
-    Button,
-    Checkbox,
-    FormControlLabel,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-    Typography
-  } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Notification from "components/notification";
-import { CallInsertNewCloudAsset, CallInsertNewDataAsset, CallInsertNewDocAsset, CallInsertNewHardAsset, CallInsertNewNetworkAsset, CallInsertNewOtherAsset, CallInsertNewSoftAsset } from "components/wallet/contractCall";
-import { CallInsertNewCAssetWithDepartment, CallInsertNewDataAssetWithDepartment, CallInsertNewDocAssetWithDepartment, CallInsertNewHAssetWithDepartment, CallInsertNewNAssetWithDepartment, CallInsertNewOAssetWithDepartment, CallInsertNewSAssetWithDepartment } from "components/wallet/users2Call";
+import {
+  CallInsertNewCloudAsset,
+  CallInsertNewDataAsset,
+  CallInsertNewDocAsset,
+  CallInsertNewHardAsset,
+  CallInsertNewNetworkAsset,
+  CallInsertNewOtherAsset,
+  CallInsertNewSoftAsset,
+} from "components/wallet/contractCall";
+import {
+  CallInsertNewCAssetWithDepartment,
+  CallInsertNewDataAssetWithDepartment,
+  CallInsertNewDocAssetWithDepartment,
+  CallInsertNewHAssetWithDepartment,
+  CallInsertNewNAssetWithDepartment,
+  CallInsertNewOAssetWithDepartment,
+  CallInsertNewSAssetWithDepartment,
+} from "components/wallet/users2Call";
 import { Field, Form, Formik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
@@ -23,7 +38,7 @@ import {
   CallUpdateNetworkAsset,
   CallUpdateSoftwareAsset,
 } from "components/wallet/dataStructsCall";
-import { Asset, Notify } from "types";
+import { Asset, DataAsset, DocAsset, HardwareAsset, Notify, SoftwareAsset, SoftwareAssetProps } from "types";
 
 const urlReg =
   // eslint-disable-next-line no-useless-escape
@@ -97,13 +112,11 @@ export const SubmitAsset = (props: any) => {
 export const SoftwareForm = ({
   asset,
   edit,
-  typeData,
 }: {
-  asset?: Asset;
+  asset: SoftwareAsset;
   edit: boolean;
-  typeData?: any;
 }) => {
-  const [notify, setNotify] = useState<any>({
+  const [notify, setNotify] = useState<Notify>({
     isOpen: false,
     message: "",
     type: "info",
@@ -114,32 +127,31 @@ export const SoftwareForm = ({
       <Notification {...notify}></Notification>
       <Formik
         initialValues={{
-          version: edit ? typeData.version : "",
-          provider: edit ? typeData.provider : "",
-          stype: edit ? typeData.stype : "",
+          version: edit ? asset.version : "",
+          provider: edit ? asset.provider : "",
+          stype: edit ? asset.stype : -1,
         }}
         validationSchema={validationSchemaSoft}
         onSubmit={(data, { setSubmitting }) => {
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateSoftwareAsset(data, assetId).then((r) => {
-              const notify: Notify = r!;
+            CallUpdateSoftwareAsset(asset, assetId).then((notify) => {
               setNotify(notify);
             });
-          } else if (asset!.assetDepart !== 0)
-            CallInsertNewSAssetWithDepartment(asset!, data).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
-            });
+          } else if (asset.assetDepart !== 0)
+            CallInsertNewSAssetWithDepartment({ ...asset, ...data }).then(
+              (notify) => {
+                setNotify(notify);
+              }
+            );
           else
-            CallInsertNewSoftAsset(asset!, data).then((r) => {
-              const notify: Notify = r!;
+            CallInsertNewSoftAsset({ ...asset, ...data }).then((notify) => {
               setNotify(notify);
             });
           setSubmitting(true);
         }}
       >
-        {({ values, isSubmitting, errors, handleChange }) => (
+        {({ values, errors, handleChange }) => (
           <Form id="form1">
             <div className="mb-6">
               <Typography variant="h5">Características del Software</Typography>
@@ -203,13 +215,11 @@ export const SoftwareForm = ({
 export const HardwareForm = ({
   asset,
   edit,
-  typeData,
 }: {
-  asset?: Asset;
+  asset: HardwareAsset;
   edit: boolean;
-  typeData?: any;
 }) => {
-  const [notify, setNotify] = useState<any>({
+  const [notify, setNotify] = useState<Notify>({
     isOpen: false,
     message: "",
     type: "info",
@@ -221,33 +231,30 @@ export const HardwareForm = ({
       <Formik
         initialValues={{
           //TODO initial values
-          model: edit ? typeData.model : "",
-          provider: edit ? typeData.provider : "",
-          serialNumber: edit ? typeData.serialNumber : "",
-          htype: edit ? typeData.htype : "",
+          model: edit ? asset.model : "",
+          provider: edit ? asset.provider : "",
+          serialNumber: edit ? asset.serialNumber : "",
+          htype: edit ? asset.htype : -1,
         }}
         validationSchema={validationSchemaHard}
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateHardwareAsset(data, assetId).then((r) => {
-              const notify: Notify = r!;
+            CallUpdateHardwareAsset(data, assetId).then((notify) => {
               setNotify(notify);
             });
-          } else if (asset!.assetDepart !== 0)
-            CallInsertNewHAssetWithDepartment(asset!, data).then((r) => {
-              const notify: Notify = r!;
+          } else if (asset.assetDepart !== 0)
+            CallInsertNewHAssetWithDepartment({ ...asset, ...data }).then((notify) => {
               setNotify(notify);
             });
           else
-            CallInsertNewHardAsset(asset!, data).then((r) => {
-              const notify: Notify = r!;
+            CallInsertNewHardAsset({ ...asset, ...data }).then((notify) => {
               setNotify(notify);
             });
         }}
       >
-        {({ values, isSubmitting, errors, handleChange }) => (
+        {({ values, errors, handleChange }) => (
           <Form id="form1">
             <div className="mb-6">
               <Typography variant="h5">Características del Hardware</Typography>
@@ -325,13 +332,11 @@ export const HardwareForm = ({
 export const DocumentForm = ({
   asset,
   edit,
-  typeData,
 }: {
-  asset?: Asset;
+  asset?: DocAsset;
   edit: boolean;
-  typeData?: any;
 }) => {
-  const [notify, setNotify] = useState<any>({
+  const [notify, setNotify] = useState<Notify>({
     isOpen: false,
     message: "",
     type: "info",
@@ -352,23 +357,20 @@ export const DocumentForm = ({
           setSubmitting(true);
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateDocAsset(data, assetId).then((r) => {
-              const notify: Notify = r!;
+            CallUpdateDocAsset(data, assetId).then((notify) => {
               setNotify(notify);
             });
-          } else if (asset!.assetDepart !== 0)
-            CallInsertNewDocAssetWithDepartment(asset!, data).then((r) => {
-              const notify: Notify = r!;
+          } else if (asset.assetDepart !== 0)
+            CallInsertNewDocAssetWithDepartment(asset!, data).then((notify) => {
               setNotify(notify);
             });
           else
-            CallInsertNewDocAsset(asset!, data).then((r) => {
-              const notify: Notify = r!;
+            CallInsertNewDocAsset(asset, data).then((notify) => {
               setNotify(notify);
             });
         }}
       >
-        {({ values, isSubmitting, errors, handleChange }) => (
+        {({ values, errors, handleChange }) => (
           <Form id="form1">
             <div className="mb-6">
               <Typography variant="h5">
@@ -432,11 +434,9 @@ export const DocumentForm = ({
 export const DataForm = ({
   asset,
   edit,
-  typeData,
 }: {
-  asset?: Asset;
+  asset?: DataAsset;
   edit: boolean;
-  typeData?: any;
 }) => {
   const [notify, setNotify] = useState<any>({
     isOpen: false,

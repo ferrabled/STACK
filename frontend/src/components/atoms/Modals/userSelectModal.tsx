@@ -8,7 +8,7 @@ import { UsersCard } from "../Cards";
 import EnhancedTable from "../Table/simpleUserTable";
 import SimpleUserTable from "../Table/simpleUserTable";
 import Notification from "components/notification";
-import { Users } from "types";
+import { TableUser } from "types";
 
 
 const style = {
@@ -25,7 +25,7 @@ const style = {
 
 const UserSelectModal = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [users, setUsers] = useState<Users[]>();
+  const [users, setUsers] = useState<TableUser[]>();
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
  
 
@@ -36,10 +36,10 @@ const UserSelectModal = (props: any) => {
 
     CallGetAllUsersFromOrg(Number(orgId!)).then((response) => {
       const cont = response.length;
-      const container: Users[] = [];
+      const container: TableUser[] = [];
       for (let i = 0; i < cont; i++) {
         console.log(response[i]);
-        const user: Users = {
+        const user: TableUser = {
           addr: response[i].addr,
           name: response[i].name,
           surname: response[i].surname,

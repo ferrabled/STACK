@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Card, Button, CircularProgress, IconButton } from "@mui/material";
 import { DataGrid,  GridColDef } from "@mui/x-data-grid";
-import { Users } from "types";
+import { TableUser } from "types";
 import { useNavigate } from "react-router-dom";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BasicModal from "../Modals/assetsFromUser";
 
 
 
-const UsersCard = (users:Users[]) => {
+const UsersCard = (users:TableUser[]) => {
   const navigate = useNavigate();
   const [rows, setRows] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);

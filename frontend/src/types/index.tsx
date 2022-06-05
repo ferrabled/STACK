@@ -103,17 +103,6 @@ export const HardwareTypes = [
 ];
 export const DocTypes = ["Contrato", "Factura", "No determinado"];
 
-export type Users = {
-  addr: string;
-  name: string;
-  surname: string;
-  email: string;
-  telephone: number;
-  orgId: number;
-  index?: number;
-  id?: number;
-};
-
 export type Notify = {
   isOpen: boolean;
   message: string;
@@ -197,18 +186,40 @@ export type DocAssetProps = {
 export type DataAssetProps = {
   location: string;
   local: string;
-}
+};
 
 export type NetworkAssetProps = {
   cidrblock: string;
   nat: boolean;
-}
+};
 
 export type CloudAssetProps = {
   url: string;
   domain: string;
-}
+};
 
 export type OtherAssetProps = {
   description: string;
+};
+
+export interface User {
+  name: string;
+  surname: string;
+  email: string;
+  telephone: number;
+  orgId: number;
 }
+
+export interface TableUser extends User {
+  addr: string;
+  index?: number;
+  id?: number;
+}
+
+export type SoftwareAsset = Asset & SoftwareAssetProps;
+export type HardwareAsset = Asset & HardwareAssetProps;
+export type DocAsset = Asset & DocAssetProps;
+export type DataAsset = Asset & DataAssetProps;
+export type NetworkAsset = Asset & NetworkAssetProps;
+export type CloudAsset = Asset & CloudAssetProps;
+export type OtherAsset = Asset & OtherAssetProps;

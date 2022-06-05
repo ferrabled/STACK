@@ -4,7 +4,7 @@ import { CallDeleteAsset } from "components/wallet/contractCall";
 import { CallGetAssetUsers } from "components/wallet/userCall";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users } from "types";
+import { TableUser } from "types";
 import { formatDate } from "utils";
 import UserSelectModal from "../Modals/userSelectModal";
 import AssetTypeCard from "./Assets/assetTypeData";
@@ -19,7 +19,7 @@ const AssetCard = (props: any) => {
   const [assetType, setAssetType] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
-  const [users, setUsers] = useState<Users[]>();
+  const [users, setUsers] = useState<TableUser[]>();
 
   const DataCard = () => {
     return (
@@ -72,9 +72,9 @@ const AssetCard = (props: any) => {
       CallGetAssetUsers(Number(id)).then((response) => {
         const cont = response.length;
         const userIds: number[] = [];
-        const container: Users[] = [];
+        const container: TableUser[] = [];
         for (let i = 0; i < cont; i++) {
-          const user: Users = {
+          const user: TableUser = {
             addr: response[i].addr,
             name: response[i].name,
             surname: response[i].surname,

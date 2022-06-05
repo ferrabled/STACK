@@ -10,7 +10,7 @@ const RegisterPage = () => {
     return (
         <Page>
             <Card className="my-3">
-                <UserForm props={orgId}></UserForm>
+                <UserForm orgId={orgId}></UserForm>
             </Card>
         </Page>
        

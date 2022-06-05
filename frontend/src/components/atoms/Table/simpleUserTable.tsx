@@ -2,13 +2,13 @@ import { Button, IconButton } from "@mui/material";
 import { DataGrid, GridColDef, GridRowParams, GridSelectionModel } from "@mui/x-data-grid"
 import { CallDeleteUsersFromDepartment, CallInsertUsersToAsset, CallInsertUserToDepartment } from "components/wallet/userCall";
 import { useEffect, useState } from "react";
-import { Users } from "types"
+import { TableUser } from "types"
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BasicModal from "../Modals/assetsFromUser";
 import { Notify } from "types";
 
 
-const SimpleUserTable = ({users, depart, idList, deleteB, setNotifyParent}:{users: Users[], depart:boolean, idList:number[], deleteB:boolean, setNotifyParent:any}) => {
+const SimpleUserTable = ({users, depart, idList, deleteB, setNotifyParent}:{users: TableUser[], depart:boolean, idList:number[], deleteB:boolean, setNotifyParent:any}) => {
 
     const [rows, setRows] = useState<any>([]);
     const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);

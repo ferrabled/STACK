@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { Asset } from "types";
+import { Asset, CloudAsset, DataAsset, DocAsset, HardwareAsset, NetworkAsset, OtherAsset, SoftwareAsset } from "types";
 import addresses from "../../assets/addresses.json";
 import mainABI from "./mainABI.json";
 
@@ -104,7 +104,7 @@ export async function CallGetAdminToOrg(props: any) {
   return orgId;
 }
 
-export async function CallInsertNewSoftAsset(asset: Asset, props: any) {
+export async function CallInsertNewSoftAsset(asset: SoftwareAsset) {
   try {
     await contract.insertNewSoftAsset(
       asset.name,
@@ -113,9 +113,9 @@ export async function CallInsertNewSoftAsset(asset: Asset, props: any) {
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.version,
-      props.provider,
-      props.stype
+      asset.version,
+      asset.provider,
+      asset.stype
     );
     const correctText = "Activo creado correctamente";
 
@@ -136,7 +136,7 @@ export async function CallInsertNewSoftAsset(asset: Asset, props: any) {
   }
 }
 
-export async function CallInsertNewHardAsset(asset: Asset, props: any) {
+export async function CallInsertNewHardAsset(asset: HardwareAsset) {
   try {
     await contract.insertNewHardAsset(
       asset.name,
@@ -145,10 +145,10 @@ export async function CallInsertNewHardAsset(asset: Asset, props: any) {
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.model,
-      props.provider,
-      props.serialNumber,
-      props.htype
+      asset.model,
+      asset.provider,
+      asset.serialNumber,
+      asset.htype
     );
     const correctText = "Activo creado correctamente";
 
@@ -169,7 +169,7 @@ export async function CallInsertNewHardAsset(asset: Asset, props: any) {
   }
 }
 
-export async function CallInsertNewDocAsset(asset: Asset, props: any) {
+export async function CallInsertNewDocAsset(asset: DocAsset) {
   console.log("Insertar doc");
   try {
     await contract.insertNewDocAsset(
@@ -179,9 +179,9 @@ export async function CallInsertNewDocAsset(asset: Asset, props: any) {
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.name,
-      props.location,
-      props.doctype
+      asset.name,
+      asset.location,
+      asset.doctype
     );
     const correctText = "Activo creado correctamente";
 
@@ -202,7 +202,7 @@ export async function CallInsertNewDocAsset(asset: Asset, props: any) {
   }
 }
 
-export async function CallInsertNewDataAsset(asset: Asset, props: any) {
+export async function CallInsertNewDataAsset(asset: DataAsset) {
   try {
     await contract.insertNewDataAsset(
       asset.name,
@@ -211,8 +211,8 @@ export async function CallInsertNewDataAsset(asset: Asset, props: any) {
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.location,
-      props.local
+      asset.location,
+      asset.local
     );
     const correctText = "Activo creado correctamente";
 
@@ -233,7 +233,7 @@ export async function CallInsertNewDataAsset(asset: Asset, props: any) {
   }
 }
 
-export async function CallInsertNewNetworkAsset(asset: Asset, props: any) {
+export async function CallInsertNewNetworkAsset(asset: NetworkAsset) {
   try {
     await contract.insertNewNetworkAsset(
       asset.name,
@@ -242,8 +242,8 @@ export async function CallInsertNewNetworkAsset(asset: Asset, props: any) {
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.cidrblock,
-      props.nat
+      asset.cidrblock,
+      asset.nat,
     );
     const correctText = "Activo creado correctamente";
 
@@ -264,7 +264,7 @@ export async function CallInsertNewNetworkAsset(asset: Asset, props: any) {
   }
 }
 
-export async function CallInsertNewCloudAsset(asset: Asset, props: any) {
+export async function CallInsertNewCloudAsset(asset: CloudAsset) {
   try {
     await contract.insertNewCloudAsset(
       asset.name,
@@ -273,8 +273,8 @@ export async function CallInsertNewCloudAsset(asset: Asset, props: any) {
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.url,
-      props.domain
+      asset.url,
+      asset.domain
     );
     const correctText = "Activo creado correctamente";
 
@@ -295,7 +295,7 @@ export async function CallInsertNewCloudAsset(asset: Asset, props: any) {
   }
 }
 
-export async function CallInsertNewOtherAsset(asset: Asset, props: any) {
+export async function CallInsertNewOtherAsset(asset: OtherAsset) {
   try {
     await contract.insertNewOtherAsset(
       asset.name,
@@ -304,7 +304,7 @@ export async function CallInsertNewOtherAsset(asset: Asset, props: any) {
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.description
+      asset.description
     );
     const correctText = "Activo creado correctamente";
 
@@ -325,7 +325,7 @@ export async function CallInsertNewOtherAsset(asset: Asset, props: any) {
   }
 }
 
-export async function CallInsertAsset(props: any) {
+export async function CallInsertAsset(props: Asset) {
   console.log(props);
   const input = props;
   //const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -337,11 +337,11 @@ export async function CallInsertAsset(props: any) {
      */
   console.log("HOLA");
   //TODO change ORG ID
-  input.organizationId = 0;
+  input.orgId = 0;
 
   contract.insertAsset(
     input.name,
-    input.organizationId,
+    input.orgId,
     input.adquireDate,
     input.creationDate,
     input.assetType

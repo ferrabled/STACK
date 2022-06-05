@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import { Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
 import { CallGetUsersFromDepart } from "components/wallet/userCall";
-import { Users } from "types";
+import { TableUser } from "types";
 import SimpleUserTable from "../Table/simpleUserTable";
 import Notification from "components/notification";
 
@@ -22,7 +22,7 @@ const style = {
 
 const UserDeleteModal = (props: any) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [users, setUsers] = useState<Users[]>();
+  const [users, setUsers] = useState<TableUser[]>();
   const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
 
 
@@ -30,10 +30,10 @@ const UserDeleteModal = (props: any) => {
 
     CallGetUsersFromDepart(Number(props.departId!)).then((response) => {
       const cont = response.length;
-      const container: Users[] = [];
+      const container: TableUser[] = [];
       for (let i = 0; i < cont; i++) {
         console.log(response[i]);
-        const user: Users = {
+        const user: TableUser = {
           addr: response[i].addr,
           name: response[i].name,
           surname: response[i].surname,

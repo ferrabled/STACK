@@ -6,8 +6,8 @@ import { useState } from "react";
 import { Notify } from "types";
 import * as Yup from "yup";
 
-const UserForm = (props: any) => {
-  const [notify, setNotify] = useState<any>({
+export default function UserForm({ orgId }: { orgId: number }) {
+  const [notify, setNotify] = useState<Notify>({
     isOpen: false,
     message: "",
     type: "info",
@@ -37,17 +37,17 @@ const UserForm = (props: any) => {
           surname: "User",
           email: "fer@gmail.com",
           telephone: "634579874",
-          orgId: props.props,
+          orgId,
         }}
         validationSchema={validationSchema}
         onSubmit={(data, { setSubmitting }) => {
-          console.log(props.props);
+          console.log(orgId);
           setSubmitting(true);
           console.log(data);
           try {
             CallInsertUser(data).then((response) => {
               console.log(response);
-              const notify: Notify = response!;
+              const notify = response;
               setNotify(notify);
             });
           } catch (e) {
@@ -56,7 +56,7 @@ const UserForm = (props: any) => {
           WaitForInsertUser(data);
         }}
       >
-        {({ values, isSubmitting, errors }) => (
+        {({ values, errors }) => (
           <Form>
             <>
               <div className="mb-6">
@@ -127,6 +127,4 @@ const UserForm = (props: any) => {
       <Notification {...notify}></Notification>
     </div>
   );
-};
-
-export default UserForm;
+}

@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { Notify, User } from "types";
 import addresses from "../../assets/addresses.json";
 import { CallIsAdministrator } from "./contractCall";
 import usersABI from "./users.json";
@@ -13,10 +14,10 @@ const contract = new ethers.Contract(
   provider.getSigner()
 );
 
-export async function WaitForInsertUser(data: any) {
+export async function WaitForInsertUser(data: User) {
   //const navigate = useNavigate()
 
-  const handleRegister = (address: any, name: string, surname: string) => {
+  const handleRegister = (address: string, name: string, surname: string) => {
     console.log("Registro");
     provider
       .getSigner()
@@ -45,7 +46,7 @@ export async function WaitForInsertUser(data: any) {
   );
 }
 
-export async function CallInsertUser(user: any) {
+export async function CallInsertUser(user: any): Promise<Notify> {
   console.log("Add new user");
   const signer = provider.getSigner();
   const signerAddress = await signer.getAddress();

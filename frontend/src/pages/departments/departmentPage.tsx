@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AssetsInList, AssetTypes, Department, Users } from "types";
+import { AssetsInList, AssetTypes, Department, TableUser } from "types";
 import PageLoged from "pages/pageCheckLogin";
 import { CallGetAssetsIdsFromDepart, CallGetDepartment, CallGetUsersFromDepart } from "components/wallet/userCall";
 import DepartmentCard from "components/atoms/Cards/Department/departmentCard";
@@ -18,7 +18,7 @@ const DepartmentPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [department, setDepartment] = useState<Department>();
-  const [users, setUsers] = useState<Users[]>();
+  const [users, setUsers] = useState<TableUser[]>();
   const [usersIds, setUsersIds] = useState<Number[]>([]);
   const [assets, setAssets] = useState<AssetsInList[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -93,13 +93,13 @@ const DepartmentPage = () => {
         }
         setDepartment(department);
         CallGetUsersFromDepart(Number(departId)).then((r) => {
-            const userList:Users[] = [];
+            const userList:TableUser[] = [];
             const userIds:Number[] = [];
             const cont = r.length;
             console.log("EL USER")
             console.log(cont);
             for (var i = 0; i < cont; i++) {
-                const user:Users = {
+                const user:TableUser = {
                     addr: r[i].addr,
                     name: r[i].name,
                     surname: r[i].surname,

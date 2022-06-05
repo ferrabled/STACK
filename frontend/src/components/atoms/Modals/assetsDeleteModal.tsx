@@ -11,7 +11,7 @@ import {
   CallGetUsersFromDepart,
 } from "components/wallet/userCall";
 import { UsersCard } from "../Cards";
-import { AssetsInList, AssetTypes, Users } from "types";
+import { AssetsInList, AssetTypes, TableUser } from "types";
 import EnhancedTable from "../Table/simpleUserTable";
 import SimpleUserTable from "../Table/simpleUserTable";
 import { CallRetrieveListOfAsset } from "components/wallet/contractCall";

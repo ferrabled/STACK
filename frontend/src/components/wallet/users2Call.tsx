@@ -1,12 +1,19 @@
 import { ethers } from "ethers";
 import {
   Asset,
+  CloudAsset,
   CloudAssetProps,
+  DataAsset,
   DataAssetProps,
+  DocAsset,
   DocAssetProps,
+  HardwareAsset,
   HardwareAssetProps,
+  NetworkAsset,
   NetworkAssetProps,
+  OtherAsset,
   OtherAssetProps,
+  SoftwareAsset,
   SoftwareAssetProps,
   TransactionError,
 } from "types";
@@ -40,10 +47,7 @@ function handleTransactionError(e: TransactionError | unknown) {
 }
 
 //NEW ASSETS WITH DEPARTMENT
-export async function CallInsertNewSAssetWithDepartment(
-  asset: Asset,
-  props: SoftwareAssetProps
-) {
+export async function CallInsertNewSAssetWithDepartment(asset: SoftwareAsset) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewSAssetWithDepartment(
@@ -53,9 +57,9 @@ export async function CallInsertNewSAssetWithDepartment(
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.version,
-      props.provider,
-      props.stype,
+      asset.version,
+      asset.provider,
+      asset.stype,
       signerAddress
     );
     const correctText = "Activo creado correctamente";
@@ -67,14 +71,11 @@ export async function CallInsertNewSAssetWithDepartment(
     };
     return notify;
   } catch (e) {
-    handleTransactionError(e);
+    return handleTransactionError(e);
   }
 }
 
-export async function CallInsertNewHAssetWithDepartment(
-  asset: Asset,
-  props: HardwareAssetProps
-) {
+export async function CallInsertNewHAssetWithDepartment(asset: HardwareAsset) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewHAssetWithDepartment(
@@ -84,10 +85,10 @@ export async function CallInsertNewHAssetWithDepartment(
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.model,
-      props.provider,
-      props.serialNumber,
-      props.htype,
+      asset.model,
+      asset.provider,
+      asset.serialNumber,
+      asset.htype,
       signerAddress
     );
     const correctText = "Activo creado correctamente";
@@ -99,14 +100,11 @@ export async function CallInsertNewHAssetWithDepartment(
     };
     return notify;
   } catch (e) {
-    handleTransactionError(e);
+    return handleTransactionError(e);
   }
 }
 
-export async function CallInsertNewDocAssetWithDepartment(
-  asset: Asset,
-  props: DocAssetProps
-) {
+export async function CallInsertNewDocAssetWithDepartment(asset: DocAsset) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewDocAssetWithDepartment(
@@ -116,9 +114,9 @@ export async function CallInsertNewDocAssetWithDepartment(
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.name,
-      props.location,
-      props.doctype,
+      asset.name,
+      asset.location,
+      asset.doctype,
       signerAddress
     );
     const correctText = "Activo creado correctamente";
@@ -130,14 +128,11 @@ export async function CallInsertNewDocAssetWithDepartment(
     };
     return notify;
   } catch (e) {
-    handleTransactionError(e);
+    return handleTransactionError(e);
   }
 }
 
-export async function CallInsertNewDataAssetWithDepartment(
-  asset: Asset,
-  props: DataAssetProps
-) {
+export async function CallInsertNewDataAssetWithDepartment(asset: DataAsset) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewDataAssetWithDepartment(
@@ -147,8 +142,8 @@ export async function CallInsertNewDataAssetWithDepartment(
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.location,
-      props.local,
+      asset.location,
+      asset.local,
       signerAddress
     );
     const correctText = "Activo creado correctamente";
@@ -160,14 +155,11 @@ export async function CallInsertNewDataAssetWithDepartment(
     };
     return notify;
   } catch (e) {
-    handleTransactionError(e);
+    return handleTransactionError(e);
   }
 }
 
-export async function CallInsertNewNAssetWithDepartment(
-  asset: Asset,
-  props: NetworkAssetProps
-) {
+export async function CallInsertNewNAssetWithDepartment(asset: NetworkAsset) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewNAssetWithDepartment(
@@ -177,8 +169,8 @@ export async function CallInsertNewNAssetWithDepartment(
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.cidrblock,
-      props.nat,
+      asset.cidrblock,
+      asset.nat,
       signerAddress
     );
     const correctText = "Activo creado correctamente";
@@ -190,14 +182,11 @@ export async function CallInsertNewNAssetWithDepartment(
     };
     return notify;
   } catch (e) {
-    handleTransactionError(e);
+    return handleTransactionError(e);
   }
 }
 
-export async function CallInsertNewCAssetWithDepartment(
-  asset: Asset,
-  props: CloudAssetProps
-) {
+export async function CallInsertNewCAssetWithDepartment(asset: CloudAsset) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewCAssetWithDepartment(
@@ -207,8 +196,8 @@ export async function CallInsertNewCAssetWithDepartment(
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.url,
-      props.domain,
+      asset.url,
+      asset.domain,
       signerAddress
     );
     const correctText = "Activo creado correctamente";
@@ -220,13 +209,12 @@ export async function CallInsertNewCAssetWithDepartment(
     };
     return notify;
   } catch (e) {
-    handleTransactionError(e);
+    return handleTransactionError(e);
   }
 }
 
 export async function CallInsertNewOAssetWithDepartment(
-  asset: Asset,
-  props: OtherAssetProps
+  asset: OtherAsset
 ) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
@@ -237,7 +225,7 @@ export async function CallInsertNewOAssetWithDepartment(
       asset.creationDate,
       asset.assetType,
       asset.assetDepart,
-      props.description,
+      asset.description,
       signerAddress
     );
     const correctText = "Activo creado correctamente";
@@ -249,6 +237,6 @@ export async function CallInsertNewOAssetWithDepartment(
     };
     return notify;
   } catch (e) {
-    handleTransactionError(e);
+    return handleTransactionError(e);
   }
 }
