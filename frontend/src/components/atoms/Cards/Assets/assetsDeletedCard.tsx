@@ -6,29 +6,26 @@ import {
   Typography,
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "utils";
-import { AssetsInList } from "types";
+import { AssetsInList, GridTableElement } from "types";
 
 const AssetsDeletedCard = ({ assets }: { assets: AssetsInList[] }) => {
   const navigate = useNavigate();
-  const [rows, setRows] = useState<any>([]);
+  const [rows, setRows] = useState<GridTableElement<AssetsInList>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const FormatData = () => {
       console.log("Recibimos los datos");
       console.log(assets);
-      const cont = Object.entries(assets).length;
-
-      const tempRow: any[] = [];
-      for (let i = 0; i < cont; i++) {
-        assets[i].id = i;
-        tempRow.push(assets[i]);
-      }
-      setRows(tempRow);
+      const assetsList = assets.map((x, i) => ({
+        ...x,
+        id: i,
+      }));
+      setRows(assetsList);
       setIsLoading(false);
     };
     FormatData();
@@ -43,7 +40,7 @@ const AssetsDeletedCard = ({ assets }: { assets: AssetsInList[] }) => {
       sortable: false,
       width: 100,
       renderCell: (params) => {
-        const onClickDetails = (e) => {
+        const onClickDetails: MouseEventHandler = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log(params.row.originalId);
           const originalId = params.row.originalId;
@@ -102,7 +99,7 @@ const AssetsDeletedCard = ({ assets }: { assets: AssetsInList[] }) => {
   else
     return (
       <Card className="gap-7 p-10 flex flex-col items-center h-full">
-        {rows.length !== 0 && (
+        {rows && rows.length !== 0 && (
           <DataGrid
             className="w-full h-full"
             rows={rows}

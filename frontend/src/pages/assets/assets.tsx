@@ -18,8 +18,8 @@ const AssetsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>([]);
   const navigate = useNavigate();
-  const [departNames, setDepartNames] = useState<string[]>();
-  const [numComments, setNumComments] = useState<number[]>();
+  const [departNames, setDepartNames] = useState<string[]>([]);
+  const [numComments, setNumComments] = useState<number[]>([]);
 
   useEffect(() => {
     const idOrg = Number(localStorage.getItem("idOrg"));
@@ -131,7 +131,7 @@ const AssetsPage = () => {
         {assets.length !== 0 && (
           <div className="min-h-full h-full">
             <AssetsCard
-              props={assets}
+              assets={assets}
               departNames={departNames}
               numComments={numComments}
             />

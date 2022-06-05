@@ -1,21 +1,25 @@
-import {
-  Button,
-  InputLabel,
-  MenuItem,
-  Select,
-  Skeleton,
-  TextField,
-  Typography,
-} from "@mui/material";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import
+  {
+    Button,
+    InputLabel,
+    MenuItem,
+    Select,
+    Skeleton,
+    TextField,
+    Typography
+  } from "@mui/material";
 import SimpleAssetsTable from "components/atoms/Table/simpleAssetsTable";
-import {
-  CallGetAsset,
-  CallGetOrganizationAssets,
-} from "components/wallet/contractCall";
-import {
-  CallGetAllDepartmentsFromOrg,
-  CallGetNumberOfCommentsByAsset,
-} from "components/wallet/userCall";
+import
+  {
+    CallGetAsset,
+    CallGetOrganizationAssets
+  } from "components/wallet/contractCall";
+import
+  {
+    CallGetAllDepartmentsFromOrg,
+    CallGetNumberOfCommentsByAsset
+  } from "components/wallet/userCall";
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { AssetsInList, AssetTypes, Department, SearchObject } from "types";
@@ -32,7 +36,7 @@ export default function SearchForm() {
   const [isLoading2, setIsLoading2] = useState(true);
 
   const [formIndex, setFormIndex] = useState(0);
-  const [assets, setAssets] = useState<any>({});
+  const [assets, setAssets] = useState<AssetsInList[]>([]);
 
   const searchCondition = (searchObject: SearchObject, asset: AssetsInList) => {
     const keyList = Object.keys(searchObject);
@@ -225,7 +229,7 @@ export default function SearchForm() {
                   setFormIndex(1);
                 }}
               >
-                {({ values, isSubmitting, errors, handleChange }) => (
+                {({ values, errors, handleChange }) => (
                   <Form>
                     <div className="mb-6">
                       <Typography variant="h5">Buscar activos</Typography>
@@ -384,7 +388,7 @@ export default function SearchForm() {
           {formIndex === 1 && (
             <>
               {isLoading2 && <Skeleton></Skeleton>}
-              {!isLoading2 && <SimpleAssetsTable {...assets} />}
+              {!isLoading2 && <SimpleAssetsTable assets={assets} />}
             </>
           )}
         </>

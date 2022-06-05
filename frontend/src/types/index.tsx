@@ -58,8 +58,8 @@ export type Asset = {
 
 export type AssetEdited = {
   name: string;
-  adquireDate?: Date;
-  creationDate?: Date;
+  adquireDate: Date;
+  creationDate: Date;
   assetType: number;
   originalAssetId: number;
   organizationId: number;
@@ -217,7 +217,7 @@ export interface User {
   name: string;
   surname: string;
   email: string;
-  telephone: number;
+  telephone: string;
   orgId: number;
 }
 

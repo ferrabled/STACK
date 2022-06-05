@@ -1,13 +1,14 @@
 import { Button, TextField, Typography } from "@mui/material";
-import {
-  CallInsertOrg,
-  WaitForInsertOrg,
-} from "components/wallet/contractCall";
+import
+  {
+    CallInsertOrg,
+    WaitForInsertOrg
+  } from "components/wallet/contractCall";
 import { Field, Form, Formik } from "formik";
-import React, { useState } from "react";
-import { Notify, OrganizationAndAdmin } from "types";
-import * as Yup from "yup";
 import useToast from "hooks/useNotify";
+import React, { useState } from "react";
+import { OrganizationAndAdmin } from "types";
+import * as Yup from "yup";
 
 const OrganizationForm = () => {
   const [notification, setNotify] = useToast();
@@ -68,7 +69,7 @@ const OrganizationForm = () => {
           setFormIndex(formIndex + 1);
         }}
       >
-        {({ values, isSubmitting, errors }) => (
+        {({ values, errors }) => (
           <Form>
             {formIndex === 0 && (
               <>

@@ -31,7 +31,7 @@ const EditAssetForm = (props: { data: AssetEdited }) => {
   useEffect(() => {
     console.log(props);
     setAssetEd(props.data);
-    const dateTime = props.data.adquireDate!;
+    const dateTime = props.data.adquireDate;
     const date = formatDateyMd(dateTime);
     console.log(date);
     setFAdqDate(date);
@@ -71,7 +71,7 @@ const EditAssetForm = (props: { data: AssetEdited }) => {
       .max(40),
   });
 
-  const ConnectToContract = (data: any) => {
+  const ConnectToContract = (data: AssetEdited) => {
     CallInsertEditedAsset(data).then((n) => {
       setNotify(n);
     });
@@ -84,13 +84,13 @@ const EditAssetForm = (props: { data: AssetEdited }) => {
         {notification}
         <Formik
           initialValues={{
-            name: assetEd!.name,
-            organizationId: Number(window.localStorage.getItem("orgId")!),
+            name: assetEd.name,
+            organizationId: Number(window.localStorage.getItem("orgId")),
             adquireDateString: fAdquireDate,
-            adquireDate: assetEd!.adquireDate!.getTime(),
+            adquireDate: assetEd.adquireDate.getTime(),
             creationDate: 0,
-            assetType: assetEd!.assetType,
-            originalAssetId: assetEd!.originalAssetId,
+            assetType: assetEd.assetType,
+            originalAssetId: assetEd.originalAssetId,
             department: assetDepart,
           }}
           validationSchema={validationSchema}
@@ -163,7 +163,7 @@ const EditAssetForm = (props: { data: AssetEdited }) => {
                       as={Select}
                     >
                       <MenuItem value={0}>Sin departamento</MenuItem>
-                      {!isLoading &&
+                      {!isLoading && departments &&
                         departments.map((department) => (
                           <MenuItem
                             key={Number(department.index)}

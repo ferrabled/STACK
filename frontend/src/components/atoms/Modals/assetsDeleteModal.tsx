@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Skeleton } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import Notification from "components/notification";
-import { CallRetrieveListOfAsset } from "components/wallet/contractCall";
+import { CallGetAsset, CallRetrieveListOfAsset } from "components/wallet/contractCall";
 import
   {
     CallGetAllDepartmentsFromOrg, CallGetAssetsIdsFromDepart
@@ -25,15 +25,18 @@ const style = {
   p: 4,
 };
 
-const AssetsDeleteModal = (props) => {
+const AssetsDeleteModal = (props: {
+  show: boolean;
+  close: () => void;
+  depart: boolean;
+  departId: number;
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>();
   const [departNames, setDepartNames] = useState<string[]>();
   const [toast, setToast] = useToast();
 
   useEffect(() => {
-    console.log("QUE HEMOS RECIBIDO " + props.usersIds);
-    console.log(props.usersIds);
     const orgId = window.localStorage.getItem("orgId");
 
     CallGetAllDepartmentsFromOrg(Number(orgId)).then((r) => {
@@ -45,27 +48,27 @@ const AssetsDeleteModal = (props) => {
       setDepartNames(container);
     });
 
-    CallGetAssetsIdsFromDepart(Number(props.departId!)).then((r) => {
+    CallGetAssetsIdsFromDepart(Number(props.departId)).then((r) => {
       console.log(r);
       const ids = r;
-      CallRetrieveListOfAsset(ids).then((response) => {
+      CallRetrieveListOfAsset(ids).then(async ([assets, assetsEdited]) => {
         console.log(r);
 
-        const cont = response[0].length;
-        const contEdit = response[1].length;
+        const cont = assets.length;
+        const contEdit = assetsEdited.length;
 
         const container: AssetsInList[] = [];
         //let object = new container;
         for (let i = 0; i < cont; i++) {
           const asset: AssetsInList = {
-            name: response[0][i].name,
-            assetType: response[0][i].assetType,
-            assetDepart: response[0][i].assetDepart,
-            assetTS: AssetTypes[response[0][i].assetType],
-            creationDate: Number(response[0][i].creationDate),
-            adquireDate: Number(response[0][i].adquireDate),
-            originalId: Number(response[0][i].index),
-            index: Number(response[0][i].index),
+            name: assets[i].name,
+            assetType: assets[i].assetType,
+            assetDepart: assets[i].assetDepart,
+            assetTS: AssetTypes[assets[i].assetType],
+            creationDate: Number(assets[i].creationDate),
+            adquireDate: Number(assets[i].adquireDate),
+            originalId: Number(assets[i].index),
+            index: Number(assets[i].index),
           };
           //TODO CHECK IF IT RETURNS ANY ASSET DELETED
           if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
@@ -75,16 +78,19 @@ const AssetsDeleteModal = (props) => {
         }
 
         for (let o = 0; o < contEdit; o++) {
-          console.log(response[1][o]);
+          console.log(assetsEdited[o]);
+          const originalAsset = await CallGetAsset(
+            assetsEdited[o].originalAssetId
+          );
           const asset: AssetsInList = {
-            name: response[1][o].name,
-            assetType: response[1][o].assetType,
-            assetTS: AssetTypes[response[1][o].assetType],
-            assetDepart: response[1][o].assetDepart,
-            creationDate: Number(response[1][o].creationDate),
-            adquireDate: Number(response[1][o].adquireDate),
-            originalId: Number(response[1][o].originalAssetId),
-            index: Number(response[1][o].index),
+            name: assetsEdited[o].name,
+            assetType: assetsEdited[o].assetType,
+            assetTS: AssetTypes[assetsEdited[o].assetType],
+            assetDepart: originalAsset.assetDepart,
+            creationDate: Number(assetsEdited[o].creationDate),
+            adquireDate: Number(assetsEdited[o].adquireDate),
+            originalId: Number(assetsEdited[o].originalAssetId),
+            index: Number(assetsEdited[o].index),
           };
           if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
           else {

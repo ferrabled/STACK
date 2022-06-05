@@ -135,9 +135,9 @@ const DepartmentPage = () => {
             }
             console.log(res);
             if (assIdList.length !== 0) {
-              CallRetrieveListOfAsset(res).then((response) => {
+              CallRetrieveListOfAsset(res).then(async (response) => {
                 console.log("TENEMOS");
-                refactorAssets(response);
+                await refactorAssets(response);
                 console.log(response);
               });
             } else {
@@ -278,7 +278,7 @@ const DepartmentPage = () => {
                     </Typography>
                   </div>
                 )}
-                {assets.length !== 0 && <SimpleAssetsTable {...assets} />}
+                {assets.length !== 0 && <SimpleAssetsTable assets={assets} />}
               </>
             )}
           </Card>

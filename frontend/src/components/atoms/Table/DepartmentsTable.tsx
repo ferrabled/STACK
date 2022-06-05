@@ -3,13 +3,11 @@ import { IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Department } from "types";
+import { Department, GridTableElement } from "types";
 
 const DepartmentTable = ({ departments }: { departments: Department[] }) => {
   const navigate = useNavigate();
-  const [rows, setRows] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [rows, setRows] = useState<GridTableElement<Department>[]>([]);
   //TODO add number of users
   useEffect(() => {
     const departmentList = departments.map((x, i) => ({
@@ -17,7 +15,6 @@ const DepartmentTable = ({ departments }: { departments: Department[] }) => {
       id: i,
     }));
     setRows(departmentList);
-    setIsLoading(false);
   }, []);
 
   const columns: GridColDef[] = [

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Typography } from "@mui/material";
 import AssetRecordCard from "components/atoms/Cards/Assets/assetRecordCard";
 import { CallGetRecordList } from "components/wallet/contractCall";
@@ -60,7 +61,7 @@ const AssetHistoryPage = () => {
       {!isLoading && (
         <>
           <Typography variant="h5">
-            Historial del activo: {originalAsset!.name}
+            Historial del activo: {originalAsset?.name}
           </Typography>
           <AssetRecordCard assets={assets!} />
         </>

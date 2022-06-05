@@ -3,36 +3,31 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Button, Card, CircularProgress, IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import
-  {
-    CallDeleteAsset,
-    CallGetIsAssetEdited
-  } from "components/wallet/contractCall";
-import React, { useEffect, useState } from "react";
+import {
+  CallDeleteAsset,
+  CallGetIsAssetEdited,
+} from "components/wallet/contractCall";
+import React, { MouseEventHandler, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AssetsInList, GridTableElement } from "types";
 import { formatDate } from "utils";
 
-const AssetsCard = (props) => {
+const AssetsCard = (props: {
+  assets: AssetsInList[];
+  departNames: string[];
+  numComments: number[];
+}) => {
   const navigate = useNavigate();
-  const [rows, setRows] = useState<any>([]);
+  const [rows, setRows] = useState<GridTableElement<AssetsInList>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const FormatData = () => {
-      const listAssets = props.props;
-      console.log("Recibimos los datos");
-      console.log(listAssets);
-
-      console.log(listAssets.length);
-      const cont = listAssets.length;
-      const tempRow: any[] = [];
-      for (let i = 0; i < cont; i++) {
-        console.log(listAssets[i]);
-        listAssets[i].id = i;
-        //console.log("AAA")
-        tempRow.push(listAssets[i]);
-      }
-      setRows(tempRow);
+      const assetsList = props.assets.map((x, i) => ({
+        ...x,
+        id: i,
+      }));
+      setRows(assetsList);
     };
     FormatData();
     setIsLoading(false);
@@ -47,7 +42,7 @@ const AssetsCard = (props) => {
       sortable: false,
       width: 150,
       renderCell: (params) => {
-        const onClickDetails = (e: any) => {
+        const onClickDetails: MouseEventHandler = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log(params.row.originalId);
           const originalId = params.row.originalId;
@@ -70,7 +65,7 @@ const AssetsCard = (props) => {
           //sessionStorage.removeItem("editId");
         };
 
-        const onClickEdit = (e: any) => {
+        const onClickEdit: MouseEventHandler = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log("orignianl");
           console.log(params.row);
@@ -95,7 +90,7 @@ const AssetsCard = (props) => {
           //sessionStorage.removeItem("editId");
         };
 
-        const onClickDelete = (e: any) => {
+        const onClickDelete: MouseEventHandler = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log("Eliminamos el activo: ");
           try {

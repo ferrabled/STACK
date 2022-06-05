@@ -1,13 +1,10 @@
+import { Button, TextField, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useEffect, useState } from "react";
-import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { Button, TextField, Typography } from "@mui/material";
 import { CallInsertComment } from "components/wallet/userCall";
-import { Notify } from "types";
-import Notification from "components/notification";
-
+import { Field, Form, Formik } from "formik";
+import useToast from "hooks/useNotify";
+import * as Yup from "yup";
 
 const style = {
   position: "absolute" as const,
@@ -22,17 +19,19 @@ const style = {
 };
 
 const validationSchema = Yup.object({
-    description: Yup.string().required("La descripción es obligatoria").max(60),
-  });
+  description: Yup.string().required("La descripción es obligatoria").max(60),
+});
 
-const AddCommentModal = (props: any) => {
-
-  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
-
+const AddCommentModal = (props: {
+  show: boolean;
+  close: () => void;
+  assetId: number;
+}) => {
+  const [toast, setToast] = useToast();
 
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Modal
         open={props.show}
         onClose={props.close}
@@ -42,23 +41,24 @@ const AddCommentModal = (props: any) => {
         <Box sx={style}>
           <Formik
             initialValues={{
-                description: '',
-                userId: 0,
-                date: 0,
+              description: "",
+              userId: 0,
+              date: 0,
             }}
             validationSchema={validationSchema}
             onSubmit={(data, { setSubmitting }) => {
-                const orgId = window.localStorage.getItem("orgId")!;
-                data.date = Date.now();
-                console.log(data);
-                CallInsertComment(data, props.assetId, Number(orgId)).then((r)=> {
-                  const notify:Notify = r!; 
-                  setNotify(notify);
-                });
-                setSubmitting(true);
+              const orgId = window.localStorage.getItem("orgId");
+              data.date = Date.now();
+              console.log(data);
+              CallInsertComment(data, props.assetId, Number(orgId)).then(
+                (n) => {
+                  setToast(n);
+                }
+              );
+              setSubmitting(true);
             }}
           >
-            {({ values, isSubmitting, errors, handleChange }) => (
+            {({ values, errors }) => (
               <Form>
                 <div className="mb-6">
                   <Typography variant="h5">Añadir Comentario</Typography>
@@ -85,7 +85,6 @@ const AddCommentModal = (props: any) => {
                 >
                   Guardar Comentario
                 </Button>
-                
               </Form>
             )}
           </Formik>

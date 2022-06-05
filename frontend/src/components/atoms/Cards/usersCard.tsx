@@ -2,23 +2,21 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { CircularProgress, IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { TableUser } from "types";
+import { GridTableElement, TableUser } from "types";
 import BasicModal from "../Modals/assetsFromUser";
 
 const UsersCard = ({ users }: { users: TableUser[] }) => {
-  const [rows, setRows] = useState<any>([]);
+  const [rows, setRows] = useState<GridTableElement<TableUser>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [userId, setUserId] = useState("");
 
   useEffect(() => {
-    const userList: TableUser[] = [];
-    const cont = Object.keys(users).length;
-    for (let i = 0; i < cont; i++) {
-      console.log(users[i]);
-      users[i].id = i + 1;
-      userList.push(users[i]);
-    }
+    const userList = users.map((x, i) => ({
+      ...x,
+      id: i,
+    }));
+
     setRows(userList);
     setIsLoading(false);
   }, []);
@@ -35,7 +33,7 @@ const UsersCard = ({ users }: { users: TableUser[] }) => {
       sortable: false,
       width: 80,
       renderCell: (params) => {
-        const onClickDetails = (e: any) => {
+        const onClickDetails: MouseEventHandler = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log("HOLA");
           console.log(params.row.index);
@@ -73,7 +71,7 @@ const UsersCard = ({ users }: { users: TableUser[] }) => {
           autoHeight
         ></DataGrid>
         <BasicModal
-          show={showModal!}
+          show={showModal}
           close={() => setShowModal(false)}
           userId={userId}
         ></BasicModal>

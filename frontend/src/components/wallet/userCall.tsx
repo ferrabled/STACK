@@ -66,7 +66,7 @@ export async function CallInsertUser(user: User): Promise<Notify> {
       user.name,
       user.surname,
       user.email,
-      user.telephone,
+      Number(user.telephone),
       user.orgId
     );
     const text =
@@ -385,7 +385,7 @@ export async function CallIsUser(addr: string) {
   return contract.isUser(addr);
 }
 
-export async function CallGetUserData(addr: number) {
+export async function CallGetUserData(addr: string) {
   return contract.getUserData(addr);
 }
 

@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Button, Card, Skeleton, Typography } from "@mui/material";
 import { CallDeleteAsset } from "components/wallet/contractCall";
 import { CallGetAssetUsers } from "components/wallet/userCall";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TableUser } from "types";
+import { Asset, TableUser } from "types";
 import { formatDate } from "utils";
 import UserSelectModal from "../Modals/userSelectModal";
 import AssetTypeCard from "./Assets/assetTypeData";
 import CommentsCard from "./commentsCard";
 import UsersCard from "./usersCard";
 
-const AssetCard = (props: any) => {
+const AssetCard = ({asset}: {asset: Asset}) => {
   const [showModal, setShowModal] = useState(false);
 
   const [assetId, setAssetId] = useState("");
@@ -62,11 +63,10 @@ const AssetCard = (props: any) => {
   };
 
   useEffect(() => {
-    setAssetType(window.sessionStorage.getItem("aType"));
+    setAssetType(window.sessionStorage.getItem("aType")!);
 
     const getUsers = () => {
-      //setAsset(props.props);
-      setAssetId(window.sessionStorage.getItem("detailId"));
+      setAssetId(window.sessionStorage.getItem("detailId")!);
       const id = window.sessionStorage.getItem("detailId");
       console.log("EN SERIO DE VRD" + id);
       CallGetAssetUsers(Number(id)).then((response) => {
@@ -94,13 +94,12 @@ const AssetCard = (props: any) => {
     getUsers();
   }, []);
 
-  const asset = props.props;
   const navigate = useNavigate();
 
   const deleteAsset = () => {
     console.log("Eliminando asset");
     CallDeleteAsset(Number(window.sessionStorage.getItem("detailId"))).then(
-      (response) => {
+      () => {
         //TODO AWAIT FOR THE CONTRACT TO BE SIGNED IN ORDER TO NAVIGATE TO ASSETS
       }
     );
@@ -110,7 +109,7 @@ const AssetCard = (props: any) => {
   const onClickEdit = () => {
     window.sessionStorage.setItem(
       "editId",
-      window.sessionStorage.getItem("detailId")
+      window.sessionStorage.getItem("detailId")!
     );
     navigate("edit");
   };
@@ -173,7 +172,7 @@ const AssetCard = (props: any) => {
             </div>
           </div>
           {isLoading && <Skeleton variant="rectangular" height={230} />}
-          {!isLoading && (
+          {!isLoading && users && (
             <>
               {users.length == 0 && (
                 <div className="my-8 mx-48">

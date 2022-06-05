@@ -12,10 +12,21 @@ import {
 } from "components/wallet/dataStructsCall";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { HardwareTypes, SoftwareTypes, DocTypes } from "types";
+import {
+  HardwareTypes,
+  SoftwareTypes,
+  DocTypes,
+  SoftwareAssetProps,
+  HardwareAssetProps,
+  DocAssetProps,
+  DataAssetProps,
+  NetworkAssetProps,
+  CloudAssetProps,
+  OtherAssetProps,
+} from "types";
 
-const AssetTypeCard = (props: { assetId: string; assetType: number }) => {
-  const [data, setData] = useState<any>("");
+const AssetTypeCard = (props: { assetId: number; assetType: number }) => {
+  const [data, setData] = useState<unknown>();
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
@@ -73,6 +84,7 @@ const AssetTypeCard = (props: { assetId: string; assetType: number }) => {
   }, []);
 
   const SoftwareCard = () => {
+    const asset = data as SoftwareAssetProps;
     const [showLicenceModal, setShowLicenceModal] = useState(false);
     const [showAddLicenceModal, setShowAddLicenceModal] = useState(false);
 
@@ -80,15 +92,15 @@ const AssetTypeCard = (props: { assetId: string; assetType: number }) => {
       <div className="flex flex-col mb-5">
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Versión</Typography>
-          <Typography variant="h6">{data.version}</Typography>
+          <Typography variant="h6">{asset.version}</Typography>
         </div>
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Proveedor</Typography>
-          <Typography variant="h6">{data.provider}</Typography>
+          <Typography variant="h6">{asset.provider}</Typography>
         </div>
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Tipo</Typography>
-          <Typography variant="h6">{SoftwareTypes[data.stype]}</Typography>
+          <Typography variant="h6">{SoftwareTypes[asset.stype]}</Typography>
         </div>
         <div>
           <div className="flex flex-row justify-between content-evenly mt-3">
@@ -109,12 +121,12 @@ const AssetTypeCard = (props: { assetId: string; assetType: number }) => {
           </div>
 
           <LicencesModal
-            show={showLicenceModal!}
+            show={showLicenceModal}
             close={() => setShowLicenceModal(false)}
             assetId={props.assetId}
           />
           <AddLicenceModal
-            show={showAddLicenceModal!}
+            show={showAddLicenceModal}
             close={() => setShowAddLicenceModal(false)}
             assetId={props.assetId}
           />
@@ -124,98 +136,104 @@ const AssetTypeCard = (props: { assetId: string; assetType: number }) => {
   };
 
   const HardwareCard = () => {
+    const asset = data as HardwareAssetProps;
     return (
       <div className="flex flex-col mb-5">
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Modelo</Typography>
-          <Typography variant="h6">{data.model}</Typography>
+          <Typography variant="h6">{asset.model}</Typography>
         </div>
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Proveedor</Typography>
-          <Typography variant="h6">{data.provider}</Typography>
+          <Typography variant="h6">{asset.provider}</Typography>
         </div>
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Número de serie</Typography>
-          <Typography variant="h6">{data.serialNumber}</Typography>
+          <Typography variant="h6">{asset.serialNumber}</Typography>
         </div>
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Tipo</Typography>
-          <Typography variant="h6">{HardwareTypes[data.htype]}</Typography>
+          <Typography variant="h6">{HardwareTypes[asset.htype]}</Typography>
         </div>
       </div>
     );
   };
 
   const DocumentCard = () => {
+    const asset = data as DocAssetProps;
     return (
       <div className="flex flex-col mb-5">
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Descripción</Typography>
-          <Typography variant="h6">{data.description}</Typography>
+          <Typography variant="h6">{asset.name}</Typography>
         </div>
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Localización</Typography>
-          <Typography variant="h6">{data.location}</Typography>
+          <Typography variant="h6">{asset.location}</Typography>
         </div>
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Tipo</Typography>
-          <Typography variant="h6">{DocTypes[data.doctype]}</Typography>
+          <Typography variant="h6">{DocTypes[asset.doctype]}</Typography>
         </div>
       </div>
     );
   };
 
   const DataCard = () => {
+    const asset = data as DataAssetProps;
     return (
       <div className="flex flex-col mb-5">
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Localización</Typography>
-          <Typography variant="h6">{data.location}</Typography>
+          <Typography variant="h6">{asset.location}</Typography>
         </div>
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Datos Locales</Typography>
-          <Typography variant="h6">{data.local ? "Sí" : "No"}</Typography>
+          <Typography variant="h6">{asset.local ? "Sí" : "No"}</Typography>
         </div>
       </div>
     );
   };
 
   const NetworkCard = () => {
+    const asset = data as NetworkAssetProps;
     return (
       <div className="flex flex-col mb-5">
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Bloque CIDR</Typography>
-          <Typography variant="h6">{data.cidrblock}</Typography>
+          <Typography variant="h6">{asset.cidrblock}</Typography>
         </div>
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">NAT</Typography>
-          <Typography variant="h6">{data.local ? "Sí" : "No"}</Typography>
+          <Typography variant="h6">{asset.nat ? "Sí" : "No"}</Typography>
         </div>
       </div>
     );
   };
 
   const CloudCard = () => {
+    const asset = data as CloudAssetProps;
     return (
       <div className="flex flex-col mb-5">
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">URL</Typography>
-          <Typography variant="h6">{data.url}</Typography>
+          <Typography variant="h6">{asset.url}</Typography>
         </div>
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">Dominio</Typography>
-          <Typography variant="h6">{data.domain}</Typography>
+          <Typography variant="h6">{asset.domain}</Typography>
         </div>
       </div>
     );
   };
 
   const OtherCard = () => {
+    const asset = data as OtherAssetProps;
     return (
       <div className="flex flex-col mb-5">
         <div className="flex flex-row justify-between content-evenly">
           <Typography variant="h6">description</Typography>
-          <Typography variant="h6">{data.description}</Typography>
+          <Typography variant="h6">{asset.description}</Typography>
         </div>
       </div>
     );

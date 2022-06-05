@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { CallInsertLicenseToSoft } from "components/wallet/dataStructsCall";
 import { Field, Form, Formik } from "formik";
+import useToast from "hooks/useNotify";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
@@ -32,7 +33,11 @@ const validationSchema = Yup.object({
     .max(40),
 });
 
-const AddLicenceModal = (props) => {
+const AddLicenceModal = (props: {
+  show: boolean;
+  close: () => void;
+  assetId: number;
+}) => {
   const navigate = useNavigate();
 
   const [toast, setToast] = useToast();

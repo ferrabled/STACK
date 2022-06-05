@@ -1,9 +1,7 @@
 import { Button, TextField, Typography } from "@mui/material";
-import Notification from "components/notification";
 import { CallInsertUser, WaitForInsertUser } from "components/wallet/userCall";
 import { Field, Form, Formik } from "formik";
-import { useState } from "react";
-import { Notify } from "types";
+import useToast from "hooks/useNotify";
 import * as Yup from "yup";
 
 export default function UserForm({ orgId }: { orgId: number }) {

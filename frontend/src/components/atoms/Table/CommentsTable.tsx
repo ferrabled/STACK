@@ -2,7 +2,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { CommentInTable } from "types";
 
-const CommentsTable = (comments: CommentInTable[]) => {
+const CommentsTable = ({comments}: {comments: CommentInTable[]}) => {
   const [rows, setRows] = useState<CommentInTable[]>([]);
 
   useEffect(() => {

@@ -21,7 +21,11 @@ const style = {
   p: 4,
 };
 
-const LicencesModal = (props) => {
+const LicencesModal = (props: {
+  show: boolean;
+  close: () => void;
+  assetId: number;
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [licences, setLicences] = useState<Licence[]>();
   const [showAddLicenceModal, setShowAddLicenceModal] = useState(false);
@@ -62,7 +66,7 @@ const LicencesModal = (props) => {
       >
         <Box sx={style}>
           {isLoading && <Skeleton></Skeleton>}
-          {!isLoading && (
+          {!isLoading && licences && (
             <>
               <div className="flex flex-row justify-between content-evenly p-1 mb-3">
                 <Typography id="modal-modal-title" variant="h6" component="h2">
