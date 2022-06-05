@@ -1,15 +1,12 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import { Skeleton } from "@mui/material";
-import { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
 import { CallGetAllUsersFromOrg } from "components/wallet/userCall";
-import { UsersCard } from "../Cards";
-import EnhancedTable from "../Table/simpleUserTable";
-import SimpleUserTable from "../Table/simpleUserTable";
-import Notification from "components/notification";
+import useToast from "hooks/useNotify";
+import { useEffect, useState } from "react";
 import { TableUser } from "types";
-
+import SimpleUserTable from "../Table/simpleUserTable";
 
 const style = {
   position: "absolute",
@@ -23,11 +20,10 @@ const style = {
   p: 4,
 };
 
-const UserSelectModal = (props: any) => {
+const UserSelectModal = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<TableUser[]>();
-  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
- 
+  const [toast, setToast] = useToast();
 
   useEffect(() => {
     const orgId = window.localStorage.getItem("orgId");
@@ -58,13 +54,13 @@ const UserSelectModal = (props: any) => {
 
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Modal
         open={props.show}
         onClose={props.close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-      >  
+      >
         <Box sx={style}>
           {props.depart === true && (
             <>
@@ -95,11 +91,11 @@ const UserSelectModal = (props: any) => {
           {/* TODO SEND data */}
           {!isLoading && (
             <SimpleUserTable
-              setNotifyParent={setNotify}
+              setNotifyParent={setToast}
               users={users!}
-              depart = {props.depart}
+              depart={props.depart}
               idList={props.usersIds}
-              deleteB ={false}
+              deleteB={false}
             ></SimpleUserTable>
           )}
         </Box>

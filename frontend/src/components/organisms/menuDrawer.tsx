@@ -1,34 +1,28 @@
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import FindInPageIcon from '@mui/icons-material/FindInPage';
+//Icons
+import HomeIcon from "@mui/icons-material/Home";
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import LogoutIcon from '@mui/icons-material/Logout';
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
-import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import * as React from "react";
 import { AccountWallet } from "components/atoms";
-import { ethers } from "ethers";
-
-//Icons
-import HomeIcon from "@mui/icons-material/Home";
-import InventoryIcon from '@mui/icons-material/Inventory';
-import HomeWorkIcon from '@mui/icons-material/HomeWork';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import LogoutIcon from '@mui/icons-material/Logout';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import { useNavigate } from "react-router-dom";
 import Identicon from "components/atoms/identicon";
-import FindInPageIcon from '@mui/icons-material/FindInPage';
+import * as React from "react";
+import { useNavigate } from "react-router-dom";
+
 
 type Anchor = "right";
 
 export default function MenuDrawer() {
-  const [account, setAccount] = React.useState('');
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  
-  provider.send("eth_requestAccounts", []).then(
-    () => provider.getSigner().getAddress().then((r:any)=> setAccount(r)))
 
   const navigate = useNavigate();
   const [state, setState] = React.useState({
