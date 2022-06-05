@@ -26,21 +26,24 @@ const contract = new ethers.Contract(
   provider.getSigner()
 );
 
-export async function CallInsertOrg(input: OrganizationAndAdmin): Promise<Notify> {
+export async function CallInsertOrg(
+  input: OrganizationAndAdmin
+): Promise<Notify> {
   const signer = provider.getSigner();
   const signerAddress = await signer.getAddress();
   console.log(input);
 
   try {
+    console.log(input);
     await contract.insertOrgAndAdmin(
       signerAddress,
       input.firstName,
       input.lastName,
       input.email,
-      input.telephoneAdmin,
+      Number(input.telephoneAdmin),
       input.organizationName,
       input.address,
-      input.telephoneOrganization
+      Number(input.telephoneOrganization)
     );
     const text =
       "Organización creada correctamente. Guardando datos en la Blockchain...";
@@ -113,10 +116,9 @@ export async function WaitForInsertOrg(data: OrganizationAndAdmin) {
   contract.on("NewOrg", (address, orgName) => handleNewOrg(address, orgName));
 }
 
-export async function CallIsAdministrator(address: string): Promise<boolean> {
+export function CallIsAdministrator(address: string): Promise<boolean> {
   console.log("Is administrator " + address);
-  const isAdmin: boolean = contract.isAdministrator(address);
-  return isAdmin;
+  return contract.isAdministrator(address);
 }
 
 export async function CallGetAdminToOrg(address: string): Promise<number> {
@@ -314,7 +316,8 @@ export async function CallInsertNewCloudAsset(
       type: "success",
     };
     return notify;
-  } catch {
+  } catch (e) {
+    console.error(e);
     const errorM = "Por favor, acepta la transacción en metamask";
     const notify = {
       isOpen: true,
@@ -368,8 +371,8 @@ export async function CallInsertAsset(props: Asset) {
 
 /**
  * Assets, y transacciones de asset editadas
- * @param props 
- * @returns 
+ * @param props
+ * @returns
  */
 export async function CallGetOrganizationAssets(
   props: number

@@ -381,7 +381,7 @@ export async function CallGetUsersById(usersIds: number[]) {
   return contract.getUsersById(usersIds);
 }
 
-export async function CallIsUser(addr: number) {
+export async function CallIsUser(addr: string) {
   return contract.isUser(addr);
 }
 
@@ -389,6 +389,6 @@ export async function CallGetUserData(addr: number) {
   return contract.getUserData(addr);
 }
 
-export async function CallGetUserFromAddr(addr: number) {
+export async function CallGetUserFromAddr(addr: string) {
   return contract.getUserFromAddr(addr);
 }

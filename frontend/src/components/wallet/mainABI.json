@@ -849,11 +849,6 @@
             "type": "uint8"
           },
           {
-            "internalType": "uint256",
-            "name": "assetDepart",
-            "type": "uint256"
-          },
-          {
             "internalType": "bool",
             "name": "deleted",
             "type": "bool"
@@ -1067,11 +1062,6 @@
             "type": "uint8"
           },
           {
-            "internalType": "uint256",
-            "name": "assetDepart",
-            "type": "uint256"
-          },
-          {
             "internalType": "bool",
             "name": "deleted",
             "type": "bool"
@@ -1127,11 +1117,6 @@
         "internalType": "uint8",
         "name": "assetType",
         "type": "uint8"
-      },
-      {
-        "internalType": "uint256",
-        "name": "assetDepart",
-        "type": "uint256"
       }
     ],
     "name": "insertEditedAsset",
@@ -1224,11 +1209,6 @@
             "type": "uint8"
           },
           {
-            "internalType": "uint256",
-            "name": "assetDepart",
-            "type": "uint256"
-          },
-          {
             "internalType": "bool",
             "name": "deleted",
             "type": "bool"
@@ -1291,11 +1271,6 @@
             "type": "uint8"
           },
           {
-            "internalType": "uint256",
-            "name": "assetDepart",
-            "type": "uint256"
-          },
-          {
             "internalType": "bool",
             "name": "deleted",
             "type": "bool"
@@ -1356,11 +1331,6 @@
             "internalType": "uint8",
             "name": "assetType",
             "type": "uint8"
-          },
-          {
-            "internalType": "uint256",
-            "name": "assetDepart",
-            "type": "uint256"
           },
           {
             "internalType": "bool",
@@ -1565,11 +1535,6 @@
             "internalType": "uint8",
             "name": "assetType",
             "type": "uint8"
-          },
-          {
-            "internalType": "uint256",
-            "name": "assetDepart",
-            "type": "uint256"
           },
           {
             "internalType": "bool",

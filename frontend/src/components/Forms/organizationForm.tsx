@@ -5,9 +5,8 @@ import {
 } from "components/wallet/contractCall";
 import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
-import { Notify } from "types";
+import { Notify, OrganizationAndAdmin } from "types";
 import * as Yup from "yup";
-import { WaitForInsertOrg } from "components/wallet/contractCall";
 import useToast from "hooks/useNotify";
 
 const OrganizationForm = () => {
@@ -23,30 +22,29 @@ const OrganizationForm = () => {
       .email("Introduce un correo válido")
       .max(50)
       .required("El correo es obligatorio"),
-    telephoneA: Yup.string()
+    telephoneAdmin: Yup.string()
       .matches(phoneRegExp, "Introduce un teléfono válido")
       .min(9, "Introduce un teléfono válido")
       .max(9, "Introduce un teléfono válido")
       .required("El teléfono del administrador es obligatorio"),
-    orgName: Yup.string()
+    organizationName: Yup.string()
       .required("El nombre de la organización es obligatorio")
       .max(20),
     address: Yup.string().required("La dirección es obligatoria").max(70),
-    telephoneOrg: Yup.string()
+    telephoneOrganization: Yup.string()
       .matches(phoneRegExp, "Introduce un teléfono válido")
       .min(9, "Introduce un teléfono válido")
       .max(9, "Introduce un teléfono válido")
       .required("El teléfono de la organización es obligatorio"),
   });
 
-  const handleSubmit = async (input: any) => {
+  const handleSubmit = async (input: OrganizationAndAdmin) => {
     console.log(input);
     console.log("Create Organization");
-    await CallInsertOrg(input).then((r) => {
-      const notify: Notify = r!;
-      setNotify(notify);
+    await CallInsertOrg(input).then((n) => {
+      setNotify(n);
     });
-    WaitForInsertOrg(input.orgName);
+    WaitForInsertOrg(input);
   };
 
   const [formIndex, setFormIndex] = useState(0);
@@ -58,10 +56,10 @@ const OrganizationForm = () => {
           firstName: "",
           lastName: "",
           email: "",
-          telephoneA: "",
-          orgName: "",
+          telephoneAdmin: "",
+          organizationName: "",
           address: "",
-          telephoneOrg: "",
+          telephoneOrganization: "",
         }}
         validationSchema={validationSchema}
         onSubmit={(data, { setSubmitting }) => {
@@ -116,13 +114,15 @@ const OrganizationForm = () => {
                 </div>
                 <div className="mb-6">
                   <Field
-                    name="telephoneA"
+                    name="telephoneAdmin"
                     label="Teléfono"
                     inputProps={{ maxLength: 255 }}
                     fullWidth
                     required
-                    error={Boolean(errors.telephoneA)}
-                    helperText={errors.telephoneA ? errors.telephoneA : " "}
+                    error={Boolean(errors.telephoneAdmin)}
+                    helperText={
+                      errors.telephoneAdmin ? errors.telephoneAdmin : " "
+                    }
                     as={TextField}
                   />
                 </div>
@@ -155,14 +155,16 @@ const OrganizationForm = () => {
                 </div>
                 <div className="mb-6">
                   <Field
-                    name="orgName"
-                    value={values.orgName}
+                    name="organizationName"
+                    value={values.organizationName}
                     label="Nombre de la Organización"
                     inputProps={{ maxLength: 255 }}
                     fullWidth
                     required
-                    error={Boolean(errors.orgName)}
-                    helperText={errors.orgName ? errors.orgName : " "}
+                    error={Boolean(errors.organizationName)}
+                    helperText={
+                      errors.organizationName ? errors.organizationName : " "
+                    }
                     as={TextField}
                   />
                 </div>
@@ -181,14 +183,18 @@ const OrganizationForm = () => {
                 </div>
                 <div className="mb-6">
                   <Field
-                    name="telephoneOrg"
+                    name="telephoneOrganization"
                     label="Teléfono"
                     inputProps={{ maxLength: 255 }}
-                    value={values.telephoneOrg}
+                    value={values.telephoneOrganization}
                     fullWidth
                     required
-                    error={Boolean(errors.telephoneOrg)}
-                    helperText={errors.telephoneOrg ? errors.telephoneOrg : " "}
+                    error={Boolean(errors.telephoneOrganization)}
+                    helperText={
+                      errors.telephoneOrganization
+                        ? errors.telephoneOrganization
+                        : " "
+                    }
                     as={TextField}
                   />
                 </div>

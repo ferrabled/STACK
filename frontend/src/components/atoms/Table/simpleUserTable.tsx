@@ -1,21 +1,20 @@
-import { Button, IconButton } from "@mui/material";
-import {
-  DataGrid,
-  GridColDef,
-  GridRowId,
-  GridRowParams,
-  GridSelectionModel,
-} from "@mui/x-data-grid";
-import {
-  CallDeleteUsersFromDepartment,
-  CallInsertUsersToAsset,
-  CallInsertUserToDepartment,
-} from "components/wallet/userCall";
-import { MouseEventHandler, useEffect, useState } from "react";
-import { GridTableElement, TableUser } from "types";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Button, IconButton } from "@mui/material";
+import
+  {
+    DataGrid,
+    GridColDef, GridRowParams,
+    GridSelectionModel
+  } from "@mui/x-data-grid";
+import
+  {
+    CallDeleteUsersFromDepartment,
+    CallInsertUsersToAsset,
+    CallInsertUserToDepartment
+  } from "components/wallet/userCall";
+import { MouseEventHandler, useEffect, useState } from "react";
+import { GridTableElement, Notify, TableUser } from "types";
 import BasicModal from "../Modals/assetsFromUser";
-import { Notify } from "types";
 
 const SimpleUserTable = ({
   users,

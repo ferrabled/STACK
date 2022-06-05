@@ -3,20 +3,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Button, Card, CircularProgress, IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import {
-  CallDeleteAsset,
-  CallGetIsAssetEdited,
-} from "components/wallet/contractCall";
+import
+  {
+    CallDeleteAsset,
+    CallGetIsAssetEdited
+  } from "components/wallet/contractCall";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "utils";
-import {
-  DataGrid,
-  GridCellValue,
-  GridColDef,
-  GridValueGetterParams,
-} from "@mui/x-data-grid";
-import { AssetsList } from "types";
 
 const AssetsCard = (props) => {
   const navigate = useNavigate();

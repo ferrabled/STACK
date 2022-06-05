@@ -29,10 +29,10 @@ export type OrganizationAndAdmin = {
   firstName: string;
   lastName: string;
   email: string;
-  telephoneAdmin: number;
+  telephoneAdmin: string;
   organizationName: string;
   address: string;
-  telephoneOrganization: number;
+  telephoneOrganization: string;
 };
 
 export type Admin = {

@@ -599,7 +599,7 @@ export const CloudForm = ({
               setToast(n);
             });
           else
-            CallInsertNewCloudAsset(asset).then((n) => {
+            CallInsertNewCloudAsset({...asset, ...data}).then((n) => {
               setToast(n);
             });
         }}
