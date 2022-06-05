@@ -25,6 +25,16 @@ export type Organization = {
   telephone: number;
 };
 
+export type OrganizationAndAdmin = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  telephoneAdmin: number
+  organizationName: string;
+  address: string;
+  telephoneOrganization: number;
+}
+
 export type Admin = {
   name: string;
   lastName: string;
@@ -52,6 +62,8 @@ export type AssetEdited = {
   creationDate?: Date;
   assetType?: string;
   originalAssetId: number;
+  organizationId: number;
+  deleted: boolean;
 };
 
 //ADD DEPARTMENT ID FOR EACH

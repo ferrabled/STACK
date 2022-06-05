@@ -20,7 +20,12 @@ const style = {
   p: 4,
 };
 
-const UserSelectModal = (props) => {
+export default function UserSelectModal(props: {
+  usersIds: number[];
+  depart: boolean;
+  show: boolean;
+  close: () => void;
+}) {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<TableUser[]>();
   const [toast, setToast] = useToast();
@@ -30,7 +35,7 @@ const UserSelectModal = (props) => {
     console.log("QUE HEMOS RECIBIDO " + props.usersIds);
     console.log(props.usersIds);
 
-    CallGetAllUsersFromOrg(Number(orgId!)).then((response) => {
+    CallGetAllUsersFromOrg(Number(orgId)).then((response) => {
       const cont = response.length;
       const container: TableUser[] = [];
       for (let i = 0; i < cont; i++) {
@@ -92,7 +97,7 @@ const UserSelectModal = (props) => {
           {!isLoading && (
             <SimpleUserTable
               setNotifyParent={setToast}
-              users={users!}
+              users={users}
               depart={props.depart}
               idList={props.usersIds}
               deleteB={false}
@@ -102,5 +107,4 @@ const UserSelectModal = (props) => {
       </Modal>
     </div>
   );
-};
-export default UserSelectModal;
+}

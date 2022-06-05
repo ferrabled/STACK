@@ -1,12 +1,16 @@
 import { ethers } from "ethers";
 import {
+  Admin,
   Asset,
+  AssetEdited,
   CloudAsset,
   DataAsset,
   DocAsset,
   HardwareAsset,
   NetworkAsset,
+  Notify,
   Organization,
+  OrganizationAndAdmin,
   OtherAsset,
   SoftwareAsset,
   TransactionError,
@@ -22,7 +26,7 @@ const contract = new ethers.Contract(
   provider.getSigner()
 );
 
-export async function CallInsertOrg(input: Organization) {
+export async function CallInsertOrg(input: OrganizationAndAdmin): Promise<Notify> {
   const signer = provider.getSigner();
   const signerAddress = await signer.getAddress();
   console.log(input);
@@ -33,10 +37,10 @@ export async function CallInsertOrg(input: Organization) {
       input.firstName,
       input.lastName,
       input.email,
-      input.telephoneA,
-      input.orgName,
+      input.telephoneAdmin,
+      input.organizationName,
       input.address,
-      input.telephoneOrg
+      input.telephoneOrganization
     );
     const text =
       "Organización creada correctamente. Guardando datos en la Blockchain...";
@@ -59,6 +63,12 @@ export async function CallInsertOrg(input: Organization) {
           type: "error",
         };
         return notify;
+      } else {
+        return {
+          isOpen: true,
+          message: "Error desconocido",
+          type: "error",
+        };
       }
     } catch {
       console.log(e);
@@ -73,7 +83,7 @@ export async function CallInsertOrg(input: Organization) {
   }
 }
 
-export async function WaitForInsertOrg(data: Organization) {
+export async function WaitForInsertOrg(data: OrganizationAndAdmin) {
   //const navigate = useNavigate()
 
   const handleNewOrg = (address: string, orgName: string) => {
@@ -84,7 +94,7 @@ export async function WaitForInsertOrg(data: Organization) {
       .getSigner()
       .getAddress()
       .then((myaddress) => {
-        if (data === orgName && address == myaddress) {
+        if (data.organizationName === orgName && address == myaddress) {
           console.log("Registro nuevo");
           window.localStorage.setItem("userAddress", address);
           window.localStorage.setItem("isAdmin", "true");
@@ -103,18 +113,20 @@ export async function WaitForInsertOrg(data: Organization) {
   contract.on("NewOrg", (address, orgName) => handleNewOrg(address, orgName));
 }
 
-export async function CallIsAdministrator(address: string) {
+export async function CallIsAdministrator(address: string): Promise<boolean> {
   console.log("Is administrator " + address);
   const isAdmin: boolean = contract.isAdministrator(address);
   return isAdmin;
 }
 
-export async function CallGetAdminToOrg(address: string) {
+export async function CallGetAdminToOrg(address: string): Promise<number> {
   const orgId = contract.getAdminToOrg(address);
   return orgId;
 }
 
-export async function CallInsertNewSoftAsset(asset: SoftwareAsset) {
+export async function CallInsertNewSoftAsset(
+  asset: SoftwareAsset
+): Promise<Notify> {
   try {
     await contract.insertNewSoftAsset(
       asset.name,
@@ -146,7 +158,9 @@ export async function CallInsertNewSoftAsset(asset: SoftwareAsset) {
   }
 }
 
-export async function CallInsertNewHardAsset(asset: HardwareAsset) {
+export async function CallInsertNewHardAsset(
+  asset: HardwareAsset
+): Promise<Notify> {
   try {
     await contract.insertNewHardAsset(
       asset.name,
@@ -179,7 +193,7 @@ export async function CallInsertNewHardAsset(asset: HardwareAsset) {
   }
 }
 
-export async function CallInsertNewDocAsset(asset: DocAsset) {
+export async function CallInsertNewDocAsset(asset: DocAsset): Promise<Notify> {
   console.log("Insertar doc");
   try {
     await contract.insertNewDocAsset(
@@ -212,7 +226,9 @@ export async function CallInsertNewDocAsset(asset: DocAsset) {
   }
 }
 
-export async function CallInsertNewDataAsset(asset: DataAsset) {
+export async function CallInsertNewDataAsset(
+  asset: DataAsset
+): Promise<Notify> {
   try {
     await contract.insertNewDataAsset(
       asset.name,
@@ -243,7 +259,9 @@ export async function CallInsertNewDataAsset(asset: DataAsset) {
   }
 }
 
-export async function CallInsertNewNetworkAsset(asset: NetworkAsset) {
+export async function CallInsertNewNetworkAsset(
+  asset: NetworkAsset
+): Promise<Notify> {
   try {
     await contract.insertNewNetworkAsset(
       asset.name,
@@ -274,7 +292,9 @@ export async function CallInsertNewNetworkAsset(asset: NetworkAsset) {
   }
 }
 
-export async function CallInsertNewCloudAsset(asset: CloudAsset) {
+export async function CallInsertNewCloudAsset(
+  asset: CloudAsset
+): Promise<Notify> {
   try {
     await contract.insertNewCloudAsset(
       asset.name,
@@ -305,34 +325,22 @@ export async function CallInsertNewCloudAsset(asset: CloudAsset) {
   }
 }
 
-export async function CallInsertNewOtherAsset(asset: OtherAsset) {
-  try {
-    await contract.insertNewOtherAsset(
-      asset.name,
-      asset.orgId,
-      asset.adquireDate,
-      asset.creationDate,
-      asset.assetType,
-      asset.assetDepart,
-      asset.description
-    );
-    const correctText = "Activo creado correctamente";
-
-    const notify = {
-      isOpen: true,
-      message: correctText,
-      type: "success",
-    };
-    return notify;
-  } catch {
-    const errorM = "Por favor, acepta la transacción en metamask";
-    const notify = {
-      isOpen: true,
-      message: errorM,
-      type: "error",
-    };
-    return notify;
-  }
+/**
+ * Ejemplo de como user el Promise.catch() en formTypes.tsx
+ * @param asset
+ */
+export async function CallInsertNewOtherAsset(
+  asset: OtherAsset
+): Promise<void> {
+  await contract.insertNewOtherAsset(
+    asset.name,
+    asset.orgId,
+    asset.adquireDate,
+    asset.creationDate,
+    asset.assetType,
+    asset.assetDepart,
+    asset.description
+  );
 }
 
 export async function CallInsertAsset(props: Asset) {
@@ -358,7 +366,9 @@ export async function CallInsertAsset(props: Asset) {
   );
 }
 
-export async function CallGetOrganizationAssets(props: number) {
+export async function CallGetOrganizationAssets(
+  props: number
+): Promise<Asset[]> {
   const contract = new ethers.Contract(
     contractAddress,
     mainABI,
@@ -368,7 +378,7 @@ export async function CallGetOrganizationAssets(props: number) {
   return assets;
 }
 
-export async function CallGetAsset(props: number) {
+export async function CallGetAsset(props: number): Promise<Asset> {
   const contract = new ethers.Contract(
     contractAddress,
     mainABI,
@@ -379,17 +389,21 @@ export async function CallGetAsset(props: number) {
   return asset;
 }
 
-export async function CallGetOrganizationData(props: number) {
+export async function CallGetOrganizationData(
+  props: number
+): Promise<Organization> {
   const organization = contract.getOrg(props);
   return organization;
 }
 
-export async function CallGetAdminData(props: number) {
+export async function CallGetAdminData(props: number): Promise<Admin> {
   const admin = contract.getAdmin(props);
   return admin;
 }
 
-export async function CallInsertEditedAsset(props: any) {
+export async function CallInsertEditedAsset(
+  props: AssetEdited
+): Promise<Notify> {
   const input = props;
   try {
     await contract.insertEditedAsset(
@@ -432,7 +446,6 @@ export async function CallDeleteAsset(props: number) {
         console.log("Deleting edited asset");
 
         console.log(response);
-        //formatData(response);
         contract.insertEditedAsset(
           Number(response.originalAssetId),
           String(response.name),
@@ -451,48 +464,60 @@ export async function CallDeleteAsset(props: number) {
         contract.insertEditedAsset(
           Number(response.index),
           String(response.name),
-          Number(response.organizationId),
+          Number(response.orgId),
           Number(response.adquireDate),
           Number(response.creationDate),
           true,
           String(response.assetType)
         );
-        /* contract.insertEditedAsset(input.originalAssetId, input.name, input.organizationId, input.adquireDate, 
-            input.creationDate, input.deleted, input.assetType); */
       });
     }
   });
 }
 
-export async function CallGetIsAssetDeleted(props: number) {
-  return contract.getIsAssetDeleted(props);
+export function CallGetIsAssetDeleted(assetId: number): Promise<boolean> {
+  return contract.getIsAssetDeleted(assetId);
 }
 
-export async function CallGetIsAssetEdited(props: number) {
-  return contract.getIsAssetEdited(props);
+export function CallGetIsAssetEdited(assetId: number): Promise<boolean> {
+  return contract.getIsAssetEdited(assetId);
 }
 
-export async function CallGetLastAssetEdited(props: number) {
-  return contract.getLastAssetEdited(props);
+export function CallGetLastAssetEdited(assetId: number): Promise<AssetEdited> {
+  return contract.getLastAssetEdited(assetId);
 }
 
-export async function CallGetAssetEdited(props: number) {
-  return contract.getAssetEdited(props);
+export function CallGetAssetEdited(
+  assetEditedId: number
+): Promise<AssetEdited> {
+  return contract.getAssetEdited(assetEditedId);
 }
 
-export async function CallGetRecordList(props: number) {
-  return contract.getRecordList(props);
+export function CallGetRecordList(
+  assetId: number
+): Promise<[Asset, AssetEdited[]]> {
+  return contract.getRecordList(assetId);
 }
 
 //Org id and get all assets deleted
-export async function CallGetAssetsDeleted(props: number) {
-  return contract.getAssetsDeleted(props);
+export function CallGetAssetsDeleted(orgId: number): Promise<AssetEdited[]> {
+  return contract.getAssetsDeleted(orgId);
 }
 
-export async function CallRetrieveListOfAsset(props: number[]) {
-  return contract.retrieveListOfAsset(props);
+/**
+ * [Lista de assets, lista de assets editados]
+ * @param ids
+ * @returns
+ */
+export function CallRetrieveListOfAsset(
+  ids: number[]
+): Promise<[Asset[], AssetEdited[]]> {
+  return contract.retrieveListOfAsset(ids);
 }
 
-export async function CallRetrieveOrgData(props: number) {
+/**
+ * [numero assets org, numero assets editados de la organizacion, numero assets eliminados de la organizacion]
+ */
+export function CallRetrieveOrgData(props: number): Promise<number[]> {
   return contract.retrieveOrgData(props);
 }

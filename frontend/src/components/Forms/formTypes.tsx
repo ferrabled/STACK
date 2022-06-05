@@ -671,9 +671,21 @@ export const OtherForm = ({
               setToast(n);
             });
           else
-            CallInsertNewOtherAsset(asset).then((n) => {
-              setToast(n);
-            });
+            CallInsertNewOtherAsset(asset)
+              .then(() => {
+                setToast({
+                  message: "Activo creado correctamente",
+                  type: "success",
+                  isOpen: true,
+                });
+              })
+              .catch(() => {
+                setToast({
+                  isOpen: true,
+                  message: "Por favor, acepta la transacción en metamask",
+                  type: "error",
+                });
+              });
         }}
       >
         {({ values, errors }) => (
