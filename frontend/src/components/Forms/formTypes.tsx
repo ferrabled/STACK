@@ -36,9 +36,23 @@ import {
   CallUpdateDocAsset,
   CallUpdateHardwareAsset,
   CallUpdateNetworkAsset,
+  CallUpdateOtherAsset,
   CallUpdateSoftwareAsset,
 } from "components/wallet/dataStructsCall";
-import { Asset, DataAsset, DocAsset, HardwareAsset, Notify, SoftwareAsset, SoftwareAssetProps } from "types";
+import {
+  Asset,
+  CloudAsset,
+  DataAsset,
+  DocAsset,
+  HardwareAsset,
+  NetworkAsset,
+  Notify,
+  OtherAsset,
+  SoftwareAsset,
+  SoftwareAssetProps,
+} from "types";
+import { AssetDetailPage } from "pages";
+import useToast from "hooks/useNotify";
 
 const urlReg =
   // eslint-disable-next-line no-useless-escape
@@ -92,7 +106,7 @@ const validationSchemaOther = Yup.object({
   description: Yup.string().required("La descripción es obligatoria").max(150),
 });
 
-export const SubmitAsset = (props: any) => {
+export const SubmitAsset = () => {
   return (
     <>
       <Button
@@ -116,15 +130,11 @@ export const SoftwareForm = ({
   asset: SoftwareAsset;
   edit: boolean;
 }) => {
-  const [notify, setNotify] = useState<Notify>({
-    isOpen: false,
-    message: "",
-    type: "info",
-  });
+  const [toast, setToast] = useToast();
 
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Formik
         initialValues={{
           version: edit ? asset.version : "",
@@ -135,18 +145,18 @@ export const SoftwareForm = ({
         onSubmit={(data, { setSubmitting }) => {
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateSoftwareAsset(asset, assetId).then((notify) => {
-              setNotify(notify);
+            CallUpdateSoftwareAsset(asset, assetId).then((n) => {
+              setToast(n);
             });
           } else if (asset.assetDepart !== 0)
             CallInsertNewSAssetWithDepartment({ ...asset, ...data }).then(
-              (notify) => {
-                setNotify(notify);
+              (n) => {
+                setToast(n);
               }
             );
           else
-            CallInsertNewSoftAsset({ ...asset, ...data }).then((notify) => {
-              setNotify(notify);
+            CallInsertNewSoftAsset({ ...asset, ...data }).then((n) => {
+              setToast(n);
             });
           setSubmitting(true);
         }}
@@ -219,15 +229,11 @@ export const HardwareForm = ({
   asset: HardwareAsset;
   edit: boolean;
 }) => {
-  const [notify, setNotify] = useState<Notify>({
-    isOpen: false,
-    message: "",
-    type: "info",
-  });
+  const [toast, setToast] = useToast();
 
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Formik
         initialValues={{
           //TODO initial values
@@ -241,16 +247,18 @@ export const HardwareForm = ({
           setSubmitting(true);
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateHardwareAsset(data, assetId).then((notify) => {
-              setNotify(notify);
+            CallUpdateHardwareAsset(data, assetId).then((n) => {
+              setToast(n);
             });
           } else if (asset.assetDepart !== 0)
-            CallInsertNewHAssetWithDepartment({ ...asset, ...data }).then((notify) => {
-              setNotify(notify);
-            });
+            CallInsertNewHAssetWithDepartment({ ...asset, ...data }).then(
+              (n) => {
+                setToast(n);
+              }
+            );
           else
-            CallInsertNewHardAsset({ ...asset, ...data }).then((notify) => {
-              setNotify(notify);
+            CallInsertNewHardAsset({ ...asset, ...data }).then((n) => {
+              setToast(n);
             });
         }}
       >
@@ -333,23 +341,19 @@ export const DocumentForm = ({
   asset,
   edit,
 }: {
-  asset?: DocAsset;
+  asset: DocAsset;
   edit: boolean;
 }) => {
-  const [notify, setNotify] = useState<Notify>({
-    isOpen: false,
-    message: "",
-    type: "info",
-  });
+  const [toast, setToast] = useToast();
 
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Formik
         initialValues={{
-          name: edit ? typeData.name : "",
-          location: edit ? typeData.location : "",
-          doctype: edit ? typeData.doctype : "",
+          name: edit ? asset.name : "",
+          location: edit ? asset.location : "",
+          doctype: edit ? asset.doctype : "",
         }}
         validationSchema={validationSchemaDoc}
         onSubmit={(data, { setSubmitting }) => {
@@ -357,16 +361,16 @@ export const DocumentForm = ({
           setSubmitting(true);
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateDocAsset(data, assetId).then((notify) => {
-              setNotify(notify);
+            CallUpdateDocAsset(asset, assetId).then((n) => {
+              setToast(n);
             });
           } else if (asset.assetDepart !== 0)
-            CallInsertNewDocAssetWithDepartment(asset!, data).then((notify) => {
-              setNotify(notify);
+            CallInsertNewDocAssetWithDepartment(asset).then((n) => {
+              setToast(n);
             });
           else
-            CallInsertNewDocAsset(asset, data).then((notify) => {
-              setNotify(notify);
+            CallInsertNewDocAsset(asset).then((n) => {
+              setToast(n);
             });
         }}
       >
@@ -435,45 +439,38 @@ export const DataForm = ({
   asset,
   edit,
 }: {
-  asset?: DataAsset;
+  asset: DataAsset;
   edit: boolean;
 }) => {
-  const [notify, setNotify] = useState<any>({
-    isOpen: false,
-    message: "",
-    type: "info",
-  });
+  const [toast, setToast] = useToast();
 
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Formik
         initialValues={{
-          location: edit ? typeData.location : "",
-          local: edit ? typeData.local : false,
+          location: edit ? asset.location : "",
+          local: edit ? asset.local : false,
         }}
         validationSchema={validationSchemaData}
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateDataAsset(data, assetId).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
+            CallUpdateDataAsset(asset, assetId).then((n) => {
+              setToast(n);
             });
-          } else if (asset!.assetDepart !== 0)
-            CallInsertNewDataAssetWithDepartment(asset!, data).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
+          } else if (asset.assetDepart !== 0)
+            CallInsertNewDataAssetWithDepartment(asset).then((n) => {
+              setToast(n);
             });
           else
-            CallInsertNewDataAsset(asset!, data).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
+            CallInsertNewDataAsset(asset).then((n) => {
+              setToast(n);
             });
         }}
       >
-        {({ values, isSubmitting, errors, handleChange }) => (
+        {({ values, errors, handleChange }) => (
           <Form id="form1">
             <div className="mb-6">
               <Typography variant="h5">Características de los Datos</Typography>
@@ -511,49 +508,40 @@ export const DataForm = ({
 export const NetworkForm = ({
   asset,
   edit,
-  typeData,
 }: {
-  asset?: Asset;
+  asset: NetworkAsset;
   edit: boolean;
-  typeData?: any;
 }) => {
-  const [notify, setNotify] = useState<any>({
-    isOpen: false,
-    message: "",
-    type: "info",
-  });
+  const [toast, setToast] = useToast();
 
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Formik
         initialValues={{
-          cidrblock: edit ? typeData.cidrblock : "",
-          nat: edit ? typeData.nat : false,
+          cidrblock: edit ? asset.cidrblock : "",
+          nat: edit ? asset.nat : false,
         }}
         validationSchema={validationSchemaNetwork}
-        onSubmit={(data, { setSubmitting }) => {
+        onSubmit={(data) => {
           //setSubmitting(true);
           console.log(data);
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateNetworkAsset(data, assetId).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
+            CallUpdateNetworkAsset(asset, assetId).then((n) => {
+              setToast(n);
             });
-          } else if (asset!.assetDepart !== 0)
-            CallInsertNewNAssetWithDepartment(asset!, data).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
+          } else if (asset.assetDepart !== 0)
+            CallInsertNewNAssetWithDepartment(asset).then((n) => {
+              setToast(n);
             });
           else
-            CallInsertNewNetworkAsset(asset!, data).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
+            CallInsertNewNetworkAsset(asset).then((n) => {
+              setToast(n);
             });
         }}
       >
-        {({ values, isSubmitting, errors, handleChange }) => (
+        {({ values, errors, handleChange }) => (
           <Form id="form1">
             <div className="mb-6">
               <Typography variant="h5">Características de la Red</Typography>
@@ -591,49 +579,38 @@ export const NetworkForm = ({
 export const CloudForm = ({
   asset,
   edit,
-  typeData,
 }: {
-  asset?: Asset;
+  asset: CloudAsset;
   edit: boolean;
-  typeData?: any;
 }) => {
-  const [notify, setNotify] = useState<any>({
-    isOpen: false,
-    message: "",
-    type: "info",
-  });
+  const [toast, setToast] = useToast();
 
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Formik
         initialValues={{
-          url: edit ? typeData.url : "",
-          domain: edit ? typeData.domain : "",
+          url: edit ? asset.url : "",
+          domain: edit ? asset.domain : "",
         }}
         validationSchema={validationSchemaCloud}
-        onSubmit={(data, { setSubmitting }) => {
+        onSubmit={(data) => {
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateCloudAsset(data, assetId).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
+            CallUpdateCloudAsset(data, assetId).then((n) => {
+              setToast(n);
             });
-          } else if (asset!.assetDepart !== 0)
-            CallInsertNewCAssetWithDepartment(asset!, data).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
+          } else if (asset.assetDepart !== 0)
+            CallInsertNewCAssetWithDepartment(asset).then((n) => {
+              setToast(n);
             });
           else
-            CallInsertNewCloudAsset(asset!, data)
-              .then(() => setSubmitting(true))
-              .then((r) => {
-                const notify: Notify = r!;
-                setNotify(notify);
-              });
+            CallInsertNewCloudAsset(asset).then((n) => {
+              setToast(n);
+            });
         }}
       >
-        {({ values, isSubmitting, errors, handleChange }) => (
+        {({ values, errors }) => (
           <Form id="form1">
             <div className="mb-6">
               <Typography variant="h5">Características de la Nube</Typography>
@@ -674,47 +651,38 @@ export const CloudForm = ({
 export const OtherForm = ({
   asset,
   edit,
-  typeData,
 }: {
-  asset?: Asset;
+  asset: OtherAsset;
   edit: boolean;
-  typeData?: any;
 }) => {
-  const [notify, setNotify] = useState<any>({
-    isOpen: false,
-    message: "",
-    type: "info",
-  });
+  const [toast, setToast] = useToast();
 
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Formik
         initialValues={{
-          description: edit ? typeData.description : "",
+          description: edit ? asset.description : "",
         }}
         validationSchema={validationSchemaOther}
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
           if (edit) {
             const assetId = Number(window.sessionStorage.getItem("detailId"));
-            CallUpdateCloudAsset(data, assetId).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
+            CallUpdateOtherAsset(data, assetId).then((n) => {
+              setToast(n);
             });
-          } else if (asset!.assetDepart !== 0)
-            CallInsertNewOAssetWithDepartment(asset!, data).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
+          } else if (asset.assetDepart !== 0)
+            CallInsertNewOAssetWithDepartment(asset).then((n) => {
+              setToast(n);
             });
           else
-            CallInsertNewOtherAsset(asset!, data).then((r) => {
-              const notify: Notify = r!;
-              setNotify(notify);
+            CallInsertNewOtherAsset(asset).then((n) => {
+              setToast(n);
             });
         }}
       >
-        {({ values, isSubmitting, errors, handleChange }) => (
+        {({ values, errors }) => (
           <Form id="form1">
             <div className="mb-6">
               <Typography variant="h5">Características</Typography>

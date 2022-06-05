@@ -18,8 +18,9 @@ const LandingSection = () => {
       <div className="h-11/12 flex flex-col gap-5 xl:pl-24">
         <Typography variant="h3">Gestor de activos sobre Blockchain</Typography>
         <Typography variant="body1" className="mb-8">
-          Un gestor para los activos de tu organización sobre blockchain que permite mantener
-          la trazabilidad y seguridad que necesitas en tu empresa
+          Un gestor para los activos de tu organización sobre blockchain que
+          permite mantener la trazabilidad y seguridad que necesitas en tu
+          empresa
         </Typography>
         <Button variant="outlined" color="primary" onClick={onContactClick}>
           ¡Comienza!
@@ -71,7 +72,7 @@ const LandingPage = () => {
   useEffect(() => {
     let cancelled = false;
 
-    let timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {
       if (!cancelled) {
         setShowCards(true);
       }

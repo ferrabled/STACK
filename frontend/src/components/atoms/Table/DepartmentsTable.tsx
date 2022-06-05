@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Department } from "types";
 
-const DepartmentTable = (departments: Department[]) => {
+const DepartmentTable = ({ departments }: { departments: Department[] }) => {
   const navigate = useNavigate();
   const [rows, setRows] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);

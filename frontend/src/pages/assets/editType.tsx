@@ -1,28 +1,28 @@
 import { Button, Card } from "@mui/material";
 import
-{
-  CloudForm,
-  DataForm,
-  DocumentForm,
-  HardwareForm,
-  NetworkForm,
-  OtherForm,
-  SoftwareForm
-} from "components/Forms/formTypes";
+  {
+    CloudForm,
+    DataForm,
+    DocumentForm,
+    HardwareForm,
+    NetworkForm,
+    OtherForm,
+    SoftwareForm
+  } from "components/Forms/formTypes";
 import
-{
-  CallGetCloudAsset,
-  CallGetDataAsset,
-  CallGetDocAsset,
-  CallGetHardwareAsset,
-  CallGetNetworkAsset,
-  CallGetOtherAsset,
-  CallGetSoftwareAsset
-} from "components/wallet/dataStructsCall";
+  {
+    CallGetCloudAsset,
+    CallGetDataAsset,
+    CallGetDocAsset,
+    CallGetHardwareAsset,
+    CallGetNetworkAsset,
+    CallGetOtherAsset,
+    CallGetSoftwareAsset
+  } from "components/wallet/dataStructsCall";
 import PageLoged from "pages/pageCheckLogin";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Asset, CloudAssetProps, DataAssetProps, DocAssetProps, HardwareAssetProps, NetworkAssetProps, OtherAssetProps, SoftwareAssetProps } from "types";
+import { CloudAssetProps, DataAssetProps, DocAssetProps, HardwareAssetProps, NetworkAssetProps, OtherAssetProps, SoftwareAssetProps } from "types";
 
 type AssetType = 
   (SoftwareAssetProps | HardwareAssetProps
@@ -111,7 +111,7 @@ const EditTypePage = () =>
                 fullWidth
                 variant="contained"
                 color="primary"
-                onClick={(e) =>
+                onClick={() =>
                 {
                   window.history.back();
                 }}

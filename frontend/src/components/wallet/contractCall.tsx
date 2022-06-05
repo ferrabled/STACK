@@ -1,9 +1,18 @@
 import { ethers } from "ethers";
-import { Asset, CloudAsset, DataAsset, DocAsset, HardwareAsset, NetworkAsset, OtherAsset, SoftwareAsset } from "types";
+import {
+  Asset,
+  CloudAsset,
+  DataAsset,
+  DocAsset,
+  HardwareAsset,
+  NetworkAsset,
+  Organization,
+  OtherAsset,
+  SoftwareAsset,
+  TransactionError,
+} from "types";
 import addresses from "../../assets/addresses.json";
 import mainABI from "./mainABI.json";
-
-
 
 const contractAddress = addresses.Main;
 const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -13,7 +22,7 @@ const contract = new ethers.Contract(
   provider.getSigner()
 );
 
-export async function CallInsertOrg(input: any) {
+export async function CallInsertOrg(input: Organization) {
   const signer = provider.getSigner();
   const signerAddress = await signer.getAddress();
   console.log(input);
@@ -37,10 +46,11 @@ export async function CallInsertOrg(input: any) {
       type: "success",
     };
     return notify;
-  } catch (e: any) {
+  } catch (e) {
+    const err = e as TransactionError;
     try {
-      if (e.data.message.includes("revert")) {
-        console.log(e.data.message);
+      if (err.data.message.includes("revert")) {
+        console.log(err.data.message);
         const errorM =
           "Ya existe un administrador con esta billetera, por favor, elige otra";
         const notify = {
@@ -63,10 +73,10 @@ export async function CallInsertOrg(input: any) {
   }
 }
 
-export async function WaitForInsertOrg(data: any) {
+export async function WaitForInsertOrg(data: Organization) {
   //const navigate = useNavigate()
 
-  const handleNewOrg = (address: any, orgName: string) => {
+  const handleNewOrg = (address: string, orgName: string) => {
     console.log("Registro");
     console.log(address, orgName);
     console.log(data);
@@ -93,14 +103,14 @@ export async function WaitForInsertOrg(data: any) {
   contract.on("NewOrg", (address, orgName) => handleNewOrg(address, orgName));
 }
 
-export async function CallIsAdministrator(props: any) {
-  console.log("Is administrator " + props);
-  const isAdmin: boolean = contract.isAdministrator(props);
+export async function CallIsAdministrator(address: string) {
+  console.log("Is administrator " + address);
+  const isAdmin: boolean = contract.isAdministrator(address);
   return isAdmin;
 }
 
-export async function CallGetAdminToOrg(props: any) {
-  const orgId = contract.getAdminToOrg(props);
+export async function CallGetAdminToOrg(address: string) {
+  const orgId = contract.getAdminToOrg(address);
   return orgId;
 }
 
@@ -243,7 +253,7 @@ export async function CallInsertNewNetworkAsset(asset: NetworkAsset) {
       asset.assetType,
       asset.assetDepart,
       asset.cidrblock,
-      asset.nat,
+      asset.nat
     );
     const correctText = "Activo creado correctamente";
 

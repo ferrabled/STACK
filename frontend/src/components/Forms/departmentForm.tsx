@@ -1,18 +1,11 @@
 import { Button, TextField, Typography } from "@mui/material";
-import Notification from "components/notification";
 import { CallInsertDepartment } from "components/wallet/userCall";
 import { Field, Form, Formik } from "formik";
-import { useState } from "react";
 import { Notify } from "types";
 import * as Yup from "yup";
-
+import useToast from "hooks/useNotify";
 const DepartmentForm = () => {
-  //TODO SET NOTIFICATION AFTER REGISTERING NEW DEPART
-  const [notify, setNotify] = useState<any>({
-    isOpen: false,
-    message: "",
-    type: "info",
-  });
+  const [toast, setNotify] = useToast();
 
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -50,7 +43,7 @@ const DepartmentForm = () => {
           }
         }}
       >
-        {({ values, isSubmitting, errors }) => (
+        {({ values, errors }) => (
           <Form>
             <>
               <div className="mb-6">
@@ -104,7 +97,7 @@ const DepartmentForm = () => {
           </Form>
         )}
       </Formik>
-      <Notification {...notify}></Notification>
+      {toast}
     </div>
   );
 };

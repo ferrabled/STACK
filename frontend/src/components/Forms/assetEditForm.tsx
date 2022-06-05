@@ -1,64 +1,66 @@
-import React, { useEffect, useState } from "react";
-import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
-import { Button, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-
-import DateAdapter from "@mui/lab/AdapterDayjs";
-import { DesktopDatePicker, LocalizationProvider } from "@mui/lab";
-import { date } from "yup/lib/locale";
-import  { CallGetAsset, CallInsertAsset, CallInsertEditedAsset } from "components/wallet/contractCall";
-import {formatDate, formatDateyMd} from "utils";
-import { Asset, AssetEdited, Department } from "types";
-import { useNavigate } from "react-router-dom";
+import {
+  Button,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
+import {
+  CallGetAsset,
+  CallInsertEditedAsset,
+} from "components/wallet/contractCall";
 import { CallGetAllDepartmentsFromOrg } from "components/wallet/userCall";
-import { Notify } from "types";
-import Notification from "components/notification";
+import { Field, Form, Formik } from "formik";
+import useToast from "hooks/useNotify";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AssetEdited, Department, Notify } from "types";
+import { formatDateyMd } from "utils";
+import * as Yup from "yup";
 
-
-const EditAssetForm = (props: {data: AssetEdited}) => {
-  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
-  const navigate = useNavigate(); 
+const EditAssetForm = (props: { data: AssetEdited }) => {
+  const [notification, setNotify] = useToast();
+  const navigate = useNavigate();
   const [departments, setDepartments] = useState<Department[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [assetDepart, setAssetDepart] = useState<number>();
   const [assetEd, setAssetEd] = useState<AssetEdited>();
   const [fAdquireDate, setFAdqDate] = useState("");
 
-
-  useEffect(()=> {
+  useEffect(() => {
     console.log(props);
     setAssetEd(props.data);
-    const dateTime = (props.data.adquireDate!)
+    const dateTime = props.data.adquireDate!;
     const date = formatDateyMd(dateTime);
     console.log(date);
     setFAdqDate(date);
 
-    CallGetAllDepartmentsFromOrg(Number(window.localStorage.getItem('orgId')!)).then(r=> {
+    CallGetAllDepartmentsFromOrg(
+      Number(window.localStorage.getItem("orgId"))
+    ).then((r) => {
       console.log(r);
       const cont = r.length;
       const container: Department[] = [];
       for (let i = 0; i < cont; i++) {
-          const department: Department = {
-            name: r[i].name,
-            description: r[i].description,
-            telephone: Number(r[i].telephone),
-            orgId: Number(r[i].orgId),
-            id: Number(r[i].index),
-            index: Number(r[i].index)
-          }
-      container.push(department);
-      
-      
+        const department: Department = {
+          name: r[i].name,
+          description: r[i].description,
+          telephone: Number(r[i].telephone),
+          orgId: Number(r[i].orgId),
+          id: Number(r[i].index),
+          index: Number(r[i].index),
+        };
+        container.push(department);
       }
-      CallGetAsset(props.data.originalAssetId).then((res)=> {
+      CallGetAsset(props.data.originalAssetId).then((res) => {
         setAssetDepart(Number(res.assetDepart));
         setIsLoading(false);
-
-      })
+      });
       setDepartments(container);
-    })
-  },[])
-  
+    });
+  }, []);
+
   const validationSchema = Yup.object({
     name: Yup.string().required("El nombre es obligatorio").max(100),
     adquireDate: Yup.string()
@@ -70,43 +72,45 @@ const EditAssetForm = (props: {data: AssetEdited}) => {
   });
 
   const ConnectToContract = (data: any) => {
-    CallInsertEditedAsset(data).then((r)=> {
-      const notify:Notify = r!; 
-      setNotify(notify);
+    CallInsertEditedAsset(data).then((n) => {
+      setNotify(n);
     });
-  }
+  };
 
-  if (isLoading) return <></>
-  else return (
-    <div className="flex flex-col m-6">
-    <Notification {...notify}></Notification>
-    <Formik
-        initialValues={{
-          name: assetEd!.name,
-          organizationId: Number(window.localStorage.getItem('orgId')!),
-          adquireDateString: fAdquireDate,
-          adquireDate: assetEd!.adquireDate!.getTime(),
-          creationDate: 0,
-          assetType: assetEd!.assetType,
-          originalAssetId: assetEd!.originalAssetId,
-          department:assetDepart,
-
-        }}
-        validationSchema={validationSchema}
-        onSubmit={(data, { setSubmitting }) => {
-          const dateString = data.adquireDateString; 
-          const dateParts: Array<string> = dateString.split("-");
-          let dateObject = new Date(+dateParts[0], +dateParts[1] - 1, +dateParts[2]); 
-          const offset = dateObject.getTimezoneOffset();
-          dateObject = new Date(dateObject.getTime() - (offset*60*1000));
-          data.adquireDate = dateObject.getTime();
-          data.creationDate = Date.now();
-          setSubmitting(true);
-          ConnectToContract(data);
-        }}
-      >
-        {({ values, isSubmitting, errors, handleChange }) => (
-          
+  if (isLoading) return <></>;
+  else
+    return (
+      <div className="flex flex-col m-6">
+        {notification}
+        <Formik
+          initialValues={{
+            name: assetEd!.name,
+            organizationId: Number(window.localStorage.getItem("orgId")!),
+            adquireDateString: fAdquireDate,
+            adquireDate: assetEd!.adquireDate!.getTime(),
+            creationDate: 0,
+            assetType: assetEd!.assetType,
+            originalAssetId: assetEd!.originalAssetId,
+            department: assetDepart,
+          }}
+          validationSchema={validationSchema}
+          onSubmit={(data, { setSubmitting }) => {
+            const dateString = data.adquireDateString;
+            const dateParts: Array<string> = dateString.split("-");
+            let dateObject = new Date(
+              +dateParts[0],
+              +dateParts[1] - 1,
+              +dateParts[2]
+            );
+            const offset = dateObject.getTimezoneOffset();
+            dateObject = new Date(dateObject.getTime() - offset * 60 * 1000);
+            data.adquireDate = dateObject.getTime();
+            data.creationDate = Date.now();
+            setSubmitting(true);
+            ConnectToContract(data);
+          }}
+        >
+          {({ values, errors, handleChange }) => (
             <Form>
               <>
                 <div className="mb-6">
@@ -127,26 +131,26 @@ const EditAssetForm = (props: {data: AssetEdited}) => {
                 </div>
                 <div className="mb-6 flex flex-row items-center justify-center gap-12">
                   <div className="mt-3 w-1/2">
-                  <Field
-                    id="adquireDateString"
-                    label="Fecha de adquisición"
-                    value={values.adquireDateString}
-                    required
-                    error={Boolean(errors.adquireDateString)}
-                    type="date"
-                    fullWidth
-                    //sx={{ width: 300 }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    as={TextField}
-                  />
+                    <Field
+                      id="adquireDateString"
+                      label="Fecha de adquisición"
+                      value={values.adquireDateString}
+                      required
+                      error={Boolean(errors.adquireDateString)}
+                      type="date"
+                      fullWidth
+                      //sx={{ width: 300 }}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      as={TextField}
+                    />
                   </div>
                   <div className="w-1/2">
-                  <InputLabel id="department-label" className="-mt-3">
+                    <InputLabel id="department-label" className="-mt-3">
                       Departamento
                     </InputLabel>
-                  <Field
+                    <Field
                       name="department"
                       className="px-2 my-2 w-1/2"
                       variant="outlined"
@@ -159,14 +163,15 @@ const EditAssetForm = (props: {data: AssetEdited}) => {
                       as={Select}
                     >
                       <MenuItem value={0}>Sin departamento</MenuItem>
-                      {!isLoading && (departments!.map(department => (
+                      {!isLoading &&
+                        departments.map((department) => (
                           <MenuItem
                             key={Number(department.index)}
                             value={Number(department.index)}
                           >
                             {department.name}
-                          </MenuItem>)))}
-                  
+                          </MenuItem>
+                        ))}
                     </Field>
                   </div>
                 </div>
@@ -197,25 +202,32 @@ const EditAssetForm = (props: {data: AssetEdited}) => {
                   </div>
                 </div>
                 <div className="lg:mx-56 xl:mx-64 2xl:mx-80 2xl:gap-40 flex flex-row gap-24 items-center justify-center">
-                <Button fullWidth
-                  onClick={()=> {navigate("/assets")}}
-                  variant="contained"
-                  color="primary"> Cancelar </Button>
-                <Button
-                  fullWidth
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                >
-                  Continuar
-                </Button></div>
+                  <Button
+                    fullWidth
+                    onClick={() => {
+                      navigate("/assets");
+                    }}
+                    variant="contained"
+                    color="primary"
+                  >
+                    {" "}
+                    Cancelar{" "}
+                  </Button>
+                  <Button
+                    fullWidth
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                  >
+                    Continuar
+                  </Button>
+                </div>
               </>
-          </Form>  
-          )}     
-      </Formik>
-      
-    </div>
-  );
+            </Form>
+          )}
+        </Formik>
+      </div>
+    );
 };
 
 export default EditAssetForm;

@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { TextField, Button, Checkbox, Typography } from "@mui/material";
-import { AdminFormValues, Notify } from "types";
-import { Field, FieldAttributes, Form, Formik } from "formik";
-import * as Yup from "yup";
+import { Button, TextField, Typography } from "@mui/material";
 import { CallInsertOrg, WaitForInsertOrg } from "components/wallet/contractCall";
-import Notification from "components/notification";
-
+import { Field, Form, Formik } from "formik";
+import React, { useState } from "react";
+import { Notify } from "types";
+import * as Yup from "yup";
+  WaitForInsertOrg,
+} from "components/wallet/contractCall";
+import useToast from "hooks/useNotify";
 
 const OrganizationForm = () => {
-  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
+  const [notification, setNotify] = useToast();
 
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -25,7 +26,9 @@ const OrganizationForm = () => {
       .min(9, "Introduce un teléfono válido")
       .max(9, "Introduce un teléfono válido")
       .required("El teléfono del administrador es obligatorio"),
-    orgName: Yup.string().required("El nombre de la organización es obligatorio").max(20),
+    orgName: Yup.string()
+      .required("El nombre de la organización es obligatorio")
+      .max(20),
     address: Yup.string().required("La dirección es obligatoria").max(70),
     telephoneOrg: Yup.string()
       .matches(phoneRegExp, "Introduce un teléfono válido")
@@ -36,14 +39,13 @@ const OrganizationForm = () => {
 
   const handleSubmit = async (input: any) => {
     console.log(input);
-    console.log("Create Organization"); 
-    await CallInsertOrg(input).then((r)=> {
-      const notify:Notify = r!; 
+    console.log("Create Organization");
+    await CallInsertOrg(input).then((r) => {
+      const notify: Notify = r!;
       setNotify(notify);
     });
-    WaitForInsertOrg(input.orgName)
-
-    };
+    WaitForInsertOrg(input.orgName);
+  };
 
   const [formIndex, setFormIndex] = useState(0);
 
@@ -58,13 +60,12 @@ const OrganizationForm = () => {
           orgName: "",
           address: "",
           telephoneOrg: "",
-          
         }}
         validationSchema={validationSchema}
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
           console.log(data);
-          setFormIndex(formIndex + 1)
+          setFormIndex(formIndex + 1);
         }}
       >
         {({ values, isSubmitting, errors }) => (
@@ -100,16 +101,16 @@ const OrganizationForm = () => {
                   />
                 </div>
                 <div className="mb-6">
-                    <Field
-                      name="email"
-                      label="Correo Electrónico"
-                      inputProps={{ maxLength: 255 }}
-                      required
-                      fullWidth
-                      helperText={errors.email ? errors.email : " "}
-                      error={Boolean(errors.email)}
-                      as={TextField}
-                    />
+                  <Field
+                    name="email"
+                    label="Correo Electrónico"
+                    inputProps={{ maxLength: 255 }}
+                    required
+                    fullWidth
+                    helperText={errors.email ? errors.email : " "}
+                    error={Boolean(errors.email)}
+                    as={TextField}
+                  />
                 </div>
                 <div className="mb-6">
                   <Field
@@ -216,24 +217,30 @@ const OrganizationForm = () => {
             {formIndex === 2 && (
               <>
                 <div className="flex flex-col items-center">
-                <div className="mb-6">
-                  <Typography variant="h5">Guardar datos</Typography>
-                </div>
+                  <div className="mb-6">
+                    <Typography variant="h5">Guardar datos</Typography>
+                  </div>
                   <Typography>
-                    Para finalizar debes conectar tu cartera Metamask, e interactuar con la blockchain.
-                    De esta manera asociamos los datos de tu organización a tu billetera
-                    y guardamos la información de una manera segura en la
-                    Blockchain.
+                    Para finalizar debes conectar tu cartera Metamask, e
+                    interactuar con la blockchain. De esta manera asociamos los
+                    datos de tu organización a tu billetera y guardamos la
+                    información de una manera segura en la Blockchain.
                   </Typography>
                   <img
                     className="h-44 w-44 my-5"
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png"
                   />
-                  <Button variant="contained" onClick={()=> handleSubmit(values)}>Finalizar</Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => handleSubmit(values)}
+                  >
+                    Finalizar
+                  </Button>
                   <a
                     className="mt-5"
                     href="https://metamask.io/"
-                    target="_blank" rel="noreferrer"
+                    target="_blank"
+                    rel="noreferrer"
                   >
                     <Typography
                       sx={{ textDecoration: "underline" }}
@@ -248,7 +255,7 @@ const OrganizationForm = () => {
           </Form>
         )}
       </Formik>
-      <Notification {...notify}></Notification>
+      {notification}
     </div>
   );
 };

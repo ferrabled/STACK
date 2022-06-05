@@ -7,11 +7,7 @@ import { Notify } from "types";
 import * as Yup from "yup";
 
 export default function UserForm({ orgId }: { orgId: number }) {
-  const [notify, setNotify] = useState<Notify>({
-    isOpen: false,
-    message: "",
-    type: "info",
-  });
+  const [toast, setToast] = useToast();
 
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -45,10 +41,9 @@ export default function UserForm({ orgId }: { orgId: number }) {
           setSubmitting(true);
           console.log(data);
           try {
-            CallInsertUser(data).then((response) => {
-              console.log(response);
-              const notify = response;
-              setNotify(notify);
+            CallInsertUser(data).then((n) => {
+              console.log(n);
+              setToast(n);
             });
           } catch (e) {
             console.log(e);
@@ -124,7 +119,7 @@ export default function UserForm({ orgId }: { orgId: number }) {
           </Form>
         )}
       </Formik>
-      <Notification {...notify}></Notification>
+      {toast}
     </div>
   );
 }

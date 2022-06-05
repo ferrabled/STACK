@@ -1,25 +1,17 @@
 import { ethers } from "ethers";
 import {
-  Asset,
   CloudAsset,
-  CloudAssetProps,
   DataAsset,
-  DataAssetProps,
   DocAsset,
-  DocAssetProps,
   HardwareAsset,
-  HardwareAssetProps,
   NetworkAsset,
-  NetworkAssetProps,
   OtherAsset,
-  OtherAssetProps,
   SoftwareAsset,
-  SoftwareAssetProps,
   TransactionError,
 } from "types";
 import addresses from "../../assets/addresses.json";
-
 import users2ABI from "./users2.json";
+
 const contractAddress2 = addresses.Users2;
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -213,9 +205,7 @@ export async function CallInsertNewCAssetWithDepartment(asset: CloudAsset) {
   }
 }
 
-export async function CallInsertNewOAssetWithDepartment(
-  asset: OtherAsset
-) {
+export async function CallInsertNewOAssetWithDepartment(asset: OtherAsset) {
   try {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewOAssetWithDepartment(

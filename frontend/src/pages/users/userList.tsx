@@ -12,7 +12,6 @@ import { CallGetAllUsersFromOrg } from "components/wallet/userCall";
 import { ethers } from "ethers";
 import PageLoged from "pages/pageCheckLogin";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { TableUser } from "types";
 import { sendInviteEmail } from "utils";
 
@@ -20,7 +19,6 @@ const UsersPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<TableUser[]>();
   const [finalUrl, setFinalUrl] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const GetUsers = () => {
@@ -98,10 +96,10 @@ const UsersPage = () => {
         <div className="my-5">
           <Typography variant="h5">Usuarios de la organización</Typography>
         </div>
-        {users?.length !== 0 && (
+        {users && users?.length !== 0 && (
           <Card>
             <div className="m-5 min-h-full h-full">
-              <UsersCard {...users!} />
+              <UsersCard users={users} />
               <div className="mt-8">
                 <Typography align="center">
                   Puedes invitar a nuevos usuarios copiando el siguiente enlace

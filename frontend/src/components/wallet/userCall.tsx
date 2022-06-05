@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { Notify, User } from "types";
+import { Comment, Department, Notify, TransactionError, User } from "types";
 import addresses from "../../assets/addresses.json";
 import { CallIsAdministrator } from "./contractCall";
 import usersABI from "./users.json";
@@ -15,7 +15,6 @@ const contract = new ethers.Contract(
 );
 
 export async function WaitForInsertUser(data: User) {
-  //const navigate = useNavigate()
 
   const handleRegister = (address: string, name: string, surname: string) => {
     console.log("Registro");
@@ -46,7 +45,7 @@ export async function WaitForInsertUser(data: User) {
   );
 }
 
-export async function CallInsertUser(user: any): Promise<Notify> {
+export async function CallInsertUser(user: User): Promise<Notify> {
   console.log("Add new user");
   const signer = provider.getSigner();
   const signerAddress = await signer.getAddress();
@@ -78,15 +77,16 @@ export async function CallInsertUser(user: any): Promise<Notify> {
       type: "success",
     };
     return notify;
-  } catch (e: any) {
+  } catch (e) {
+    const err = e as TransactionError;
     let errorM = "";
     try {
-      if (e.data.message.includes("OrgId not found")) {
+      if (err.data.message.includes("OrgId not found")) {
         errorM = "El id de la organización no existe";
-      } else if (e.data.message.includes("user is admin")) {
+      } else if (err.data.message.includes("user is admin")) {
         errorM =
           "La billetera elegida es del administrador. Por favor elige otra";
-      } else if (e.data.message.includes("Address registered")) {
+      } else if (err.data.message.includes("Address registered")) {
         errorM = "La dirección de la cartera ya se encuentra registrada";
       }
     } catch {
@@ -150,7 +150,7 @@ export async function CallGetNumUsersFromOrg(assetId: number) {
 
 //TODO notifications
 //DEPARTMENTS
-export async function CallInsertDepartment(props: any) {
+export async function CallInsertDepartment(props: Department) {
   const signerAddress = await provider.getSigner().getAddress();
   try {
     await contract.insertDepartment(
@@ -168,10 +168,11 @@ export async function CallInsertDepartment(props: any) {
       type: "success",
     };
     return notify;
-  } catch (e: any) {
+  } catch (e) {
+    const err = e as TransactionError;
     try {
-      if (e.data.message.includes("revert")) {
-        console.log(e.data.message);
+      if (err.data.message.includes("revert")) {
+        console.log(err.data.message);
         const errorM = "La billetera conectada no pertenece a la organización";
         const notify = {
           isOpen: true,
@@ -181,7 +182,7 @@ export async function CallInsertDepartment(props: any) {
         return notify;
       }
     } catch {
-      console.log(e);
+      console.log(err);
       const errorM = "Por favor, acepta la transacción en metamask";
       const notify = {
         isOpen: true,
@@ -314,7 +315,7 @@ export async function CallGetAssetsIdsFromDepart(departId: number) {
 
 //COMMENTS
 export async function CallInsertComment(
-  comment: any,
+  comment: Comment,
   assetId: number,
   orgId: number
 ) {
@@ -335,9 +336,10 @@ export async function CallInsertComment(
       type: "success",
     };
     return notify;
-  } catch (e: any) {
+  } catch (e) {
+    const err = e as TransactionError;
     try {
-      if (e.data.message.includes("Administrator")) {
+      if (err.data.message.includes("Administrator")) {
         const errorM = "El administrador no puede crear comentarios.";
         const notify = {
           isOpen: true,
@@ -346,7 +348,7 @@ export async function CallInsertComment(
         };
         return notify;
       }
-      if (e.data.message.includes("User")) {
+      if (err.data.message.includes("User")) {
         const errorM = "Esta billetera no pertenece a la organización.";
         const notify = {
           isOpen: true,
