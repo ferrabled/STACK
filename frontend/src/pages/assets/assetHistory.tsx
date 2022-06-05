@@ -3,7 +3,7 @@ import AssetRecordCard from "components/atoms/Cards/Assets/assetRecordCard";
 import { CallGetRecordList } from "components/wallet/contractCall";
 import PageLoged from "pages/pageCheckLogin";
 import React, { useEffect, useState } from "react";
-import { AssetsInList } from "types";
+import { AssetsInList, AssetTypes } from "types";
 
 const AssetHistoryPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,17 +15,19 @@ const AssetHistoryPage = () => {
 
     CallGetRecordList(Number(id)).then((response) => {
       console.log(response);
-      const len = response[1].length;
+      const [asset, assetsEdited] = response;
+      const len = assetsEdited.length;
       const container: AssetsInList[] = [];
 
       const assetOriginal: AssetsInList = {
-        name: response[0].name,
-        assetType: response[0].assetType,
-        assetDepart: response[0].assetDepart,
-        creationDate: Number(response[0].creationDate),
-        adquireDate: Number(response[0].adquireDate),
-        originalId: Number(response[0].index),
-        index: Number(response[0].index),
+        name: asset.name,
+        assetType: asset.assetType,
+        assetTS: AssetTypes[asset.assetType],
+        assetDepart: asset.assetDepart,
+        creationDate: Number(asset.creationDate),
+        adquireDate: Number(asset.adquireDate),
+        originalId: Number(asset.index),
+        index: Number(asset.index),
       };
       console.log(assetOriginal);
       setOriginal(assetOriginal);
@@ -34,13 +36,14 @@ const AssetHistoryPage = () => {
 
       for (let i = 0; i < len; i++) {
         const asset: AssetsInList = {
-          name: response[1][i].name,
-          assetType: response[1][i].assetType,
-          assetDepart: response[1][i].assetDepart,
-          creationDate: Number(response[1][i].creationDate),
-          adquireDate: Number(response[1][i].adquireDate),
-          originalId: Number(response[1][i].originalAssetId),
-          index: Number(response[1][i].index),
+          name: assetsEdited[i].name,
+          assetType: assetsEdited[i].assetType,
+          assetTS: AssetTypes[assetsEdited[i].assetType],
+          assetDepart: assetOriginal.assetDepart,
+          creationDate: Number(assetsEdited[i].creationDate),
+          adquireDate: Number(assetsEdited[i].adquireDate),
+          originalId: Number(assetsEdited[i].originalAssetId),
+          index: Number(assetsEdited[i].index),
         };
         console.log("Asset editado añadido con id");
         container.push(asset);
@@ -51,15 +54,15 @@ const AssetHistoryPage = () => {
       setIsLoading(false);
     });
   }, []);
-
+  
   return (
     <PageLoged>
       {!isLoading && (
         <>
           <Typography variant="h5">
-            Historial del activo: {originalAsset.name}
+            Historial del activo: {originalAsset!.name}
           </Typography>
-          <AssetRecordCard assets={assets} />
+          <AssetRecordCard assets={assets!} />
         </>
       )}
     </PageLoged>

@@ -1,20 +1,18 @@
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Button, Card, CircularProgress, IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import React, { useEffect, useState } from "react";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import EditIcon from "@mui/icons-material/Edit";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { useNavigate } from "react-router-dom";
-import { formatDate } from "utils";
-import { AssetsInList, AssetsList } from "types";
 import {
   CallDeleteAsset,
   CallGetIsAssetEdited,
 } from "components/wallet/contractCall";
+import React, { MouseEventHandler, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AssetsInList, GridTableElement } from "types";
+import { formatDate } from "utils";
 
 const AssetRecordCard = ({ assets }: { assets: AssetsInList[] }) => {
   const navigate = useNavigate();
-  const [rows, setRows] = useState<any>([]);
+  const [rows, setRows] = useState<GridTableElement<AssetsInList>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const onClickDelete = () => {
@@ -48,14 +46,8 @@ const AssetRecordCard = ({ assets }: { assets: AssetsInList[] }) => {
     const FormatData = () => {
       console.log("Recibimos los datos");
       console.log(assets);
-      const cont = Object.entries(assets).length;
-
-      const tempRow: any[] = [];
-      for (let i = 0; i < cont; i++) {
-        assets[i].id = i;
-        tempRow.push(assets[i]);
-      }
-      setRows(tempRow);
+      const assetsList = assets.map((x, i) => ({ ...x, id: i }));
+      setRows(assetsList);
       setIsLoading(false);
     };
     FormatData();
@@ -70,7 +62,7 @@ const AssetRecordCard = ({ assets }: { assets: AssetsInList[] }) => {
       sortable: false,
       width: 100,
       renderCell: (params) => {
-        const onClickDetails = (e: any) => {
+        const onClickDetails: MouseEventHandler = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log(params.row.originalId);
           const originalId = params.row.originalId;
@@ -110,7 +102,7 @@ const AssetRecordCard = ({ assets }: { assets: AssetsInList[] }) => {
       },
     },
     {
-      field: "assetType",
+      field: "assetTS",
       headerName: "Tipo",
       type: "string",
       width: 90,

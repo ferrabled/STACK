@@ -42,6 +42,7 @@ const AssetsPage = () => {
         const contEdit = assetsEdited.length;
         const container: AssetsInList[] = [];
         //let object = new container;
+        console.log(assets,assetsEdited);
         for (let i = 0; i < cont; i++) {
           const asset: AssetsInList = {
             name: assets[i].name,
@@ -66,14 +67,13 @@ const AssetsPage = () => {
           const asset: AssetsInList = {
             name: assetsEdited[o].name,
             assetType: assetsEdited[o].assetType,
-            assetTS: AssetTypes[assets[o].assetType],
+            assetTS: AssetTypes[assetsEdited[o].assetType],
             assetDepart: Number(originalAsset.assetDepart),
             creationDate: Number(assetsEdited[o].creationDate),
             adquireDate: Number(assetsEdited[o].adquireDate),
             originalId: Number(assetsEdited[o].originalAssetId),
-            index: Number(assets[o].index),
+            index: Number(assetsEdited[o].index),
           };
-          console.log("DEPARTMENT ASSET" + Number(assets[o].assetDepart));
           if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
           else {
             console.log("Añadido");

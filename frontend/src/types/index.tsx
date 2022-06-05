@@ -64,6 +64,7 @@ export type AssetEdited = {
   originalAssetId: number;
   organizationId: number;
   deleted: boolean;
+  index: number;
 };
 
 //ADD DEPARTMENT ID FOR EACH
