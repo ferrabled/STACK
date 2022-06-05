@@ -60,7 +60,7 @@ export type AssetEdited = {
   name: string;
   adquireDate?: Date;
   creationDate?: Date;
-  assetType?: string;
+  assetType: number;
   originalAssetId: number;
   organizationId: number;
   deleted: boolean;

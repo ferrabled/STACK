@@ -16,7 +16,7 @@ import {
 
 const AssetsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [assets, setAssets] = useState<AssetsInList[] | null>(null);
+  const [assets, setAssets] = useState<AssetsInList[]>([]);
   const navigate = useNavigate();
   const [departNames, setDepartNames] = useState<string[]>();
   const [numComments, setNumComments] = useState<number[]>();
@@ -37,20 +37,21 @@ const AssetsPage = () => {
 
     const GetAssets = () => {
       CallGetOrganizationAssets(idOrg).then(async (response) => {
-        const cont = response[0].length;
-        const contEdit = response[1].length;
+        const [assets, assetsEdited] = response;
+        const cont = assets.length;
+        const contEdit = assetsEdited.length;
         const container: AssetsInList[] = [];
         //let object = new container;
         for (let i = 0; i < cont; i++) {
           const asset: AssetsInList = {
-            name: response[0][i].name,
-            assetType: response[0][i].assetType,
-            assetDepart: Number(response[0][i].assetDepart),
-            assetTS: AssetTypes[response[0][i].assetType],
-            creationDate: Number(response[0][i].creationDate),
-            adquireDate: Number(response[0][i].adquireDate),
-            originalId: Number(response[0][i].index),
-            index: Number(response[0][i].index),
+            name: assets[i].name,
+            assetType: assets[i].assetType,
+            assetDepart: Number(assets[i].assetDepart),
+            assetTS: AssetTypes[assets[i].assetType],
+            creationDate: Number(assets[i].creationDate),
+            adquireDate: Number(assets[i].adquireDate),
+            originalId: Number(assets[i].index),
+            index: Number(assets[i].index),
           };
           if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
           else {
@@ -59,20 +60,20 @@ const AssetsPage = () => {
         }
         for (let o = 0; o < contEdit; o++) {
           const originalAsset = await CallGetAsset(
-            response[1][o].originalAssetId
+            assetsEdited[o].originalAssetId
           );
           console.log("depart" + Number(originalAsset.assetDepart));
           const asset: AssetsInList = {
-            name: response[1][o].name,
-            assetType: response[1][o].assetType,
-            assetTS: AssetTypes[response[1][o].assetType],
+            name: assetsEdited[o].name,
+            assetType: assetsEdited[o].assetType,
+            assetTS: AssetTypes[assets[o].assetType],
             assetDepart: Number(originalAsset.assetDepart),
-            creationDate: Number(response[1][o].creationDate),
-            adquireDate: Number(response[1][o].adquireDate),
-            originalId: Number(response[1][o].originalAssetId),
-            index: Number(response[1][o].index),
+            creationDate: Number(assetsEdited[o].creationDate),
+            adquireDate: Number(assetsEdited[o].adquireDate),
+            originalId: Number(assetsEdited[o].originalAssetId),
+            index: Number(assets[o].index),
           };
-          console.log("DEPARTMENT ASSET" + Number(response[1][o].assetDepart));
+          console.log("DEPARTMENT ASSET" + Number(assets[o].assetDepart));
           if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
           else {
             console.log("Añadido");
@@ -81,14 +82,17 @@ const AssetsPage = () => {
           }
         }
         const commentCont: number[] = [];
-        for (let e = 0; e < container.length; e++) {
-          CallGetNumberOfCommentsByAsset(container[e].originalId).then((r) => {
-            commentCont.push(Number(r));
-            setIsLoading(false);
-          });
-        }
-        setNumComments(commentCont);
-        setAssets(container);
+        Promise.all(
+          container.map((e) => {
+            return CallGetNumberOfCommentsByAsset(e.originalId).then((r) => {
+              commentCont.push(Number(r));
+            });
+          })
+        ).then(() => {
+          setIsLoading(false);
+          setNumComments(commentCont);
+          setAssets(container);
+        });
       });
     };
 
@@ -124,7 +128,7 @@ const AssetsPage = () => {
         <div className="my-5">
           <Typography variant="h5">Todos los activos</Typography>
         </div>
-        {assets!.length !== 0 && (
+        {assets.length !== 0 && (
           <div className="min-h-full h-full">
             <AssetsCard
               props={assets}
@@ -133,7 +137,7 @@ const AssetsPage = () => {
             />
           </div>
         )}
-        {assets!.length == 0 && (
+        {assets.length == 0 && (
           <Card>
             <div className="mx-5 mt-5 mb-10 min-h-full h-full">
               <div className="my-8 mx-48">

@@ -1,9 +1,5 @@
 import { MenuDrawer } from "components/organisms";
-import { ethers } from "ethers";
 import React from "react";
-
-
-const provider = new ethers.providers.Web3Provider(window.ethereum);
 
 const AppHeader = () => {
   return (

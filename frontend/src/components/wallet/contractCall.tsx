@@ -366,9 +366,14 @@ export async function CallInsertAsset(props: Asset) {
   );
 }
 
+/**
+ * Assets, y transacciones de asset editadas
+ * @param props 
+ * @returns 
+ */
 export async function CallGetOrganizationAssets(
   props: number
-): Promise<Asset[]> {
+): Promise<[Asset[], AssetEdited[]]> {
   const contract = new ethers.Contract(
     contractAddress,
     mainABI,
