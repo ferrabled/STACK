@@ -44,7 +44,7 @@ export async function CallInsertNewSAssetWithDepartment(asset: SoftwareAsset) {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewSAssetWithDepartment(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -72,7 +72,7 @@ export async function CallInsertNewHAssetWithDepartment(asset: HardwareAsset) {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewHAssetWithDepartment(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -101,7 +101,7 @@ export async function CallInsertNewDocAssetWithDepartment(asset: DocAsset) {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewDocAssetWithDepartment(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -129,7 +129,7 @@ export async function CallInsertNewDataAssetWithDepartment(asset: DataAsset) {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewDataAssetWithDepartment(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -156,7 +156,7 @@ export async function CallInsertNewNAssetWithDepartment(asset: NetworkAsset) {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewNAssetWithDepartment(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -183,7 +183,7 @@ export async function CallInsertNewCAssetWithDepartment(asset: CloudAsset) {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewCAssetWithDepartment(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -210,7 +210,7 @@ export async function CallInsertNewOAssetWithDepartment(asset: OtherAsset) {
     const signerAddress = await provider.getSigner().getAddress();
     await contract2.insertNewOAssetWithDepartment(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,

@@ -10,7 +10,17 @@ import { CallGetAllDepartmentsFromOrg } from "components/wallet/userCall";
 import { Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Asset, Department } from "types";
+import {
+  Asset,
+  CloudAsset,
+  DataAsset,
+  Department,
+  DocAsset,
+  HardwareAsset,
+  NetworkAsset,
+  OtherAsset,
+  SoftwareAsset,
+} from "types";
 import * as Yup from "yup";
 import {
   CloudForm,
@@ -36,7 +46,7 @@ const AssetForm = () => {
         const department: Department = {
           name: r[i].name,
           description: r[i].description,
-          telephone: Number(r[i].telephone),
+          telephone: r[i].telephone,
           orgId: Number(r[i].orgId),
           id: Number(r[i].index),
           index: Number(r[i].index),
@@ -93,7 +103,7 @@ const AssetForm = () => {
               data.adquireDate = dateObject.getTime();
               const asset: Asset = {
                 name: data.name,
-                orgId: data.organizationId,
+                organizationId: data.organizationId,
                 assetType: Number(data.assetType),
                 assetDepart: Number(data.department),
                 creationDate: data.creationDate,
@@ -157,6 +167,7 @@ const AssetForm = () => {
                       >
                         <MenuItem value={0}>Sin departamento</MenuItem>
                         {!isLoading &&
+                          departments &&
                           departments.map((department) => (
                             <MenuItem
                               key={Number(department.index)}
@@ -220,15 +231,29 @@ const AssetForm = () => {
           </Formik>
         </div>
       )}
-      {formIndex === 1 && (
+      {formIndex === 1 && asset && (
         <>
-          {asset.assetType === 0 && <SoftwareForm asset={asset} edit={false} />}
-          {asset.assetType === 1 && <HardwareForm asset={asset} edit={false} />}
-          {asset.assetType === 2 && <DocumentForm asset={asset} edit={false} />}
-          {asset.assetType === 3 && <DataForm asset={asset} edit={false} />}
-          {asset.assetType === 4 && <NetworkForm asset={asset} edit={false} />}
-          {asset.assetType === 5 && <CloudForm asset={asset} edit={false} />}
-          {asset.assetType === 6 && <OtherForm asset={asset} edit={false} />}
+          {asset.assetType === 0 && (
+            <SoftwareForm asset={asset as SoftwareAsset} edit={false} />
+          )}
+          {asset.assetType === 1 && (
+            <HardwareForm asset={asset as HardwareAsset} edit={false} />
+          )}
+          {asset.assetType === 2 && (
+            <DocumentForm asset={asset as DocAsset} edit={false} />
+          )}
+          {asset.assetType === 3 && (
+            <DataForm asset={asset as DataAsset} edit={false} />
+          )}
+          {asset.assetType === 4 && (
+            <NetworkForm asset={asset as NetworkAsset} edit={false} />
+          )}
+          {asset.assetType === 5 && (
+            <CloudForm asset={asset as CloudAsset} edit={false} />
+          )}
+          {asset.assetType === 6 && (
+            <OtherForm asset={asset as OtherAsset} edit={false} />
+          )}
           <div className="lg:mx-56 xl:mx-64 2xl:mx-80 2xl:gap-40 flex flex-row gap-24 items-center justify-center">
             <Button
               fullWidth
@@ -241,8 +266,7 @@ const AssetForm = () => {
             >
               Atrás
             </Button>
-
-            <SubmitAsset></SubmitAsset>
+            <SubmitAsset />
           </div>
         </>
       )}

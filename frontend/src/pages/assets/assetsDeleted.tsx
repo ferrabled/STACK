@@ -24,7 +24,6 @@ const AssetsDeletedPage = () => {
                 const asset: AssetsInList = {
                     name: response[0].name,
                     assetType: response[0].assetType,
-                    assetDepart: response[0].assetDepart,
                     creationDate: Number(response[0].creationDate),
                     adquireDate: Number(response[0].adquireDate),
                     originalId: Number(response[0].originalAssetId),
@@ -47,7 +46,7 @@ const AssetsDeletedPage = () => {
 
     return (
         <PageLoged>
-            {!isLoading && <>
+            {!isLoading && assets && <>
             <Typography variant="h5">Activos Eliminados</Typography>
             <AssetsDeletedCard assets={assets}/>
             </>}

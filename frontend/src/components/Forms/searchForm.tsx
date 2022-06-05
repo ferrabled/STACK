@@ -169,7 +169,7 @@ export default function SearchForm() {
         const department: Department = {
           name: r[i].name,
           description: r[i].description,
-          telephone: Number(r[i].telephone),
+          telephone: r[i].telephone,
           orgId: Number(r[i].orgId),
           id: Number(r[i].index),
           index: Number(r[i].index),

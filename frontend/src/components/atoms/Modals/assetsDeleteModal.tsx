@@ -69,6 +69,7 @@ const AssetsDeleteModal = (props: {
             adquireDate: Number(assets[i].adquireDate),
             originalId: Number(assets[i].index),
             index: Number(assets[i].index),
+            organizationId: assets[i].organizationId,
           };
           //TODO CHECK IF IT RETURNS ANY ASSET DELETED
           if (asset.creationDate === 0 && asset.adquireDate === 0) continue;

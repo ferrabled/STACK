@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Skeleton } from "@mui/material";
 import {
   AdministratorCard,
@@ -21,7 +22,7 @@ const MyOrganizationPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [org, setOrg] = useState<Organization>();
   const [admin, setAdmin] = useState<Admin>();
-  const [dashboardValues, setDashboardValues] = useState<number[]>();
+  const [dashboardValues, setDashboardValues] = useState<number[]>([]);
 
   useEffect(() => {
     const orgId = Number(window.localStorage.getItem("orgId"));
@@ -39,7 +40,7 @@ const MyOrganizationPage = () => {
           const admin: Admin = {
             name: response["name"],
             lastName: response["lastname"],
-            address: response["addressO"],
+            address: response["admin"],
             telephone: response["telephone"],
             email: response["email"],
           };
@@ -82,11 +83,11 @@ const MyOrganizationPage = () => {
           </div>
         )}
         <>
-          {!isLoading && (
+          {!isLoading && org && (
             <>
               <div className="flex flex-row w-full items-center justify-center gap-5">
-                <OrganizationCard data={org} />
-                <AdministratorCard admin={admin} />
+                <OrganizationCard org={org} />
+                <AdministratorCard admin={admin!} />
               </div>
               <DashboardData values={dashboardValues} />
             </>

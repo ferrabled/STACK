@@ -1,9 +1,9 @@
 import { Button, Card, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Admin } from "types";
+import { BlockchainAdmin } from "types";
 
-const HomeCard = ({ admin }: { admin: Admin }) => {
+const HomeCard = ({ admin }: { admin: BlockchainAdmin }) => {
   const navigate = useNavigate();
 
   const redirectAssets = () => {

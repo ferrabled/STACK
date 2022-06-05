@@ -4,11 +4,11 @@ import { HomeCard } from "components/atoms";
 import { CallGetAdminData } from "components/wallet/contractCall";
 import { CallGetUserFromAddr } from "components/wallet/userCall";
 import React, { useEffect, useState } from "react";
-import { Admin } from "types";
+import { BlockchainAdmin } from "types";
 import PageLoged from "./pageCheckLogin";
 
 const HomePage = () => {
-  const [userData, setUserData] = useState<Admin|null>(null);
+  const [userData, setUserData] = useState<BlockchainAdmin | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -37,9 +37,7 @@ const HomePage = () => {
   else
     return (
       <div>
-        <PageLoged>
-          <HomeCard admin={userData}></HomeCard>
-        </PageLoged>
+        <PageLoged>{userData && <HomeCard admin={userData} />}</PageLoged>
       </div>
     );
 };

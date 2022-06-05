@@ -15,11 +15,11 @@ import { Field, Form, Formik } from "formik";
 import useToast from "hooks/useNotify";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AssetEdited, Department } from "types";
+import { Asset, AssetEdited, Department, InputAssetEdited } from "types";
 import { formatDateyMd } from "utils";
 import * as Yup from "yup";
 
-const EditAssetForm = (props: { data: AssetEdited }) => {
+const EditAssetForm = (props: { data: AssetEdited | Asset }) => {
   const [notification, setNotify] = useToast();
   const navigate = useNavigate();
   const [departments, setDepartments] = useState<Department[]>();
@@ -30,9 +30,9 @@ const EditAssetForm = (props: { data: AssetEdited }) => {
 
   useEffect(() => {
     console.log(props);
-    setAssetEd(props.data);
+    setAssetEd(props.data as AssetEdited);
     const dateTime = props.data.adquireDate;
-    const date = formatDateyMd(dateTime);
+    const date = formatDateyMd(dateTime as Date);
     console.log(date);
     setFAdqDate(date);
 
@@ -46,14 +46,14 @@ const EditAssetForm = (props: { data: AssetEdited }) => {
         const department: Department = {
           name: r[i].name,
           description: r[i].description,
-          telephone: Number(r[i].telephone),
+          telephone: r[i].telephone,
           orgId: Number(r[i].orgId),
           id: Number(r[i].index),
           index: Number(r[i].index),
         };
         container.push(department);
       }
-      CallGetAsset(props.data.originalAssetId).then((res) => {
+      CallGetAsset((props.data as AssetEdited).originalAssetId).then((res) => {
         setAssetDepart(Number(res.assetDepart));
         setIsLoading(false);
       });
@@ -71,13 +71,13 @@ const EditAssetForm = (props: { data: AssetEdited }) => {
       .max(40),
   });
 
-  const ConnectToContract = (data: AssetEdited) => {
+  const ConnectToContract = (data: InputAssetEdited) => {
     CallInsertEditedAsset(data).then((n) => {
       setNotify(n);
     });
   };
 
-  if (isLoading) return <></>;
+  if (isLoading || !assetEd) return <></>;
   else
     return (
       <div className="flex flex-col m-6">
@@ -87,7 +87,7 @@ const EditAssetForm = (props: { data: AssetEdited }) => {
             name: assetEd.name,
             organizationId: Number(window.localStorage.getItem("orgId")),
             adquireDateString: fAdquireDate,
-            adquireDate: assetEd.adquireDate.getTime(),
+            adquireDate: (assetEd.adquireDate as Date).getTime(),
             creationDate: 0,
             assetType: assetEd.assetType,
             originalAssetId: assetEd.originalAssetId,
@@ -107,7 +107,7 @@ const EditAssetForm = (props: { data: AssetEdited }) => {
             data.adquireDate = dateObject.getTime();
             data.creationDate = Date.now();
             setSubmitting(true);
-            ConnectToContract(data);
+            ConnectToContract({ ...data, deleted: false });
           }}
         >
           {({ values, errors, handleChange }) => (
@@ -163,7 +163,8 @@ const EditAssetForm = (props: { data: AssetEdited }) => {
                       as={Select}
                     >
                       <MenuItem value={0}>Sin departamento</MenuItem>
-                      {!isLoading && departments &&
+                      {!isLoading &&
+                        departments &&
                         departments.map((department) => (
                           <MenuItem
                             key={Number(department.index)}

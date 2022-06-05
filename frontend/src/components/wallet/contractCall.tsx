@@ -1,20 +1,21 @@
 import { ethers } from "ethers";
-import {
-  Admin,
-  Asset,
-  AssetEdited,
-  CloudAsset,
-  DataAsset,
-  DocAsset,
-  HardwareAsset,
-  NetworkAsset,
-  Notify,
-  Organization,
-  OrganizationAndAdmin,
-  OtherAsset,
-  SoftwareAsset,
-  TransactionError,
-} from "types";
+import
+  {
+    Asset,
+    AssetEdited,
+    BlockchainAdmin,
+    BlockchainOrganization,
+    CloudAsset,
+    DataAsset,
+    DocAsset,
+    HardwareAsset,
+    InputAssetEdited,
+    NetworkAsset,
+    Notify, OrganizationAndAdmin,
+    OtherAsset,
+    SoftwareAsset,
+    TransactionError
+  } from "types";
 import addresses from "../../assets/addresses.json";
 import mainABI from "./mainABI.json";
 
@@ -132,7 +133,7 @@ export async function CallInsertNewSoftAsset(
   try {
     await contract.insertNewSoftAsset(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -166,7 +167,7 @@ export async function CallInsertNewHardAsset(
   try {
     await contract.insertNewHardAsset(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -200,7 +201,7 @@ export async function CallInsertNewDocAsset(asset: DocAsset): Promise<Notify> {
   try {
     await contract.insertNewDocAsset(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -234,7 +235,7 @@ export async function CallInsertNewDataAsset(
   try {
     await contract.insertNewDataAsset(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -267,7 +268,7 @@ export async function CallInsertNewNetworkAsset(
   try {
     await contract.insertNewNetworkAsset(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -300,7 +301,7 @@ export async function CallInsertNewCloudAsset(
   try {
     await contract.insertNewCloudAsset(
       asset.name,
-      asset.orgId,
+      asset.organizationId,
       asset.adquireDate,
       asset.creationDate,
       asset.assetType,
@@ -337,7 +338,7 @@ export async function CallInsertNewOtherAsset(
 ): Promise<void> {
   await contract.insertNewOtherAsset(
     asset.name,
-    asset.orgId,
+    asset.organizationId,
     asset.adquireDate,
     asset.creationDate,
     asset.assetType,
@@ -358,11 +359,11 @@ export async function CallInsertAsset(props: Asset) {
      */
   console.log("HOLA");
   //TODO change ORG ID
-  input.orgId = 0;
+  input.organizationId = 0;
 
   contract.insertAsset(
     input.name,
-    input.orgId,
+    input.organizationId,
     input.adquireDate,
     input.creationDate,
     input.assetType
@@ -386,31 +387,33 @@ export async function CallGetOrganizationAssets(
   return assets;
 }
 
-export async function CallGetAsset(props: number): Promise<Asset> {
+export async function CallGetAsset(assetId: number): Promise<Asset> {
   const contract = new ethers.Contract(
     contractAddress,
     mainABI,
     provider.getSigner()
   );
 
-  const asset = contract.getAsset(props);
+  const asset = contract.getAsset(assetId);
   return asset;
 }
 
 export async function CallGetOrganizationData(
   props: number
-): Promise<Organization> {
+): Promise<BlockchainOrganization> {
   const organization = contract.getOrg(props);
   return organization;
 }
 
-export async function CallGetAdminData(props: number): Promise<Admin> {
+export async function CallGetAdminData(
+  props: number
+): Promise<BlockchainAdmin> {
   const admin = contract.getAdmin(props);
   return admin;
 }
 
 export async function CallInsertEditedAsset(
-  props: AssetEdited
+  props: InputAssetEdited
 ): Promise<Notify> {
   const input = props;
   try {
@@ -418,8 +421,8 @@ export async function CallInsertEditedAsset(
       input.originalAssetId,
       input.name,
       input.organizationId,
-      input.adquireDate,
-      input.creationDate,
+      (input.adquireDate as Date).getTime(),
+      (input.creationDate as Date).getTime(),
       input.deleted,
       input.assetType
     );
@@ -472,7 +475,7 @@ export async function CallDeleteAsset(props: number) {
         contract.insertEditedAsset(
           Number(response.index),
           String(response.name),
-          Number(response.orgId),
+          Number(response.organizationId),
           Number(response.adquireDate),
           Number(response.creationDate),
           true,

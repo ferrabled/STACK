@@ -3,7 +3,10 @@ import { Skeleton } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import { CallGetAsset, CallGetOrganizationAssets } from "components/wallet/contractCall";
+import {
+  CallGetAsset,
+  CallGetOrganizationAssets,
+} from "components/wallet/contractCall";
 import { CallGetAllDepartmentsFromOrg } from "components/wallet/userCall";
 import useToast from "hooks/useNotify";
 import { useEffect, useState } from "react";
@@ -45,7 +48,10 @@ const AssetsDepartModal = (props: { show: boolean; close: () => void }) => {
       });
     };
 
-    const refactorAssets = async ([assets, assetsEdited]: [Asset[], AssetEdited[]]) => {
+    const refactorAssets = async ([assets, assetsEdited]: [
+      Asset[],
+      AssetEdited[]
+    ]) => {
       const cont = assets.length;
       const contEdit = assetsEdited.length;
       const container: AssetsInList[] = [];
@@ -58,6 +64,7 @@ const AssetsDepartModal = (props: { show: boolean; close: () => void }) => {
           creationDate: Number(assets[i].creationDate),
           adquireDate: Number(assets[i].adquireDate),
           originalId: Number(assets[i].index),
+          organizationId: assets[i].organizationId,
           index: Number(assets[i].index),
         };
         //TODO CHECK IF IT RETURNS ANY ASSET DELETED

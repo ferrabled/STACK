@@ -156,7 +156,7 @@ export async function CallInsertDepartment(props: Department) {
     await contract.insertDepartment(
       props.name,
       props.description,
-      props.telephone,
+      Number(props.telephone),
       props.orgId,
       signerAddress
     );
@@ -180,6 +180,12 @@ export async function CallInsertDepartment(props: Department) {
           type: "error",
         };
         return notify;
+      } else {
+        return {
+          isOpen: true,
+          message: "Error desconocido",
+          type: "error",
+        }
       }
     } catch {
       console.log(err);
@@ -356,6 +362,11 @@ export async function CallInsertComment(
           type: "error",
         };
         return notify;
+      }
+      return {
+        isOpen: true,
+        message: "Error desconocido",
+        type: "error",
       }
     } catch {
       const errorM = "Por favor, acepta la transacción en metamask";

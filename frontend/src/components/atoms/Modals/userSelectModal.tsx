@@ -45,7 +45,7 @@ export default function UserSelectModal(props: {
           name: response[i].name,
           surname: response[i].surname,
           email: response[i].email,
-          telephone: Number(response[i].telephone),
+          telephone: response[i].telephone,
           orgId: Number(response[i].orgId),
           index: Number(response[i].index),
         };
@@ -94,7 +94,7 @@ export default function UserSelectModal(props: {
           <div className="mb-6"></div>
           {isLoading && <Skeleton></Skeleton>}
           {/* TODO SEND data */}
-          {!isLoading && (
+          {!isLoading && users && (
             <SimpleUserTable
               setNotifyParent={setToast}
               users={users}

@@ -1,20 +1,22 @@
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Button, CircularProgress, IconButton } from "@mui/material";
-import {
-  DataGrid,
-  GridColDef,
-  GridRowParams,
-  GridSelectionModel,
-} from "@mui/x-data-grid";
+import
+  {
+    DataGrid,
+    GridColDef,
+    GridRowParams,
+    GridSelectionModel
+  } from "@mui/x-data-grid";
 import { CallGetIsAssetEdited } from "components/wallet/contractCall";
+import
+  {
+    CallDeleteAssetFromDepartment,
+    CallInsertAssetToDepartment
+  } from "components/wallet/userCall";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AssetsInList, GridTableElement, Notify } from "types";
 import { formatDate } from "utils";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Asset, AssetsInList, GridTableElement, Notify } from "types";
-import {
-  CallDeleteAssetFromDepartment,
-  CallInsertAssetToDepartment,
-} from "components/wallet/userCall";
 
 const SimpleSelectAssetsTable = ({
   assets,
@@ -28,7 +30,7 @@ const SimpleSelectAssetsTable = ({
   setNotifyParent: (n: Notify) => void;
 }) => {
   const navigate = useNavigate();
-  const [rows, setRows] = useState<GridTableElement<Asset>[]>([]);
+  const [rows, setRows] = useState<GridTableElement<AssetsInList>[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
 

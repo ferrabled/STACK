@@ -25,6 +25,12 @@ export type Organization = {
   telephone: number;
 };
 
+export type BlockchainOrganization = {
+  name: string;
+  addressO: string;
+  telephone: number;
+}
+
 export type OrganizationAndAdmin = {
   firstName: string;
   lastName: string;
@@ -43,12 +49,21 @@ export type Admin = {
   telephone: number;
 };
 
+export type BlockchainAdmin = {
+  name: string;
+  lastname: string;
+  admin: string;
+  email: string;
+  telephone: number;
+  index: number;
+}
+
 //ASSETS:
 
 export type Asset = {
   name: string;
   //TODO ORG ID CHECK EVERYWHERE
-  orgId: number;
+  organizationId: number;
   assetType: number;
   assetDepart: number;
   creationDate: number;
@@ -56,16 +71,19 @@ export type Asset = {
   index?: number;
 };
 
-export type AssetEdited = {
+
+export type InputAssetEdited = {
   name: string;
-  adquireDate: Date;
-  creationDate: Date;
+  adquireDate: number|Date;
+  creationDate: number|Date;
   assetType: number;
   originalAssetId: number;
   organizationId: number;
   deleted: boolean;
-  index: number;
 };
+export type AssetEdited = InputAssetEdited & {
+  index: number;
+}
 
 //ADD DEPARTMENT ID FOR EACH
 export type AssetsInList = {
@@ -74,7 +92,7 @@ export type AssetsInList = {
   creationDate: number;
   assetType: number;
   assetTS?: string;
-  assetDepart: number;
+  assetDepart?: number;
   assetDS?: string;
   originalId: number;
   //Id shown in the list
@@ -83,6 +101,7 @@ export type AssetsInList = {
   //on the blockchain
   index: number;
   comments?: number;
+  organizationId?: number;
 };
 
 export const AssetTypes = [
@@ -123,7 +142,7 @@ export type Notify = {
 export type Department = {
   name: string;
   description: string;
-  telephone: number;
+  telephone: string;
   orgId: number;
   index?: number;
   id?: number;

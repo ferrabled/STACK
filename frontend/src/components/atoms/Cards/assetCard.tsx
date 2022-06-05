@@ -5,14 +5,14 @@ import { CallDeleteAsset } from "components/wallet/contractCall";
 import { CallGetAssetUsers } from "components/wallet/userCall";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Asset, TableUser } from "types";
+import { Asset, AssetEdited, TableUser } from "types";
 import { formatDate } from "utils";
 import UserSelectModal from "../Modals/userSelectModal";
 import AssetTypeCard from "./Assets/assetTypeData";
 import CommentsCard from "./commentsCard";
 import UsersCard from "./usersCard";
 
-const AssetCard = ({asset}: {asset: Asset}) => {
+const AssetCard = ({asset}: {asset: AssetEdited|Asset}) => {
   const [showModal, setShowModal] = useState(false);
 
   const [assetId, setAssetId] = useState("");
@@ -79,7 +79,7 @@ const AssetCard = ({asset}: {asset: Asset}) => {
             name: response[i].name,
             surname: response[i].surname,
             email: response[i].email,
-            telephone: Number(response[i].telephone),
+            telephone: response[i].telephone,
             orgId: Number(response[i].orgId),
             index: Number(response[i].index),
           };

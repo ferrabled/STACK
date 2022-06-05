@@ -1,20 +1,20 @@
 import { Card } from "@mui/material";
 import { EditAssetForm } from "components/Forms";
-import {
-  CallGetAsset,
-  CallGetLastAssetEdited,
-} from "components/wallet/contractCall";
-import { ethers } from "ethers";
+import
+  {
+    CallGetAsset,
+    CallGetLastAssetEdited
+  } from "components/wallet/contractCall";
 import PageLoged from "pages/pageCheckLogin";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AssetEdited } from "types";
+import { Asset, AssetEdited } from "types";
 
 const EditAssetPage = () => {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [asset, setAsset] = useState<AssetEdited>();
+  const [asset, setAsset] = useState<AssetEdited | Asset>();
 
   useEffect(() => {
     const itemId = window.sessionStorage.getItem("editId");
@@ -22,35 +22,13 @@ const EditAssetPage = () => {
     else {
       if (window.sessionStorage.getItem("isEdited") === "false") {
         CallGetAsset(Number(itemId)).then((response) => {
-          const asset: AssetEdited = {
-            name: response["name"],
-            adquireDate: new Date(
-              Number(ethers.BigNumber.from(response["adquireDate"]))
-            ),
-            creationDate: new Date(
-              Number(ethers.BigNumber.from(response["creationDate"]))
-            ),
-            assetType: response["assetType"],
-            originalAssetId: Number(itemId),
-          };
-          setAsset(asset);
+          setAsset(response);
           setIsLoading(false);
         });
       } else {
         CallGetLastAssetEdited(Number(itemId)).then((response) => {
-          const asset: AssetEdited = {
-            name: response["name"],
-            adquireDate: new Date(
-              Number(ethers.BigNumber.from(response["adquireDate"]))
-            ),
-            creationDate: new Date(
-              Number(ethers.BigNumber.from(response["creationDate"]))
-            ),
-            assetType: response["assetType"],
-            originalAssetId: Number(itemId),
-          };
           console.log(asset);
-          setAsset(asset);
+          setAsset(response);
           setIsLoading(false);
         });
       }
@@ -59,7 +37,7 @@ const EditAssetPage = () => {
 
   return (
     <PageLoged>
-      {!isLoading && (
+      {!isLoading && asset && (
         <Card className="my-3">
           <EditAssetForm data={asset} />
         </Card>

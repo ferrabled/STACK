@@ -25,7 +25,7 @@ const DepartmentsPage = () => {
           const department: Department = {
             name: response[i].name,
             description: response[i].description,
-            telephone: Number(response[i].telephone),
+            telephone: response[i].telephone,
             orgId: Number(response[i].orgId),
             id: Number(response[i].index),
             index: Number(response[i].index),

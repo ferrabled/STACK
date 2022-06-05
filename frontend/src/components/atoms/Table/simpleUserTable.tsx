@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Button, IconButton } from "@mui/material";
 import
@@ -36,7 +37,7 @@ const SimpleUserTable = ({
   const [assetId, setAssetId] = useState("");
 
   useEffect(() => {
-    const assetId = window.sessionStorage.getItem("detailId");
+    const assetId = window.sessionStorage.getItem("detailId")!;
     setAssetId(assetId);
     const usersList = users.map((x, i) => ({ ...x, id: i }));
     setRows(usersList);

@@ -43,7 +43,7 @@ const UserDeleteModal = (props: {
           name: response[i].name,
           surname: response[i].surname,
           email: response[i].email,
-          telephone: Number(response[i].telephone),
+          telephone: response[i].telephone,
           orgId: Number(response[i].orgId),
           index: Number(response[i].index),
         };

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Button, TextField, Typography } from "@mui/material";
 import { CallInsertDepartment } from "components/wallet/userCall";
 import { Field, Form, Formik } from "formik";
@@ -25,13 +26,15 @@ const DepartmentForm = () => {
           name: "Fernando",
           description: "User",
           telephone: "634579874",
-          orgId: window.localStorage.getItem("orgId"),
         }}
         validationSchema={validationSchema}
         onSubmit={(data, { setSubmitting }) => {
           console.log(data);
           try {
-            CallInsertDepartment(data).then((n) => {
+            CallInsertDepartment({
+              ...data,
+              orgId: Number(window.localStorage.getItem("orgId")!),
+            }).then((n) => {
               /* console.log(response) */
               setToast(n);
               setSubmitting(true);

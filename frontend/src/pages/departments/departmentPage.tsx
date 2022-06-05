@@ -113,7 +113,7 @@ const DepartmentPage = () => {
               name: r[i].name,
               surname: r[i].surname,
               email: r[i].email,
-              telephone: Number(r[i].telephone),
+              telephone: r[i].telephone,
               orgId: Number(r[i].orgId),
               index: Number(r[i].index),
             };

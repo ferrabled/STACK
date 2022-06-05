@@ -22,7 +22,7 @@ import
 import PageLoged from "pages/pageCheckLogin";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { CloudAssetProps, DataAssetProps, DocAssetProps, HardwareAssetProps, NetworkAssetProps, OtherAssetProps, SoftwareAssetProps } from "types";
+import { CloudAsset, CloudAssetProps, DataAsset, DataAssetProps, DocAsset, DocAssetProps, HardwareAsset, HardwareAssetProps, NetworkAsset, NetworkAssetProps, OtherAsset, OtherAssetProps, SoftwareAsset, SoftwareAssetProps } from "types";
 
 type AssetType = 
   (SoftwareAssetProps | HardwareAssetProps
@@ -99,13 +99,13 @@ const EditTypePage = () =>
       {!isLoading && data && (
         <Card className="my-3">
           <div className="flex flex-col m-6">
-            {typeNumber === 0 && <SoftwareForm asset={data as SoftwareAssetProps} edit />}
-            {typeNumber === 1 && <HardwareForm asset={data as HardwareAssetProps} edit />}
-            {typeNumber === 2 && <DocumentForm asset={data as DocAssetProps } edit />}
-            {typeNumber === 3 && <DataForm asset={data} edit />}
-            {typeNumber === 4 && <NetworkForm asset={data} edit />}
-            {typeNumber === 5 && <CloudForm asset={data} edit />}
-            {typeNumber === 6 && <OtherForm asset={data} edit />}
+            {typeNumber === 0 && <SoftwareForm asset={data as SoftwareAsset} edit />}
+            {typeNumber === 1 && <HardwareForm asset={data as HardwareAsset} edit />}
+            {typeNumber === 2 && <DocumentForm asset={data as DocAsset } edit />}
+            {typeNumber === 3 && <DataForm asset={data as DataAsset} edit />}
+            {typeNumber === 4 && <NetworkForm asset={data as NetworkAsset} edit />}
+            {typeNumber === 5 && <CloudForm asset={data as CloudAsset} edit />}
+            {typeNumber === 6 && <OtherForm asset={data as OtherAsset} edit />}
             <div className="lg:mx-56 xl:mx-64 2xl:mx-80 2xl:gap-40 flex flex-row gap-24 items-center justify-center">
               <Button
                 fullWidth

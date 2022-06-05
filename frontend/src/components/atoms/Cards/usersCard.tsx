@@ -1,7 +1,7 @@
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { CircularProgress, IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { GridTableElement, TableUser } from "types";
 import BasicModal from "../Modals/assetsFromUser";
 
