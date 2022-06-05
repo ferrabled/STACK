@@ -2,10 +2,10 @@ import { Skeleton } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import { CallRetrieveListOfAsset } from "components/wallet/contractCall";
+import { CallGetAsset, CallRetrieveListOfAsset } from "components/wallet/contractCall";
 import { CallGetUserAssets } from "components/wallet/userCall";
 import { useEffect, useState } from "react";
-import { AssetsInList, AssetTypes } from "types";
+import { AssetsInList, AssetTypes, Asset, AssetEdited } from "types";
 import SimpleAssetsTable from "../Table/simpleAssetsTable";
 
 const style = {
@@ -20,7 +20,11 @@ const style = {
   p: 4,
 };
 
-const BasicModal = (props) => {
+const BasicModal = (props: {
+  show: boolean;
+  close: () => void;
+  userId: string;
+}) => {
   const [isEmpty, setIsEmpty] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>();
@@ -30,21 +34,23 @@ const BasicModal = (props) => {
     if (!props.show) return;
     setIsLoading(true);
 
-    const refactorAssets = (response: any) => {
-      console.log(response);
-      const cont = response[0].length;
-      const contEdit = response[1].length;
+    const refactorAssets = async ([assets, assetsEdited]: [
+      Asset[],
+      AssetEdited[]
+    ]) => {
+      const cont = assets.length;
+      const contEdit = assetsEdited.length;
       const container: AssetsInList[] = [];
       for (let i = 0; i < cont; i++) {
         const asset: AssetsInList = {
-          name: response[0][i].name,
-          assetType: response[0][i].assetType,
-          assetTS: AssetTypes[response[0][i].assetType],
-          assetDepart: response[0][i].assetDepart,
-          creationDate: Number(response[0][i].creationDate),
-          adquireDate: Number(response[0][i].adquireDate),
-          originalId: Number(response[0][i].index),
-          index: Number(response[0][i].index),
+          name: assets[i].name,
+          assetType: assets[i].assetType,
+          assetTS: AssetTypes[assets[i].assetType],
+          assetDepart: assets[i].assetDepart,
+          creationDate: Number(assets[i].creationDate),
+          adquireDate: Number(assets[i].adquireDate),
+          originalId: Number(assets[i].index),
+          index: Number(assets[i].index),
         };
         //TODO CHECK IF IT RETURNS ANY ASSET DELETED
         if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
@@ -54,15 +60,18 @@ const BasicModal = (props) => {
       }
 
       for (let o = 0; o < contEdit; o++) {
+        const originalAsset = await CallGetAsset(
+          assetsEdited[o].originalAssetId
+        );
         const asset: AssetsInList = {
-          name: response[1][o].name,
-          assetType: response[1][o].assetType,
-          assetTS: AssetTypes[response[1][o].assetType],
-          assetDepart: response[1][o].assetDepart,
-          creationDate: Number(response[1][o].creationDate),
-          adquireDate: Number(response[1][o].adquireDate),
-          originalId: Number(response[1][o].originalAssetId),
-          index: Number(response[1][o].index),
+          name: assetsEdited[o].name,
+          assetType: assetsEdited[o].assetType,
+          assetTS: AssetTypes[assetsEdited[o].assetType],
+          assetDepart: originalAsset.assetDepart,
+          creationDate: Number(assetsEdited[o].creationDate),
+          adquireDate: Number(assetsEdited[o].adquireDate),
+          originalId: Number(assetsEdited[o].originalAssetId),
+          index: Number(assetsEdited[o].index),
         };
         if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
         else {
@@ -75,14 +84,14 @@ const BasicModal = (props) => {
 
     console.log(props.show);
     if (props.show) {
-      setAssetId(props.userId);
+      // setAssetId(props.userId);
       if (props.userId !== "") {
         CallGetUserAssets(Number(props.userId)).then((r) => {
           console.log(r);
-          CallRetrieveListOfAsset(r).then((response) => {
+          CallRetrieveListOfAsset(r).then(async (response) => {
             if (response[0].length !== 0 || response[1].length !== 0) {
               setIsEmpty(false);
-              refactorAssets(response);
+              await refactorAssets(response);
             } else {
               setIsEmpty(true);
               setIsLoading(false);
@@ -114,7 +123,7 @@ const BasicModal = (props) => {
                   activos desde la vista detallada de cualquier activo.
                 </Typography>
               )}
-              {!isEmpty && <SimpleAssetsTable {...assets!} />}
+              {!isEmpty && <SimpleAssetsTable assets={assets!} />}
             </>
           )}
         </Box>

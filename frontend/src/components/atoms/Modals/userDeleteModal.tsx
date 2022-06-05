@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { CallGetUsersFromDepart } from "components/wallet/userCall";
 import { TableUser } from "types";
 import SimpleUserTable from "../Table/simpleUserTable";
-import Notification from "components/notification";
+import useToast from "hooks/useNotify";
 
 const style = {
   position: "absolute",
@@ -20,7 +20,13 @@ const style = {
   p: 4,
 };
 
-const UserDeleteModal = (props) => {
+const UserDeleteModal = (props: {
+  show: boolean;
+  close: () => void;
+  depart: boolean;
+  usersIds: number[];
+  departId: number;
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<TableUser[]>();
   const [toast, setToast] = useToast();
@@ -91,7 +97,7 @@ const UserDeleteModal = (props) => {
               depart={props.depart}
               idList={[]}
               deleteB
-            ></SimpleUserTable>
+            />
           )}
         </Box>
       </Modal>

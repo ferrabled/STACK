@@ -26,7 +26,7 @@ const validationSchema = Yup.object({
   adquireDate: Yup.string().max(40),
 });
 
-const SearchForm = (props) => {
+export default function SearchForm() {
   const [departments, setDepartments] = useState<Department[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoading2, setIsLoading2] = useState(true);
@@ -50,25 +50,25 @@ const SearchForm = (props) => {
         case "adquireDateI":
           console.log(asset.adquireDate);
           console.log(searchObject.adquireDateI);
-          if (asset.adquireDate <= searchObject.adquireDateI) {
+          if (asset.adquireDate <= searchObject.adquireDateI!) {
             console.log("Adquire date anterior");
             return false;
           }
           break;
         case "adquireDateF":
-          if (asset.adquireDate >= searchObject.adquireDateF) {
+          if (asset.adquireDate >= searchObject.adquireDateF!) {
             console.log("Adquire date posterior");
             return false;
           }
           break;
         case "creationDateI":
-          if (asset.creationDate <= searchObject.creationDateI) {
+          if (asset.creationDate <= searchObject.creationDateI!) {
             console.log("Creation date anterior");
             return false;
           }
           break;
         case "creationDateF":
-          if (asset.creationDate >= searchObject.creationDateF) {
+          if (asset.creationDate >= searchObject.creationDateF!) {
             console.log("Creation date posterior");
             return false;
           }
@@ -90,8 +90,7 @@ const SearchForm = (props) => {
     return true;
   };
 
-  function formatData(data) {
-    const dateString = data;
+  function formatData(dateString: string) {
     const dateParts: string[] = dateString.split("-");
     let dateObject = new Date(+dateParts[0], +dateParts[1] - 1, +dateParts[2]);
     const offset = new Date().getTimezoneOffset();
@@ -104,20 +103,21 @@ const SearchForm = (props) => {
     const idOrg = Number(localStorage.getItem("idOrg"));
 
     CallGetOrganizationAssets(idOrg).then(async (response) => {
-      const cont = response[0].length;
-      const contEdit = response[1].length;
+      const [assets, assetsEdited] = response;
+      const cont = assets.length;
+      const contEdit = assetsEdited.length;
       const container: AssetsInList[] = [];
       //let object = new container;
       for (let i = 0; i < cont; i++) {
         const asset: AssetsInList = {
-          name: response[0][i].name,
-          assetType: Number(response[0][i].assetType),
-          assetDepart: Number(response[0][i].assetDepart),
-          assetTS: AssetTypes[response[0][i].assetType],
-          creationDate: Number(response[0][i].creationDate),
-          adquireDate: Number(response[0][i].adquireDate),
-          originalId: Number(response[0][i].index),
-          index: Number(response[0][i].index),
+          name: assets[i].name,
+          assetType: Number(assets[i].assetType),
+          assetDepart: Number(assets[i].assetDepart),
+          assetTS: AssetTypes[assets[i].assetType],
+          creationDate: Number(assets[i].creationDate),
+          adquireDate: Number(assets[i].adquireDate),
+          originalId: Number(assets[i].index),
+          index: Number(assets[i].index),
         };
         const searchreturn = searchCondition(sdata, asset);
         console.log("busqueda " + searchreturn + " " + asset.name);
@@ -125,18 +125,18 @@ const SearchForm = (props) => {
       }
       for (let o = 0; o < contEdit; o++) {
         const originalAsset = await CallGetAsset(
-          response[1][o].originalAssetId
+          assetsEdited[o].originalAssetId
         );
         console.log("depart" + Number(originalAsset.assetDepart));
         const asset: AssetsInList = {
-          name: response[1][o].name,
-          assetType: response[1][o].assetType,
-          assetTS: AssetTypes[response[1][o].assetType],
+          name: assetsEdited[o].name,
+          assetType: assetsEdited[o].assetType,
+          assetTS: AssetTypes[assetsEdited[o].assetType],
           assetDepart: Number(originalAsset.assetDepart),
-          creationDate: Number(response[1][o].creationDate),
-          adquireDate: Number(response[1][o].adquireDate),
-          originalId: Number(response[1][o].originalAssetId),
-          index: Number(response[1][o].index),
+          creationDate: Number(assetsEdited[o].creationDate),
+          adquireDate: Number(assetsEdited[o].adquireDate),
+          originalId: Number(assetsEdited[o].originalAssetId),
+          index: Number(assetsEdited[o].index),
         };
         const searchreturn = searchCondition(sdata, asset);
         console.log("busqueda" + searchreturn);
@@ -356,8 +356,8 @@ const SearchForm = (props) => {
                         >
                           <MenuItem value={-1}> - </MenuItem>
                           <MenuItem value={0}>Sin departamento</MenuItem>
-                          {!isLoading &&
-                            departments!.map((department) => (
+                          {!isLoading && departments && 
+                            departments.map((department) => (
                               <MenuItem
                                 key={Number(department.index)}
                                 value={Number(department.index)}
@@ -391,5 +391,4 @@ const SearchForm = (props) => {
       )}
     </>
   );
-};
-export default SearchForm;
+}

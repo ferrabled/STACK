@@ -1,6 +1,5 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { CommentInTable } from "types";
 
 const CommentsTable = (comments: CommentInTable[]) => {

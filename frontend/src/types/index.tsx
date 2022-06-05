@@ -70,8 +70,8 @@ export type AssetEdited = {
 //ADD DEPARTMENT ID FOR EACH
 export type AssetsInList = {
   name: string;
-  adquireDate?: number;
-  creationDate?: number;
+  adquireDate: number;
+  creationDate: number;
   assetType: number;
   assetTS?: string;
   assetDepart: number;
@@ -223,7 +223,7 @@ export interface User {
 
 export interface TableUser extends User {
   addr: string;
-  index?: number;
+  index: number;
 }
 
 export type SoftwareAsset = Asset & SoftwareAssetProps;

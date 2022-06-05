@@ -2,6 +2,7 @@ import { Card, Typography } from "@mui/material";
 import { Department } from "types";
 
 const DepartmentCard = ({ department }: { department: Department }) => {
+  
   return (
     <Card id="Department" className="p-5 m-5">
       <div className="flex flex-col justify-between">

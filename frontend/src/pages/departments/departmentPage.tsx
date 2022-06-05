@@ -1,27 +1,34 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AssetsInList, AssetTypes, Department, TableUser } from "types";
-import PageLoged from "pages/pageCheckLogin";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import { Button, Card, Skeleton, Typography } from "@mui/material";
+import { UsersCard } from "components/atoms/Cards";
+import DepartmentCard from "components/atoms/Cards/Department/departmentCard";
+import { AssetsDepartModal, UserSelectModal } from "components/atoms/Modals";
+import AssetsDeleteModal from "components/atoms/Modals/assetsDeleteModal";
+import UserDeleteModal from "components/atoms/Modals/userDeleteModal";
+import SimpleAssetsTable from "components/atoms/Table/simpleAssetsTable";
+import { CallGetAsset, CallRetrieveListOfAsset } from "components/wallet/contractCall";
 import {
   CallGetAssetsIdsFromDepart,
   CallGetDepartment,
   CallGetUsersFromDepart,
 } from "components/wallet/userCall";
-import DepartmentCard from "components/atoms/Cards/Department/departmentCard";
-import { UsersCard } from "components/atoms/Cards";
-import { Button, Card, Skeleton, Typography } from "@mui/material";
-import { AssetsDepartModal, UserSelectModal } from "components/atoms/Modals";
-import { CallRetrieveListOfAsset } from "components/wallet/contractCall";
-import SimpleAssetsTable from "components/atoms/Table/simpleAssetsTable";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import UserDeleteModal from "components/atoms/Modals/userDeleteModal";
-import AssetsDeleteModal from "components/atoms/Modals/assetsDeleteModal";
+import PageLoged from "pages/pageCheckLogin";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Asset,
+  AssetEdited,
+  AssetsInList,
+  AssetTypes,
+  Department,
+  TableUser,
+} from "types";
 
 const DepartmentPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [department, setDepartment] = useState<Department>();
-  const [users, setUsers] = useState<TableUser[]>();
+  const [users, setUsers] = useState<TableUser[]>([]);
   const [usersIds, setUsersIds] = useState<number[]>([]);
   const [assets, setAssets] = useState<AssetsInList[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -30,22 +37,24 @@ const DepartmentPage = () => {
   const [showDeleteAssetsModal, setShowDeleteAssetsModal] = useState(false);
 
   useEffect(() => {
-    const refactorAssets = (response) => {
-      console.log(response);
-      const cont = response[0].length;
-      const contEdit = response[1].length;
+    const refactorAssets = async ([assets, assetsEdited]: [
+      Asset[],
+      AssetEdited[]
+    ]) => {
+      const cont = assets.length;
+      const contEdit = assetsEdited.length;
       console.log(cont, contEdit);
       const container: AssetsInList[] = [];
       for (let i = 0; i < cont; i++) {
         const asset: AssetsInList = {
-          name: response[0][i].name,
-          assetType: response[0][i].assetType,
-          assetDepart: response[0][i].assetDepart,
-          assetTS: AssetTypes[response[0][i].assetType],
-          creationDate: Number(response[0][i].creationDate),
-          adquireDate: Number(response[0][i].adquireDate),
-          originalId: Number(response[0][i].index),
-          index: Number(response[0][i].index),
+          name: assets[i].name,
+          assetType: assets[i].assetType,
+          assetDepart: assets[i].assetDepart,
+          assetTS: AssetTypes[assets[i].assetType],
+          creationDate: Number(assets[i].creationDate),
+          adquireDate: Number(assets[i].adquireDate),
+          originalId: Number(assets[i].index),
+          index: Number(assets[i].index),
         };
         //TODO CHECK IF IT RETURNS ANY ASSET DELETED
         if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
@@ -55,15 +64,18 @@ const DepartmentPage = () => {
       }
 
       for (let o = 0; o < contEdit; o++) {
+        const originalAsset = await CallGetAsset(
+          assetsEdited[o].originalAssetId
+        );
         const asset: AssetsInList = {
-          name: response[1][o].name,
-          assetType: response[1][o].assetType,
-          assetDepart: response[1][o].assetDepart,
-          assetTS: AssetTypes[response[1][o].assetType],
-          creationDate: Number(response[1][o].creationDate),
-          adquireDate: Number(response[1][o].adquireDate),
-          originalId: Number(response[1][o].originalAssetId),
-          index: Number(response[1][o].index),
+          name: assetsEdited[o].name,
+          assetType: assetsEdited[o].assetType,
+          assetDepart: originalAsset.assetDepart,
+          assetTS: AssetTypes[assetsEdited[o].assetType],
+          creationDate: Number(assetsEdited[o].creationDate),
+          adquireDate: Number(assetsEdited[o].adquireDate),
+          originalId: Number(assetsEdited[o].originalAssetId),
+          index: Number(assetsEdited[o].index),
         };
         if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
         else {
@@ -156,7 +168,11 @@ const DepartmentPage = () => {
   return (
     <PageLoged>
       <section>
-        <DepartmentCard department={department} />
+        {department ? (
+          <DepartmentCard department={department} />
+        ) : (
+          <Skeleton variant="rectangular" height={230} />
+        )}
       </section>
 
       <section>
@@ -184,7 +200,7 @@ const DepartmentPage = () => {
             </div>
           </div>
           {isLoading && <Skeleton variant="rectangular" height={230} />}
-          {!isLoading && (
+          {!isLoading && users && (
             <>
               {users.length == 0 && (
                 <div className="my-8 mx-48">

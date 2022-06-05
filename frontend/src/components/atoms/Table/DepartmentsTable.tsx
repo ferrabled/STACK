@@ -1,7 +1,7 @@
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Department } from "types";
 
@@ -12,13 +12,10 @@ const DepartmentTable = ({ departments }: { departments: Department[] }) => {
 
   //TODO add number of users
   useEffect(() => {
-    const departmentList: any[] = [];
-    const cont = Object.keys(departments).length;
-
-    for (let i = 0; i < cont; i++) {
-      departments[i].id = i + 1;
-      departmentList.push(departments[i]);
-    }
+    const departmentList = departments.map((x, i) => ({
+      ...x,
+      id: i,
+    }));
     setRows(departmentList);
     setIsLoading(false);
   }, []);
@@ -32,7 +29,7 @@ const DepartmentTable = ({ departments }: { departments: Department[] }) => {
       sortable: false,
       width: 80,
       renderCell: (params) => {
-        const onClickDetails = (e: any) => {
+        const onClickDetails: MouseEventHandler = (e) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log(params.row.index);
           const departId = params.row.index;
