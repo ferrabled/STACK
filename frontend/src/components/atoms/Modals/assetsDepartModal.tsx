@@ -24,7 +24,6 @@ const style = {
 
 const AssetsDepartModal = (props: any) => {
   const [isEmpty, setIsEmpty] = useState(true);
-  const [assetId, setAssetId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>();
   const [departNames, setDepartNames] = useState<string[]>();
@@ -130,8 +129,8 @@ const AssetsDepartModal = (props: any) => {
               )}
               {!isEmpty && <SimpleSelectAssetsTable 
               setNotifyParent={setNotify}
-              departNames={departNames!} 
-              assets={assets!} 
+              departNames={departNames} 
+              assets={assets} 
               deleteB={false} />}
             </>
           )}

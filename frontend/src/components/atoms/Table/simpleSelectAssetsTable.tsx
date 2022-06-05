@@ -25,7 +25,7 @@ const SimpleSelectAssetsTable = ({
   assets: AssetsInList[];
   deleteB: boolean;
   departNames: string[];
-  setNotifyParent: any;
+  setNotifyParent: (n: Notify) => void;
 }) => {
   const navigate = useNavigate();
   const [rows, setRows] = useState<any>([]);
@@ -154,7 +154,7 @@ const SimpleSelectAssetsTable = ({
           columns={columns}
           isRowSelectable={
             deleteB
-              ? (params: GridRowParams) => true
+              ? () => true
               : (params: GridRowParams) => params.row.assetDepart == 0
           }
           checkboxSelection

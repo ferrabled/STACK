@@ -1,11 +1,13 @@
 import { Button, TextField, Typography } from "@mui/material";
-import { CallInsertOrg, WaitForInsertOrg } from "components/wallet/contractCall";
+import {
+  CallInsertOrg,
+  WaitForInsertOrg,
+} from "components/wallet/contractCall";
 import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { Notify } from "types";
 import * as Yup from "yup";
-  WaitForInsertOrg,
-} from "components/wallet/contractCall";
+import { WaitForInsertOrg } from "components/wallet/contractCall";
 import useToast from "hooks/useNotify";
 
 const OrganizationForm = () => {

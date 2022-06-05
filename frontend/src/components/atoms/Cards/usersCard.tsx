@@ -2,7 +2,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { CircularProgress, IconButton } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { TableUser } from "types";
 import BasicModal from "../Modals/assetsFromUser";
 
@@ -13,7 +12,7 @@ const UsersCard = ({ users }: { users: TableUser[] }) => {
   const [userId, setUserId] = useState("");
 
   useEffect(() => {
-    const userList: any[] = [];
+    const userList: TableUser[] = [];
     const cont = Object.keys(users).length;
     for (let i = 0; i < cont; i++) {
       console.log(users[i]);

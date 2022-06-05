@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Notification from "components/notification";
 import {
   CallInsertNewCloudAsset,
   CallInsertNewDataAsset,
@@ -19,18 +18,6 @@ import {
   CallInsertNewSoftAsset,
 } from "components/wallet/contractCall";
 import {
-  CallInsertNewCAssetWithDepartment,
-  CallInsertNewDataAssetWithDepartment,
-  CallInsertNewDocAssetWithDepartment,
-  CallInsertNewHAssetWithDepartment,
-  CallInsertNewNAssetWithDepartment,
-  CallInsertNewOAssetWithDepartment,
-  CallInsertNewSAssetWithDepartment,
-} from "components/wallet/users2Call";
-import { Field, Form, Formik } from "formik";
-import { useState } from "react";
-import * as Yup from "yup";
-import {
   CallUpdateCloudAsset,
   CallUpdateDataAsset,
   CallUpdateDocAsset,
@@ -40,19 +27,26 @@ import {
   CallUpdateSoftwareAsset,
 } from "components/wallet/dataStructsCall";
 import {
-  Asset,
+  CallInsertNewCAssetWithDepartment,
+  CallInsertNewDataAssetWithDepartment,
+  CallInsertNewDocAssetWithDepartment,
+  CallInsertNewHAssetWithDepartment,
+  CallInsertNewNAssetWithDepartment,
+  CallInsertNewOAssetWithDepartment,
+  CallInsertNewSAssetWithDepartment,
+} from "components/wallet/users2Call";
+import { Field, Form, Formik } from "formik";
+import useToast from "hooks/useNotify";
+import {
   CloudAsset,
   DataAsset,
   DocAsset,
   HardwareAsset,
   NetworkAsset,
-  Notify,
   OtherAsset,
   SoftwareAsset,
-  SoftwareAssetProps,
 } from "types";
-import { AssetDetailPage } from "pages";
-import useToast from "hooks/useNotify";
+import * as Yup from "yup";
 
 const urlReg =
   // eslint-disable-next-line no-useless-escape

@@ -15,7 +15,7 @@ import { Field, Form, Formik } from "formik";
 import useToast from "hooks/useNotify";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AssetEdited, Department, Notify } from "types";
+import { AssetEdited, Department } from "types";
 import { formatDateyMd } from "utils";
 import * as Yup from "yup";
 

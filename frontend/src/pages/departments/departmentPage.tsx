@@ -30,7 +30,7 @@ const DepartmentPage = () => {
   const [showDeleteAssetsModal, setShowDeleteAssetsModal] = useState(false);
 
   useEffect(() => {
-    const refactorAssets = (response: any) => {
+    const refactorAssets = (response) => {
       console.log(response);
       const cont = response[0].length;
       const contEdit = response[1].length;
@@ -107,7 +107,7 @@ const DepartmentPage = () => {
             };
 
             console.log(user);
-            userIds.push(user.index!);
+            userIds.push(user.index);
             userList.push(user);
           }
           setUsers(userList);
@@ -164,7 +164,7 @@ const DepartmentPage = () => {
           <div className="flex flex-row justify-between content-evenly p-1 mb-3">
             <Typography variant="h6">Usuarios del Departamento</Typography>
             <div className="flex flex-row gap-4">
-              {!isLoading && users!.length !== 0 && (
+              {!isLoading && users.length !== 0 && (
                 <Button
                   variant="outlined"
                   color="error"

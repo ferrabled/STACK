@@ -18,7 +18,6 @@ import {
 } from "components/wallet/userCall";
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { AssetsInList, AssetTypes, Department, SearchObject } from "types";
 import * as Yup from "yup";
 
@@ -27,15 +26,13 @@ const validationSchema = Yup.object({
   adquireDate: Yup.string().max(40),
 });
 
-const SearchForm = (props: any) => {
-  const navigate = useNavigate();
+const SearchForm = (props) => {
   const [departments, setDepartments] = useState<Department[]>();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoading2, setIsLoading2] = useState(true);
 
   const [formIndex, setFormIndex] = useState(0);
   const [assets, setAssets] = useState<any>({});
-  const [numComments, setNumComments] = useState<number[]>();
 
   const searchCondition = (searchObject: SearchObject, asset: AssetsInList) => {
     const keyList = Object.keys(searchObject);
@@ -51,39 +48,39 @@ const SearchForm = (props: any) => {
           }
           break;
         case "adquireDateI":
-          console.log(asset.adquireDate!);
-          console.log(searchObject.adquireDateI!);
-          if (asset.adquireDate! <= searchObject.adquireDateI!) {
+          console.log(asset.adquireDate);
+          console.log(searchObject.adquireDateI);
+          if (asset.adquireDate <= searchObject.adquireDateI) {
             console.log("Adquire date anterior");
             return false;
           }
           break;
         case "adquireDateF":
-          if (asset.adquireDate! >= searchObject.adquireDateF!) {
+          if (asset.adquireDate >= searchObject.adquireDateF) {
             console.log("Adquire date posterior");
             return false;
           }
           break;
         case "creationDateI":
-          if (asset.creationDate! <= searchObject.creationDateI!) {
+          if (asset.creationDate <= searchObject.creationDateI) {
             console.log("Creation date anterior");
             return false;
           }
           break;
         case "creationDateF":
-          if (asset.creationDate! >= searchObject.creationDateF!) {
+          if (asset.creationDate >= searchObject.creationDateF) {
             console.log("Creation date posterior");
             return false;
           }
           break;
         case "assetType":
-          if (asset.assetType !== searchObject.assetType!) {
+          if (asset.assetType !== searchObject.assetType) {
             console.log("tipo de asset distinto");
             return false;
           }
           break;
         case "department":
-          if (asset.assetDepart !== searchObject.department!) {
+          if (asset.assetDepart !== searchObject.department) {
             console.log("department distinto");
             return false;
           }
@@ -93,7 +90,7 @@ const SearchForm = (props: any) => {
     return true;
   };
 
-  function formatData(data: any) {
+  function formatData(data) {
     const dateString = data;
     const dateParts: string[] = dateString.split("-");
     let dateObject = new Date(+dateParts[0], +dateParts[1] - 1, +dateParts[2]);
@@ -152,7 +149,6 @@ const SearchForm = (props: any) => {
           setIsLoading(false);
         });
       }
-      setNumComments(commentCont);
       setAssets(container);
       console.log("HOLA");
       setIsLoading2(false);
@@ -161,7 +157,7 @@ const SearchForm = (props: any) => {
 
   useEffect(() => {
     CallGetAllDepartmentsFromOrg(
-      Number(window.localStorage.getItem("orgId")!)
+      Number(window.localStorage.getItem("orgId"))
     ).then((r) => {
       const cont = r.length;
       const container: Department[] = [];

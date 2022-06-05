@@ -1,11 +1,10 @@
 import { Button, TextField, Typography } from "@mui/material";
 import { CallInsertDepartment } from "components/wallet/userCall";
 import { Field, Form, Formik } from "formik";
-import { Notify } from "types";
 import * as Yup from "yup";
 import useToast from "hooks/useNotify";
 const DepartmentForm = () => {
-  const [toast, setNotify] = useToast();
+  const [toast, setToast] = useToast();
 
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -32,10 +31,9 @@ const DepartmentForm = () => {
         onSubmit={(data, { setSubmitting }) => {
           console.log(data);
           try {
-            CallInsertDepartment(data).then((response) => {
+            CallInsertDepartment(data).then((n) => {
               /* console.log(response) */
-              const notify: Notify = response!;
-              setNotify(notify);
+              setToast(n);
               setSubmitting(true);
             });
           } catch (e) {

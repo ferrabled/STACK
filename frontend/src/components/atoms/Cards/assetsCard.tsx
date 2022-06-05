@@ -1,24 +1,29 @@
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Button, Card, CircularProgress, IconButton } from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import {
+  CallDeleteAsset,
+  CallGetIsAssetEdited,
+} from "components/wallet/contractCall";
 import React, { useEffect, useState } from "react";
-import { Card, Button, Typography, Table, CircularProgress, IconButton } from "@mui/material";
-import { DataGrid, GridCellValue, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { AssetsList } from "types";
 import { useNavigate } from "react-router-dom";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import { CallDeleteAsset, CallGetIsAssetEdited, CallInsertEditedAsset } from "components/wallet/contractCall";
 import { formatDate } from "utils";
+import {
+  DataGrid,
+  GridCellValue,
+  GridColDef,
+  GridValueGetterParams,
+} from "@mui/x-data-grid";
+import { AssetsList } from "types";
 
-
-
-const AssetsCard = (props:any) => {
+const AssetsCard = (props) => {
   const navigate = useNavigate();
   const [rows, setRows] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-
   useEffect(() => {
-
     const FormatData = () => {
       const listAssets = props.props;
       console.log("Recibimos los datos");
@@ -26,7 +31,7 @@ const AssetsCard = (props:any) => {
 
       console.log(listAssets.length);
       const cont = listAssets.length;
-      const tempRow: any[] = []; 
+      const tempRow: any[] = [];
       for (let i = 0; i < cont; i++) {
         console.log(listAssets[i]);
         listAssets[i].id = i;
@@ -34,10 +39,10 @@ const AssetsCard = (props:any) => {
         tempRow.push(listAssets[i]);
       }
       setRows(tempRow);
-    }
+    };
     FormatData();
-    setIsLoading(false)
-  }, [])
+    setIsLoading(false);
+  }, []);
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
@@ -48,100 +53,94 @@ const AssetsCard = (props:any) => {
       sortable: false,
       width: 150,
       renderCell: (params) => {
-        const onClickDetails = (e:any) => {
+        const onClickDetails = (e: any) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log(params.row.originalId);
           const originalId = params.row.originalId;
-          CallGetIsAssetEdited(originalId).then(
-            (response) => {
-              console.log("True or false");
-              console.log(response);
-              if(response) {
-                console.log("True");
-                sessionStorage.setItem('isEdited', String(true));
-              } else {
-                console.log("false");
-                sessionStorage.setItem('isEdited', String(false));
-              }
-            sessionStorage.setItem('aType', params.row.assetType);
-            sessionStorage.setItem('record','n');
-            sessionStorage.setItem('detailId', String(originalId));    
-            navigate("/asset/");
+          CallGetIsAssetEdited(originalId).then((response) => {
+            console.log("True or false");
+            console.log(response);
+            if (response) {
+              console.log("True");
+              sessionStorage.setItem("isEdited", String(true));
+            } else {
+              console.log("false");
+              sessionStorage.setItem("isEdited", String(false));
             }
-          )
+            sessionStorage.setItem("aType", params.row.assetType);
+            sessionStorage.setItem("record", "n");
+            sessionStorage.setItem("detailId", String(originalId));
+            navigate("/asset/");
+          });
           //const api: GridApi = params.api;
           //sessionStorage.removeItem("editId");
-          
-         
-
         };
 
-        const onClickEdit = (e:any) => {
+        const onClickEdit = (e: any) => {
           e.stopPropagation(); // don't select this row after clicking
-          console.log("orignianl")
+          console.log("orignianl");
           console.log(params.row);
           const originalId = params.row.originalId;
-          CallGetIsAssetEdited(originalId).then(
-            (response) => {
-              console.log("True or false");
-              console.log(response);
-              if(response) {
-                console.log("True");
-                sessionStorage.setItem('isEdited', String(true));
-                sessionStorage.setItem('editId', String(originalId));
-              } else {
-                console.log("false");
-                sessionStorage.setItem('isEdited', String(false));
-                sessionStorage.setItem('editId', String(originalId));
-              }   
-            sessionStorage.setItem('aType', params.row.assetType);
-            navigate("/asset/edit");
+          CallGetIsAssetEdited(originalId).then((response) => {
+            console.log("True or false");
+            console.log(response);
+            if (response) {
+              console.log("True");
+              sessionStorage.setItem("isEdited", String(true));
+              sessionStorage.setItem("editId", String(originalId));
+            } else {
+              console.log("false");
+              sessionStorage.setItem("isEdited", String(false));
+              sessionStorage.setItem("editId", String(originalId));
             }
-          )
-          
+            sessionStorage.setItem("aType", params.row.assetType);
+            navigate("/asset/edit");
+          });
+
           //const api: GridApi = params.api;
           //sessionStorage.removeItem("editId");
-
-          
-
         };
 
-        const onClickDelete = (e:any) => {
+        const onClickDelete = (e: any) => {
           e.stopPropagation(); // don't select this row after clicking
           console.log("Eliminamos el activo: ");
           try {
-            console.log("delete original asset:"+params.row.originalId);
+            console.log("delete original asset:" + params.row.originalId);
             CallDeleteAsset(params.row.originalId);
             navigate("/assets");
-          }
-          catch {
-              console.log("User reverted transaction");
+          } catch {
+            console.log("User reverted transaction");
           }
         };
-        return <>
-        <div className="w-1/3">
-          <IconButton color="primary" onClick={onClickDetails}>
-            <VisibilityIcon/>
-          </IconButton></div>
-        <div className="w-1/3 items-center">
-        <IconButton color="primary" onClick={onClickEdit}>
-          <EditIcon/>
-        </IconButton></div>
-        <div className="w-1/3">
-        <IconButton color="primary" onClick={onClickDelete}>
-          <DeleteForeverIcon/>
-        </IconButton></div>
-        </>;
+        return (
+          <>
+            <div className="w-1/3">
+              <IconButton color="primary" onClick={onClickDetails}>
+                <VisibilityIcon />
+              </IconButton>
+            </div>
+            <div className="w-1/3 items-center">
+              <IconButton color="primary" onClick={onClickEdit}>
+                <EditIcon />
+              </IconButton>
+            </div>
+            <div className="w-1/3">
+              <IconButton color="primary" onClick={onClickDelete}>
+                <DeleteForeverIcon />
+              </IconButton>
+            </div>
+          </>
+        );
       },
     },
-    { 
-      field: "adquireDate", 
-      headerName: "Fecha", 
-      width: 130, 
+    {
+      field: "adquireDate",
+      headerName: "Fecha",
+      width: 130,
       renderCell: (params) => {
         const adquireDate = new Date(params.row.adquireDate);
         const adquireDateF = formatDate(adquireDate);
-        return <>{adquireDateF}</>
+        return <>{adquireDateF}</>;
       },
     },
     {
@@ -156,40 +155,54 @@ const AssetsCard = (props:any) => {
       type: "string",
       width: 150,
       renderCell: (params) => {
-        return <>{props.departNames[params.row.assetDepart]}</>
-    }},
+        return <>{props.departNames[params.row.assetDepart]}</>;
+      },
+    },
     {
       field: "numComments",
       headerName: "Comentarios",
       type: "string",
       width: 150,
       renderCell: (params) => {
-        return <>{props.numComments[params.row.id]}</>
-    }}
-    
+        return <>{props.numComments[params.row.id]}</>;
+      },
+    },
   ];
 
+  console.log(rows);
 
-    console.log(rows);
-
-  if (isLoading) return <CircularProgress />
-  else return (
-    <Card className="gap-7 p-10 flex flex-col items-center h-full">
-      <DataGrid
-        className="w-full h-full"
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        autoHeight
-      ></DataGrid>
-      <div className="w-full flex flex-row justify-evenly">
-        <Button color="primary" variant="contained" onClick={() => window.history.back()}> Atrás </Button>
-        <Button color="primary" variant="contained" onClick={() => navigate("/assets/new")}> Nuevo Activo </Button>
-      </div>
-      
-    </Card>
-  );
+  if (isLoading) return <CircularProgress />;
+  else
+    return (
+      <Card className="gap-7 p-10 flex flex-col items-center h-full">
+        <DataGrid
+          className="w-full h-full"
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          autoHeight
+        ></DataGrid>
+        <div className="w-full flex flex-row justify-evenly">
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => window.history.back()}
+          >
+            {" "}
+            Atrás{" "}
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => navigate("/assets/new")}
+          >
+            {" "}
+            Nuevo Activo{" "}
+          </Button>
+        </div>
+      </Card>
+    );
 };
 
 export default AssetsCard;

@@ -12,15 +12,15 @@ const AssetsDeletedPage = () => {
 
 
     useEffect(()=> {
-        const id = window.localStorage.getItem('orgId')!;
+        const id = window.localStorage.getItem('orgId');
 
         CallGetAssetsDeleted(Number(id)).then((response) => {
             console.log(response)
             const len = response.length;
             console.log(len);
-            let container: AssetsInList[] = [];
+            const container: AssetsInList[] = [];
 
-            for (var i = 0; i < len; i++) {
+            for (let i = 0; i < len; i++) {
                 const asset: AssetsInList = {
                     name: response[0].name,
                     assetType: response[0].assetType,
@@ -49,7 +49,7 @@ const AssetsDeletedPage = () => {
         <PageLoged>
             {!isLoading && <>
             <Typography variant="h5">Activos Eliminados</Typography>
-            <AssetsDeletedCard {...assets!}/>
+            <AssetsDeletedCard assets={assets}/>
             </>}
         </PageLoged>
     )

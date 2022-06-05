@@ -1,23 +1,17 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import { Skeleton } from "@mui/material";
-import { useEffect, useState } from "react";
-import {
-  CallGetAllDepartmentsFromOrg,
-  CallGetAllUsersFromOrg,
-  CallGetAssetsIdsFromDepart,
-  CallGetUsersFromDepart,
-} from "components/wallet/userCall";
-import { UsersCard } from "../Cards";
-import { AssetsInList, AssetTypes, TableUser } from "types";
-import EnhancedTable from "../Table/simpleUserTable";
-import SimpleUserTable from "../Table/simpleUserTable";
-import { CallRetrieveListOfAsset } from "components/wallet/contractCall";
-import { SimpleSelectAssetsTable } from "../Table";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
 import Notification from "components/notification";
-
+import { CallRetrieveListOfAsset } from "components/wallet/contractCall";
+import
+  {
+    CallGetAllDepartmentsFromOrg, CallGetAssetsIdsFromDepart
+  } from "components/wallet/userCall";
+import useToast from "hooks/useNotify";
+import { useEffect, useState } from "react";
+import { AssetsInList, AssetTypes } from "types";
+import { SimpleSelectAssetsTable } from "../Table";
 
 const style = {
   position: "absolute" as const,
@@ -31,27 +25,25 @@ const style = {
   p: 4,
 };
 
-const AssetsDeleteModal = (props: any) => {
+const AssetsDeleteModal = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>();
   const [departNames, setDepartNames] = useState<string[]>();
-  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
-
-
+  const [toast, setToast] = useToast();
 
   useEffect(() => {
     console.log("QUE HEMOS RECIBIDO " + props.usersIds);
     console.log(props.usersIds);
     const orgId = window.localStorage.getItem("orgId");
 
-    CallGetAllDepartmentsFromOrg(Number(orgId)).then((r)=> {
+    CallGetAllDepartmentsFromOrg(Number(orgId)).then((r) => {
       const cont = r.length;
-      const container: string[] = ['Sin departamento'];
+      const container: string[] = ["Sin departamento"];
       for (let i = 0; i < cont; i++) {
-        container.push(r[i].name)
+        container.push(r[i].name);
       }
       setDepartNames(container);
-    })
+    });
 
     CallGetAssetsIdsFromDepart(Number(props.departId!)).then((r) => {
       console.log(r);
@@ -109,7 +101,7 @@ const AssetsDeleteModal = (props: any) => {
 
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Modal
         open={props.show}
         onClose={props.close}
@@ -124,8 +116,9 @@ const AssetsDeleteModal = (props: any) => {
               </Typography>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 Selecciona a continuación qué activos quieres eliminar del
-                departamento. Estos activos ya no pertenecerán al departamento
-                y dejarán de poder editarse y ser eliminados por los usuarios del departamento.
+                departamento. Estos activos ya no pertenecerán al departamento y
+                dejarán de poder editarse y ser eliminados por los usuarios del
+                departamento.
               </Typography>
             </>
           )}
@@ -147,11 +140,11 @@ const AssetsDeleteModal = (props: any) => {
           {!isLoading && (
             <>
               <SimpleSelectAssetsTable
-                setNotifyParent={setNotify}
+                setNotifyParent={setToast}
                 departNames={departNames!}
                 assets={assets!}
                 deleteB
-            ></SimpleSelectAssetsTable>
+              ></SimpleSelectAssetsTable>
             </>
           )}
         </Box>

@@ -35,7 +35,7 @@ const EditTypePage = () =>
   const [isLoading, setIsLoading] = useState(true);
 
   const typeNumber = Number(useParams().id);
-  const assetId = Number(window.sessionStorage.getItem("detailId")!);
+  const assetId = Number(window.sessionStorage.getItem("detailId"));
 
   useEffect(() =>
   {

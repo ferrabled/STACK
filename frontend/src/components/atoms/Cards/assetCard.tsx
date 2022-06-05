@@ -62,12 +62,12 @@ const AssetCard = (props: any) => {
   };
 
   useEffect(() => {
-    setAssetType(window.sessionStorage.getItem("aType")!);
+    setAssetType(window.sessionStorage.getItem("aType"));
 
     const getUsers = () => {
       //setAsset(props.props);
-      setAssetId(window.sessionStorage.getItem("detailId")!);
-      const id = window.sessionStorage.getItem("detailId")!;
+      setAssetId(window.sessionStorage.getItem("detailId"));
+      const id = window.sessionStorage.getItem("detailId");
       console.log("EN SERIO DE VRD" + id);
       CallGetAssetUsers(Number(id)).then((response) => {
         const cont = response.length;
@@ -84,7 +84,7 @@ const AssetCard = (props: any) => {
             index: Number(response[i].index),
           };
           container.push(user);
-          userIds.push(user.index!);
+          userIds.push(user.index);
         }
         setUsersIds(userIds);
         setUsers(container);
@@ -110,7 +110,7 @@ const AssetCard = (props: any) => {
   const onClickEdit = () => {
     window.sessionStorage.setItem(
       "editId",
-      window.sessionStorage.getItem("detailId")!
+      window.sessionStorage.getItem("detailId")
     );
     navigate("edit");
   };
@@ -175,7 +175,7 @@ const AssetCard = (props: any) => {
           {isLoading && <Skeleton variant="rectangular" height={230} />}
           {!isLoading && (
             <>
-              {users!.length == 0 && (
+              {users.length == 0 && (
                 <div className="my-8 mx-48">
                   <Typography>
                     Aún no hay usuarios asignados a este activo. Para asignar
@@ -188,13 +188,13 @@ const AssetCard = (props: any) => {
                   </Typography>
                 </div>
               )}
-              {users!.length !== 0 && <UsersCard {...users!} />}
+              {users.length !== 0 && <UsersCard users={users} />}
             </>
           )}
         </Card>
       </section>
       <UserSelectModal
-        show={showModal!}
+        show={showModal}
         close={() => setShowModal(false)}
         depart={false}
         usersIds={usersIds}

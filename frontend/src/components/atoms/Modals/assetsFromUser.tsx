@@ -1,10 +1,9 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import { Skeleton } from "@mui/material";
-import { CallGetUserAssets } from "components/wallet/userCall";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
 import { CallRetrieveListOfAsset } from "components/wallet/contractCall";
+import { CallGetUserAssets } from "components/wallet/userCall";
 import { useEffect, useState } from "react";
 import { AssetsInList, AssetTypes } from "types";
 import SimpleAssetsTable from "../Table/simpleAssetsTable";
@@ -21,9 +20,8 @@ const style = {
   p: 4,
 };
 
-const BasicModal = (props: any) => {
+const BasicModal = (props) => {
   const [isEmpty, setIsEmpty] = useState(true);
-  const [assetId, setAssetId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState<AssetsInList[]>();
 

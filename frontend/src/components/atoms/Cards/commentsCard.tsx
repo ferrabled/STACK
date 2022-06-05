@@ -1,10 +1,10 @@
-import { Button, Card, Skeleton, Typography } from "@mui/material";
+import AddCommentIcon from '@mui/icons-material/AddComment';
+import { Button, Card, Typography } from "@mui/material";
 import { CallGetCommentsByAsset, CallGetUsersById } from "components/wallet/userCall";
 import { useEffect, useState } from "react";
 import { Comment, CommentInTable } from "types";
 import AddCommentModal from "../Modals/addCommentModal";
 import CommentsTable from "../Table/CommentsTable";
-import AddCommentIcon from '@mui/icons-material/AddComment';
 
 const CommentsCard = ({assetId}:{assetId:number}) => {
 
@@ -73,20 +73,20 @@ const CommentsCard = ({assetId}:{assetId:number}) => {
             </Button>
             </div>
             {!isLoading && (<>
-              {finalComments!.length == 0 && ( <>
+              {finalComments.length == 0 && ( <>
                 <div className="mb-5 mx-48"><Typography>Aún no hay comentarios en el activo. Cualquier usuario puede añadir un comentario nuevo.</Typography>
                 <div className='m-2'></div><Typography align="center">Puedes crear un comentario nuevo haciendo click en el siguiente botón</Typography></div>
                 </>
               )}
 
-              {finalComments!.length !== 0 && (
-                <CommentsTable {...finalComments!} ></CommentsTable> 
+              {finalComments.length !== 0 && (
+                <CommentsTable {...finalComments} ></CommentsTable> 
               )}
 
             </>)}
           </div>
           <AddCommentModal
-          show={showCommentModal!}
+          show={showCommentModal}
           close={() => setShowCommentModal(false)}
           assetId={assetId}/>
           

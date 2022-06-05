@@ -20,15 +20,13 @@ const style = {
   p: 4,
 };
 
-const UserDeleteModal = (props: any) => {
+const UserDeleteModal = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState<TableUser[]>();
-  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
-
+  const [toast, setToast] = useToast();
 
   useEffect(() => {
-
-    CallGetUsersFromDepart(Number(props.departId!)).then((response) => {
+    CallGetUsersFromDepart(Number(props.departId)).then((response) => {
       const cont = response.length;
       const container: TableUser[] = [];
       for (let i = 0; i < cont; i++) {
@@ -42,7 +40,7 @@ const UserDeleteModal = (props: any) => {
           orgId: Number(response[i].orgId),
           index: Number(response[i].index),
         };
-        container.push(user);  
+        container.push(user);
       }
       setUsers(container);
       setIsLoading(false);
@@ -51,7 +49,7 @@ const UserDeleteModal = (props: any) => {
 
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Modal
         open={props.show}
         onClose={props.close}
@@ -66,9 +64,8 @@ const UserDeleteModal = (props: any) => {
               </Typography>
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 Selecciona a continuación qué usuarios quieres eliminar del
-                departamento. Estos usuarios ya no pertenecerán al departamento y dejarán 
-                de tener permisos para editar y
-                eliminar los activos.
+                departamento. Estos usuarios ya no pertenecerán al departamento
+                y dejarán de tener permisos para editar y eliminar los activos.
               </Typography>
             </>
           )}
@@ -89,9 +86,9 @@ const UserDeleteModal = (props: any) => {
           {/* TODO SEND data */}
           {!isLoading && (
             <SimpleUserTable
-              setNotifyParent={setNotify}
+              setNotifyParent={setToast}
               users={users!}
-              depart = {props.depart}
+              depart={props.depart}
               idList={[]}
               deleteB
             ></SimpleUserTable>

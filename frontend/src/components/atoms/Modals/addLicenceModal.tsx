@@ -1,14 +1,17 @@
-import { Button, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Notification from "components/notification";
 import { CallInsertLicenseToSoft } from "components/wallet/dataStructsCall";
 import { Field, Form, Formik } from "formik";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Notify } from "types";
 import * as Yup from "yup";
-
 
 const style = {
   position: "absolute",
@@ -23,20 +26,19 @@ const style = {
 };
 
 const validationSchema = Yup.object({
-    name: Yup.string().required("El nombre es obligatorio").max(60),
-    adquireDate: Yup.string()
-      .required("La fecha de adquisición es obligatoria")
-      .max(40),
-  });
+  name: Yup.string().required("El nombre es obligatorio").max(60),
+  adquireDate: Yup.string()
+    .required("La fecha de adquisición es obligatoria")
+    .max(40),
+});
 
-const AddLicenceModal = (props: any) => {
-    const navigate = useNavigate();
+const AddLicenceModal = (props) => {
+  const navigate = useNavigate();
 
-
-  const [notify, setNotify] = useState<any>({isOpen:false, message:'', type:'info'})
+  const [toast, setToast] = useToast();
   return (
     <div>
-      <Notification {...notify}></Notification>
+      {toast}
       <Modal
         open={props.show}
         onClose={props.close}
@@ -46,49 +48,50 @@ const AddLicenceModal = (props: any) => {
         <Box sx={style}>
           <Formik
             initialValues={{
-                name: '',
-                key: '',
-                adquireDate: 0,
-                adquireDateString: "",
-                expirationDate: 0,
-                expirationDateString: "",
-                licenseType: ''
+              name: "",
+              key: "",
+              adquireDate: 0,
+              adquireDateString: "",
+              expirationDate: 0,
+              expirationDateString: "",
+              licenseType: "",
             }}
             validationSchema={validationSchema}
             onSubmit={(data, { setSubmitting }) => {
-                const dateString = data.adquireDateString; // Oct 23
-                const dateParts: string[] = dateString.split("-");
-                let dateObject = new Date(
-                    +dateParts[0],
-                    +dateParts[1] - 1,
-                    +dateParts[2]
-                );
-                const offset = dateObject.getTimezoneOffset();
-                dateObject = new Date(dateObject.getTime() - offset * 60 * 1000);
-                data.adquireDate = dateObject.getTime();
+              const dateString = data.adquireDateString; // Oct 23
+              const dateParts: string[] = dateString.split("-");
+              let dateObject = new Date(
+                +dateParts[0],
+                +dateParts[1] - 1,
+                +dateParts[2]
+              );
+              const offset = dateObject.getTimezoneOffset();
+              dateObject = new Date(dateObject.getTime() - offset * 60 * 1000);
+              data.adquireDate = dateObject.getTime();
 
-                const dateString2 = data.expirationDateString; // Oct 23
-                const dateParts2: string[] = dateString2.split("-");
-                let dateObject2 = new Date(
-                    +dateParts2[0],
-                    +dateParts2[1] - 1,
-                    +dateParts2[2]
-                );
-                dateObject2 = new Date(dateObject2.getTime() - offset * 60 * 1000);
-                data.expirationDate = dateObject2.getTime();
-                CallInsertLicenseToSoft(data, props.assetId).then((r)=> {
-                  const notify:Notify = r!;
-                  if (notify.type === 'success') {
-                    setTimeout(function(){
-                        navigate("/asset/");
-                      }, 4000);
-                  } 
-                  setNotify(notify);
-                });
-                setSubmitting(true);
+              const dateString2 = data.expirationDateString; // Oct 23
+              const dateParts2: string[] = dateString2.split("-");
+              let dateObject2 = new Date(
+                +dateParts2[0],
+                +dateParts2[1] - 1,
+                +dateParts2[2]
+              );
+              dateObject2 = new Date(
+                dateObject2.getTime() - offset * 60 * 1000
+              );
+              data.expirationDate = dateObject2.getTime();
+              CallInsertLicenseToSoft(data, props.assetId).then((notify) => {
+                if (notify.type === "success") {
+                  setTimeout(function () {
+                    navigate("/asset/");
+                  }, 4000);
+                }
+                setToast(notify);
+              });
+              setSubmitting(true);
             }}
           >
-            {({ values, isSubmitting, errors, handleChange }) => (
+            {({ values, errors, handleChange }) => (
               <Form>
                 <div className="mb-6">
                   <Typography variant="h5">Añadir Licencia</Typography>
@@ -121,58 +124,58 @@ const AddLicenceModal = (props: any) => {
                   />
                 </div>
                 <div className="flex flex-row justify-center items-center gap-5">
-                <div className="w-1/2">
-                  <Field
-                    id="adquireDateString"
-                    label="Fecha de adquisición"
-                    value={values.adquireDateString}
-                    required
-                    error={Boolean(errors.adquireDateString)}
-                    type="date"
-                    fullWidth
-                    //sx={{ width: 300 }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    as={TextField}
-                  />
+                  <div className="w-1/2">
+                    <Field
+                      id="adquireDateString"
+                      label="Fecha de adquisición"
+                      value={values.adquireDateString}
+                      required
+                      error={Boolean(errors.adquireDateString)}
+                      type="date"
+                      fullWidth
+                      //sx={{ width: 300 }}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      as={TextField}
+                    />
                   </div>
                   <div className="w-1/2">
-                  <Field
-                    id="expirationDateString"
-                    label="Fecha de expiración"
-                    value={values.expirationDateString}
-                    required
-                    error={Boolean(errors.expirationDateString)}
-                    type="date"
-                    fullWidth
-                    //sx={{ width: 300 }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    as={TextField}
-                  />
-                  </div>
-                  </div>
-                  <div className="my-5 flex flex-col items-center justify-center">
-                    <InputLabel id="test-select-label">
-                      Tipo de Licencia
-                    </InputLabel>
                     <Field
-                      name="licenseType"
-                      className="px-2 my-2 w-1/2 mb-5"
-                      variant="outlined"
-                      onChange={handleChange}
+                      id="expirationDateString"
+                      label="Fecha de expiración"
+                      value={values.expirationDateString}
                       required
-                      error={Boolean(errors.licenseType)}
-                      value={values.licenseType}
-                      as={Select}
-                    >
-                      <MenuItem value={0}>Libre</MenuItem>
-                      <MenuItem value={1}>Comercial</MenuItem>
-                      <MenuItem value={2}>De prueba</MenuItem>
-                    </Field>
+                      error={Boolean(errors.expirationDateString)}
+                      type="date"
+                      fullWidth
+                      //sx={{ width: 300 }}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      as={TextField}
+                    />
                   </div>
+                </div>
+                <div className="my-5 flex flex-col items-center justify-center">
+                  <InputLabel id="test-select-label">
+                    Tipo de Licencia
+                  </InputLabel>
+                  <Field
+                    name="licenseType"
+                    className="px-2 my-2 w-1/2 mb-5"
+                    variant="outlined"
+                    onChange={handleChange}
+                    required
+                    error={Boolean(errors.licenseType)}
+                    value={values.licenseType}
+                    as={Select}
+                  >
+                    <MenuItem value={0}>Libre</MenuItem>
+                    <MenuItem value={1}>Comercial</MenuItem>
+                    <MenuItem value={2}>De prueba</MenuItem>
+                  </Field>
+                </div>
                 <Button
                   fullWidth
                   type="submit"
@@ -181,7 +184,6 @@ const AddLicenceModal = (props: any) => {
                 >
                   Guardar Licencia
                 </Button>
-                
               </Form>
             )}
           </Formik>
