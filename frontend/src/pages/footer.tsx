@@ -22,7 +22,7 @@ import { Divider, Typography } from "@mui/material";
   
   const AppFooter = () => {
     return (
-      <footer className="bottom-0 grid w-full grid-cols-1 gap-10 bg-brand-lighter bg-opacity-50 px-4 py-8 md:grid-cols-3 md:px-8 lg:px-24 xl:gap-16 xl:px-48 mt-20">
+      <footer className="absolute bottom-0 grid w-full grid-cols-2 gap-10 bg-brand-lighter bg-opacity-50 px-4 py-8 md:grid-cols-3 md:px-8 lg:px-24 xl:gap-16 xl:px-48 mt-20">
         <FooterSection title="Ubicación">
           <Typography variant="body2">
             Escuela Técnica Superior de Ingeniería Informática, Universidad de
@@ -30,7 +30,7 @@ import { Divider, Typography } from "@mui/material";
           </Typography>
           <a
             href="https://goo.gl/maps/S4zvin8BscVjHyRW6"
-            className="flex items-center gap-2"
+            className="flex items-center justify-center gap-2"
           >
             <LocationCity />
             <Typography variant="body2">Avenida Reina Mercedes S/N</Typography>

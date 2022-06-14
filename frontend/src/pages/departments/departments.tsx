@@ -13,7 +13,7 @@ const DepartmentsPage = () => {
 
   useEffect(() => {
     const GetDepartments = () => {
-      const idOrg = Number(localStorage.getItem("idOrg"));
+      const idOrg = Number(localStorage.getItem("orgId"));
       console.log("obteniendo departamentos de org " + idOrg);
       CallGetAllDepartmentsFromOrg(idOrg).then((response) => {
         console.log(response);

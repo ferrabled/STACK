@@ -230,7 +230,6 @@ export const HardwareForm = ({
       {toast}
       <Formik
         initialValues={{
-          //TODO initial values
           model: edit ? asset.model : "",
           provider: edit ? asset.provider : "",
           serialNumber: edit ? asset.serialNumber : "",

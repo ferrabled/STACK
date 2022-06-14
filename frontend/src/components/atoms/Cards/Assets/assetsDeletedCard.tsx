@@ -98,7 +98,7 @@ const AssetsDeletedCard = ({ assets }: { assets: AssetsInList[] }) => {
   if (isLoading) return <CircularProgress />;
   else
     return (
-      <Card className="gap-7 p-10 flex flex-col items-center h-full">
+      <Card className="gap-7 mt-5 p-10 flex flex-col items-center h-full">
         {rows && rows.length !== 0 && (
           <DataGrid
             className="w-full h-full"
@@ -109,7 +109,9 @@ const AssetsDeletedCard = ({ assets }: { assets: AssetsInList[] }) => {
             autoHeight
           ></DataGrid>
         )}
-        <Typography>Aún no hay activos eliminados</Typography>
+        {rows.length == 0 && (
+          <Typography>Aún no hay activos eliminados</Typography>
+        )}
         <div className="w-full flex flex-row justify-evenly">
           <Button
             color="primary"

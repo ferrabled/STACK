@@ -22,6 +22,11 @@ const EditAssetPage = () => {
     else {
       if (window.sessionStorage.getItem("isEdited") === "false") {
         CallGetAsset(Number(itemId)).then((response) => {
+          response.organizationId = Number(response.organizationId);
+          response.assetDepart = Number(response.assetDepart);
+          response.index = Number(response.index);
+          console.log("Is not edite")
+          console.log(response);
           setAsset(response);
           setIsLoading(false);
         });

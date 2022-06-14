@@ -35,10 +35,10 @@ const AssetsCard = (props: {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "name", headerName: "First name", width: 130 },
+    { field: "name", headerName: "Nombre", width: 130 },
     {
       field: "action",
-      headerName: "Action",
+      headerName: "Acción",
       sortable: false,
       width: 150,
       renderCell: (params) => {
@@ -124,7 +124,7 @@ const AssetsCard = (props: {
     },
     {
       field: "adquireDate",
-      headerName: "Fecha",
+      headerName: "Fecha ad.",
       width: 130,
       renderCell: (params) => {
         const adquireDate = new Date(params.row.adquireDate);

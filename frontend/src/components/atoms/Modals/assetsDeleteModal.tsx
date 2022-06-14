@@ -71,7 +71,6 @@ const AssetsDeleteModal = (props: {
             index: Number(assets[i].index),
             organizationId: assets[i].organizationId,
           };
-          //TODO CHECK IF IT RETURNS ANY ASSET DELETED
           if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
           else {
             container.push(asset);
@@ -143,7 +142,6 @@ const AssetsDeleteModal = (props: {
           )}
           <div className="mb-6"></div>
           {isLoading && <Skeleton></Skeleton>}
-          {/* TODO SEND data */}
           {!isLoading && (
             <>
               <SimpleSelectAssetsTable

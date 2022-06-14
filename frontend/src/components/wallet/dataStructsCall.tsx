@@ -20,7 +20,6 @@ const contract2 = new ethers.Contract(
   provider2.getSigner()
 );
 
-//TODO CHECK IDS
 export async function CallGetSoftwareAsset(assetId: number): Promise<SoftwareAssetProps> {
   const ret = contract2.getSoftwareAsset(assetId);
   return ret;

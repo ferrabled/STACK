@@ -1,10 +1,10 @@
-import PageLoged from "../page";
+import PageLoged from "pages/pageCheckLogin";
 import DepartmentForm from "components/Forms/departmentForm";
 import { Card } from "@mui/material";
 
 const NewDepartmentPage = () => {
   return (
-    <PageLoged title="">
+    <PageLoged>
         <Card className="my-3">
           <DepartmentForm />
         </Card>

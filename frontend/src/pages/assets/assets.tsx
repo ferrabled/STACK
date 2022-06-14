@@ -22,7 +22,7 @@ const AssetsPage = () => {
   const [numComments, setNumComments] = useState<number[]>([]);
 
   useEffect(() => {
-    const idOrg = Number(localStorage.getItem("idOrg"));
+    const idOrg = Number(localStorage.getItem("orgId"));
 
     const getDepartmentNames = () => {
       CallGetAllDepartmentsFromOrg(idOrg).then((r) => {

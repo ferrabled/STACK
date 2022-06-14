@@ -27,10 +27,10 @@ export default function UserForm({ orgId }: { orgId: number }) {
     <div className="flex flex-col m-6">
       <Formik
         initialValues={{
-          name: "Fernando",
-          surname: "User",
-          email: "fer@gmail.com",
-          telephone: "634579874",
+          name: "",
+          surname: "",
+          email: "",
+          telephone: "",
           orgId,
         }}
         validationSchema={validationSchema}
@@ -59,7 +59,7 @@ export default function UserForm({ orgId }: { orgId: number }) {
                 <Field
                   name="name"
                   value={values.name}
-                  label="Nombre del Administrador"
+                  label="Nombre del Usuario"
                   inputProps={{ maxLength: 255 }}
                   fullWidth
                   required
@@ -71,7 +71,7 @@ export default function UserForm({ orgId }: { orgId: number }) {
               <div className="mb-6">
                 <Field
                   name="surname"
-                  label="Apellidos del Administrador"
+                  label="Apellidos del Usuario"
                   inputProps={{ maxLength: 255 }}
                   required
                   fullWidth
@@ -100,6 +100,7 @@ export default function UserForm({ orgId }: { orgId: number }) {
                   label="Teléfono"
                   inputProps={{ maxLength: 255 }}
                   fullWidth
+                  required
                   error={Boolean(errors.telephone)}
                   helperText={errors.telephone ? errors.telephone : " "}
                   as={TextField}

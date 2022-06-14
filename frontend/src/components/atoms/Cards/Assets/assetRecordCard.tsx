@@ -21,7 +21,6 @@ const AssetRecordCard = ({ assets }: { assets: AssetsInList[] }) => {
       const id = window.sessionStorage.getItem("detailId");
       console.log("delete original asset:" + id);
       CallDeleteAsset(Number(id));
-      //TODO NAVIGATE AFTER DELETING
       //navigate("/assets");
     } catch {
       console.log("User reverted transaction");
@@ -55,7 +54,7 @@ const AssetRecordCard = ({ assets }: { assets: AssetsInList[] }) => {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "name", headerName: "First name", width: 130 },
+    { field: "name", headerName: "First name", width: 250 },
     {
       field: "action",
       headerName: "Action",
@@ -114,7 +113,7 @@ const AssetRecordCard = ({ assets }: { assets: AssetsInList[] }) => {
   if (isLoading) return <CircularProgress />;
   else
     return (
-      <Card className="gap-7 p-10 flex flex-col items-center h-full">
+      <Card className="gap-7 mt-6 p-10 flex flex-col items-center h-full">
         <DataGrid
           className="w-full h-full"
           rows={rows}

@@ -90,7 +90,6 @@ const UserDeleteModal = (props: {
           )}
           <div className="mb-6"></div>
           {isLoading && <Skeleton></Skeleton>}
-          {/* TODO SEND data */}
           {!isLoading && (
             <SimpleUserTable
               setNotifyParent={setToast}

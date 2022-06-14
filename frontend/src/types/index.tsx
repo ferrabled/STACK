@@ -62,7 +62,6 @@ export type BlockchainAdmin = {
 
 export type Asset = {
   name: string;
-  //TODO ORG ID CHECK EVERYWHERE
   organizationId: number;
   assetType: number;
   assetDepart: number;

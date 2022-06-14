@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Notify } from "types";
 import AppFooter from "./footer";
+import AppHeader from "./header";
 
 const PageLoged = (props: { children?: React.ReactNode }) => {
   const [toast, setToast] = useToast();
@@ -53,11 +54,14 @@ const PageLoged = (props: { children?: React.ReactNode }) => {
   }, []);
 
   return (
-    <section className="block w-full py-5 px-16 md:px-8 lg:px-24 xl:px-48 mui:left-[250px] mui:w-[calc(100%-250px)] absolute flex flex-col items-center bg-[#f6f6f6]">
-      {toast}
-      <Box className="w-full max-w-7xl mt-10">{props.children}</Box>
-      <AppFooter />
-    </section>
+    <>
+      <AppHeader />
+      <section className="block w-full py-5 px-16 md:px-8 lg:px-24 xl:px-48 mui:left-[250px] mui:w-[calc(100%-250px)] absolute flex flex-col items-center bg-[#f6f6f6]">
+        {toast}
+        <Box className="w-full max-w-7xl mt-10 pb-[350px] min-h-[calc(100vh-100px)]">{props.children}</Box>
+        <AppFooter />
+      </section>
+    </>
   );
 };
 

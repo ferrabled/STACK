@@ -1,6 +1,7 @@
 import DataBox from "components/atoms/statBox";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import AddCommentIcon from "@mui/icons-material/AddComment";
 import { useNavigate } from "react-router-dom";
 
 const DashboardData = ({ values }: { values: number[] }) => {
@@ -56,7 +57,13 @@ const DashboardData = ({ values }: { values: number[] }) => {
           color="success"
         />
       </a>
-
+      <DataBox
+          title="Comentarios"
+          active={2}
+          total={2}
+          icon={<AddCommentIcon color="primary" />}
+          color="primary"
+        />
       <a
         className="cursor-pointer hover:shadow-xl"
         onClick={() => navigate("/assets/deleted")}

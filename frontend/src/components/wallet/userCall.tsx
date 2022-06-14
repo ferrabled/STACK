@@ -45,6 +45,57 @@ export async function WaitForInsertUser(data: User) {
   );
 }
 
+export async function WaitForInsertDepart(data: any) {
+  const handleRegister = (address: any, name: string, telephone: number) => {
+    console.log(address, name, Number(telephone))
+    console.log("NewDepart");
+    provider
+      .getSigner()
+      .getAddress()
+      .then((myaddress) => {
+        if (
+          data.name == name &&
+          data.telephone == Number(telephone) &&
+          address == myaddress
+        ) {
+          console.log("Nuevo departamento nuevo");
+          window.location.replace("/departments");
+        }
+        return () => {
+          contract.removeAllListeners("NewDepart");
+        };
+      });
+  };
+  console.log("Listening to the blockchain");
+  contract.on("NewDepart", (address, name, telephone) =>
+    handleRegister(address, name, telephone)
+  );
+}
+
+export async function WaitForNewComment(data: any) {
+  const handleRegister = (address: any, date: number) => {
+    provider
+      .getSigner()
+      .getAddress()
+      .then((myaddress) => {
+        if (
+          data.date == Number(date) &&
+          address == myaddress
+        ) {
+          console.log("Nuevo Comentario creado");
+          window.location.replace("/asset");
+        }
+        return () => {
+          contract.removeAllListeners("NewDepart");
+        };
+      });
+  };
+  console.log("Listening to the blockchain");
+  contract.on("NewComment", (address, date) =>
+    handleRegister(address, date)
+  );
+}
+
 export async function CallInsertUser(user: User): Promise<Notify> {
   console.log("Add new user");
   const signer = provider.getSigner();
@@ -148,7 +199,6 @@ export async function CallGetNumUsersFromOrg(assetId: number) {
   return contract.getNumUsersFromOrg(assetId);
 }
 
-//TODO notifications
 //DEPARTMENTS
 export async function CallInsertDepartment(props: Department) {
   const signerAddress = await provider.getSigner().getAddress();
@@ -334,7 +384,7 @@ export async function CallInsertComment(
       orgId,
       signerAddress
     );
-    const correctText = "Activo creado correctamente";
+    const correctText = "Comentario creado correctamente";
 
     const notify = {
       isOpen: true,

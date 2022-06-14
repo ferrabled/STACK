@@ -12,11 +12,15 @@ contract Main {
     //EVENTS
     event NewOrg(address user, string orgName);
 
-    event LogNewUser(
-        address indexed userAddress,
-        uint256 index,
-        bytes32 userEmail,
-        uint256 userAge
+    event NewAsset(
+        string name,
+        uint256 creationDate
+    );
+
+    event NewEditedAsset(
+        string name,
+        bool deleted,
+        uint256 creationDate
     );
 
     //STRUCTS
@@ -50,7 +54,6 @@ contract Main {
     mapping(address => uint256) public addressToOrganizationIndex;
 
     //FUNCTIONS
-    //TODO CHECK IS ADMINISTRATOR IF WORKING PROPERLY
     //data created with organization
     function insertOrgAndAdmin(
         address admin,
@@ -217,6 +220,7 @@ contract Main {
         assetBoolEditedAndDeleted[assetsList.length - 1].push(false);
         assetBoolEditedAndDeleted[assetsList.length - 1].push(false);
         originalAssetsToEditedList[assetsList.length - 1];
+        emit NewAsset(name, creationDate);
     }
 
     function insertAssetToDepartment(uint256 index, uint256 assetDepartId) public {
@@ -441,6 +445,7 @@ contract Main {
             uint32 de = organizationNumberOfAssetsED[organizationId][1]+1;
             organizationNumberOfAssetsED[organizationId][1] = de;
         }
+        emit NewEditedAsset(name, deleted, creationDate);
     }
 
     function getRecordList(uint assetId) public view returns (Asset memory, AssetEdited[] memory) {

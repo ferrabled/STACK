@@ -11,6 +11,17 @@ contract Users {
         departList.push(Department('0','0',0,0,0));
     }
 
+    event NewDepart(
+        address addr,
+        string name,
+        uint telephone
+    );
+
+    event NewComment(
+        address addr,
+        uint date
+    );
+
     event Register(
         address addr, 
         string name,
@@ -99,6 +110,32 @@ contract Users {
         } 
     }
 
+    function deleteUsersFromAsset(uint assetId, uint[] memory userIds) public {
+        uint cont = userIds.length;
+        for (uint i = 0; i < cont; i++) {
+            for(uint o = 0; o < cont; o++){  
+                uint assetUsers = assetToListOfUsers[assetId].length;
+                if (assetToListOfUsers[assetId][o] == userIds[i]){
+                    for (uint e = o; e < assetUsers-1; e++){
+                        assetToListOfUsers[assetId][e] = assetToListOfUsers[assetId][e+1];
+                    }
+                    assetToListOfUsers[assetId].pop();
+                    break;
+                }
+            } 
+            for(uint o = 0; o < cont; o++){  
+                uint usersAssets = userIdToAssetList[userIds[i]].length;
+                if (userIdToAssetList[userIds[i]][o] == assetId){
+                    for (uint e = o; e < usersAssets-1; e++){
+                        userIdToAssetList[userIds[i]][e] = userIdToAssetList[userIds[i]][e+1];
+                    }
+                    userIdToAssetList[userIds[i]].pop();
+                    break;
+                }
+            }
+        }
+    }
+
     function getUserAssets(uint userId) public view returns(uint[] memory assetIds){
         return userIdToAssetList[userId];
     }
@@ -157,6 +194,7 @@ contract Users {
             uint departId = departList.length;
             departList.push(Department(name, description, telephone, orgId, departId));
             orgIdToDepartList[orgId].push(departId);
+            emit NewDepart(addr, name, telephone);
     }
 
     function getDepartment(uint departId) public view returns(Department memory){
@@ -294,6 +332,7 @@ contract Users {
         uint comId = commentList.length;
         commentList.push(Comment(description, userId, date));
         assetIdToCommentList[assetId].push(comId);
+        emit NewComment(addr, date);
     }
 
     function getCommentsByAsset(uint assetId) public view returns(Comment[] memory){

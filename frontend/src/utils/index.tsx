@@ -21,9 +21,9 @@ export const formatDate = function formatDate(date: Date) {
 
 export const formatDateyMd = function formatDate(date: Date) {
   // function for reusability
-  let d = date.getUTCDate().toString(); // getUTCDate() returns 1 - 31
-  let m = (date.getUTCMonth() + 1).toString(); // getUTCMonth() returns 0 - 11
-  const y = date.getUTCFullYear().toString(); // getUTCFullYear() returns a 4-digit year
+  let d = new Date(date).getUTCDate().toString(); // getUTCDate() returns 1 - 31
+  let m = (new Date(date).getUTCMonth() + 1).toString(); // getUTCMonth() returns 0 - 11
+  const y = new Date(date).getUTCFullYear().toString(); // getUTCFullYear() returns a 4-digit year
   let formatted = "";
   if (d.length === 1) {
     // pad to two digits if needed

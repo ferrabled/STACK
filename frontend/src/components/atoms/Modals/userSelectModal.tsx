@@ -93,7 +93,6 @@ export default function UserSelectModal(props: {
           )}
           <div className="mb-6"></div>
           {isLoading && <Skeleton></Skeleton>}
-          {/* TODO SEND data */}
           {!isLoading && users && (
             <SimpleUserTable
               setNotifyParent={setToast}

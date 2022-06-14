@@ -30,7 +30,11 @@ const EditAssetForm = (props: { data: AssetEdited | Asset }) => {
 
   useEffect(() => {
     console.log(props);
-    setAssetEd(props.data as AssetEdited);
+    const assetEd = props.data as AssetEdited;
+    if(sessionStorage.getItem("isEdited") == 'false') {
+      assetEd.originalAssetId = props.data.index!;
+    }
+    setAssetEd(assetEd);
     const dateTime = props.data.adquireDate;
     const date = formatDateyMd(dateTime as Date);
     console.log(date);
@@ -39,7 +43,7 @@ const EditAssetForm = (props: { data: AssetEdited | Asset }) => {
     CallGetAllDepartmentsFromOrg(
       Number(window.localStorage.getItem("orgId"))
     ).then((r) => {
-      console.log(r);
+      console.log("Departamentos" + r);
       const cont = r.length;
       const container: Department[] = [];
       for (let i = 0; i < cont; i++) {
@@ -87,7 +91,7 @@ const EditAssetForm = (props: { data: AssetEdited | Asset }) => {
             name: assetEd.name,
             organizationId: Number(window.localStorage.getItem("orgId")),
             adquireDateString: fAdquireDate,
-            adquireDate: (assetEd.adquireDate as Date).getTime(),
+            adquireDate: (new Date (assetEd.adquireDate as Date)).getTime(),
             creationDate: 0,
             assetType: assetEd.assetType,
             originalAssetId: assetEd.originalAssetId,

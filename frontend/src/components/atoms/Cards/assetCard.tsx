@@ -100,7 +100,6 @@ const AssetCard = ({asset}: {asset: AssetEdited|Asset}) => {
     console.log("Eliminando asset");
     CallDeleteAsset(Number(window.sessionStorage.getItem("detailId"))).then(
       () => {
-        //TODO AWAIT FOR THE CONTRACT TO BE SIGNED IN ORDER TO NAVIGATE TO ASSETS
       }
     );
     navigate("/assets");

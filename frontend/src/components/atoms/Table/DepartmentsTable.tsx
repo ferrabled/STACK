@@ -8,7 +8,6 @@ import { Department, GridTableElement } from "types";
 const DepartmentTable = ({ departments }: { departments: Department[] }) => {
   const navigate = useNavigate();
   const [rows, setRows] = useState<GridTableElement<Department>[]>([]);
-  //TODO add number of users
   useEffect(() => {
     const departmentList = departments.map((x, i) => ({
       ...x,

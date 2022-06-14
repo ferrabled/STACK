@@ -110,7 +110,6 @@ const SimpleUserTable = ({
 
   return (
     <>
-      {/* TODO CHECK NOTIFICATION */}
       <div className=""></div>
       <DataGrid
         rows={rows}

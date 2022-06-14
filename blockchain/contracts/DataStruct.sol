@@ -55,11 +55,6 @@ contract DataStructs {
     Other[] private otherList;
     
     mapping(uint => uint256) assetSoftware;
-
-    //TODO
-    //Mapping for software & license relation;
-    //mapping(uint => uint[]) softAssetToLicense;
-
     mapping(uint => uint256) assetHardware;
     mapping(uint => uint256) assetDocument;
     mapping(uint => uint256) assetData;

@@ -53,7 +53,6 @@ const BasicModal = (props: {
           originalId: Number(assets[i].index),
           index: Number(assets[i].index),
         };
-        //TODO CHECK IF IT RETURNS ANY ASSET DELETED
         if (asset.creationDate === 0 && asset.adquireDate === 0) continue;
         else {
           container.push(asset);

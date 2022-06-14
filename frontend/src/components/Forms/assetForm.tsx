@@ -79,13 +79,12 @@ const AssetForm = () => {
         <div>
           <Formik
             initialValues={{
-              //TODO change initial values
-              name: "Nombre",
+              name: "",
               organizationId: orgId,
-              adquireDateString: "1999-10-11",
-              adquireDate: 10,
-              creationDate: 100,
-              assetType: "1",
+              adquireDateString: "",
+              adquireDate: 0,
+              creationDate: 0,
+              assetType: "0",
               department: "0",
             }}
             validationSchema={validationSchema}

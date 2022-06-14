@@ -117,13 +117,74 @@ export async function WaitForInsertOrg(data: OrganizationAndAdmin) {
   contract.on("NewOrg", (address, orgName) => handleNewOrg(address, orgName));
 }
 
-export function CallIsAdministrator(address: string): Promise<boolean> {
-  console.log("Is administrator " + address);
-  return contract.isAdministrator(address);
+export async function WaitForNewAsset(data: any) {
+    //const navigate = useNavigate()
+  
+    const handleBlockchain = (name: any, creationDate: number) => {
+      console.log("Registro");
+      provider
+        .getSigner()
+        .getAddress()
+        .then((myaddress) => {
+          if (
+            data.name == name &&
+            data.creationDate == Number(creationDate)
+          ) {
+            console.log("Registro nuevo");
+            window.location.replace("/assets");
+          }
+          return () => {
+            contract.removeAllListeners("NewAsset");
+          };
+        });
+    };
+
+    console.log("Listening to the blockchain");
+    contract.on("NewAsset", (name, creationDate) =>
+        handleBlockchain(name, creationDate)
+  );
 }
 
-export async function CallGetAdminToOrg(address: string): Promise<number> {
-  const orgId = contract.getAdminToOrg(address);
+export async function WaitForEditedAsset(data: any) {
+    //const navigate = useNavigate()
+  
+    const handleBlockchain = (name: any, deleted:boolean, creationDate: number) => {
+        console.log(name, deleted, creationDate);
+      console.log("Registro");
+      provider
+        .getSigner()
+        .getAddress()
+        .then((myaddress) => {
+          if (
+            data.name == name &&
+            data.deleted == deleted &&
+            data.creationDate == Number(creationDate)
+          ) {
+            console.log("Nueva edición");
+            window.location.replace("/asset");
+          }
+          return () => {
+            contract.removeAllListeners("NewEditedAsset");
+          };
+        });
+    };
+
+    console.log("Listening to the blockchain");
+    console.log(data.deleted);
+    contract.on("NewEditedAsset", (name, deleted, creationDate) =>
+        handleBlockchain(name,deleted, creationDate)
+  );
+}
+
+
+export async function CallIsAdministrator(props: any) {
+    console.log("Is administrator " + props);
+    const isAdmin: boolean = contract.isAdministrator(props)
+    return isAdmin;
+}
+
+export async function CallGetAdminToOrg(props: any) {
+  const orgId = contract.getAdminToOrg(props)
   return orgId;
 }
 
@@ -357,8 +418,6 @@ export async function CallInsertAsset(props: Asset) {
         mainABI,
         provider.getSigner());
      */
-  console.log("HOLA");
-  //TODO change ORG ID
   input.organizationId = 0;
 
   contract.insertAsset(
@@ -420,13 +479,14 @@ export async function CallInsertEditedAsset(
   props: InputAssetEdited
 ): Promise<Notify> {
   const input = props;
+  console.log(input);
   try {
     await contract.insertEditedAsset(
       input.originalAssetId,
       input.name,
       input.organizationId,
-      (input.adquireDate as Date).getTime(),
-      (input.creationDate as Date).getTime(),
+      input.adquireDate,
+      input.creationDate,
       input.deleted,
       input.assetType
     );

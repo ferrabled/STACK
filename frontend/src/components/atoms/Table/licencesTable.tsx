@@ -7,7 +7,13 @@ const LicencesTable = (licences: Licence[]) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const licencesList = licences.map((x, i) => ({ ...x, id: i }));
+    const licencesList:any[] = [];
+    const cont = Object.keys(licences).length;
+    console.log("Número de licencias total: "+cont)
+    for (let i = 0; i < cont; i++) {
+        licences[i].id = (i+1);
+        licencesList.push(licences[i]);
+    }
     setRows(licencesList);
     setIsLoading(false);
   }, [licences]);

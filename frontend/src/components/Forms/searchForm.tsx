@@ -104,7 +104,7 @@ export default function SearchForm() {
   }
 
   const SearchInAssets = (sdata: SearchObject) => {
-    const idOrg = Number(localStorage.getItem("idOrg"));
+    const idOrg = Number(localStorage.getItem("orgId"));
 
     CallGetOrganizationAssets(idOrg).then(async (response) => {
       const [assets, assetsEdited] = response;
@@ -192,7 +192,7 @@ export default function SearchForm() {
                   name: "",
                   adquireDateI: 0,
                   adquireDateF: 0,
-                  adquireDateStringI: "1999-11-09",
+                  adquireDateStringI: "",
                   adquireDateStringF: "",
                   creationDateI: 0,
                   creationDateF: 0,
@@ -206,8 +206,6 @@ export default function SearchForm() {
                   console.log(data);
                   setSubmitting(true);
                   const sdata: SearchObject = {};
-
-                  //TODO FORMAT DATES TO OBTAIN IT
                   if (data.adquireDateStringI !== "")
                     sdata.adquireDateI = formatData(data.adquireDateStringI);
                   if (data.adquireDateStringF !== "")
