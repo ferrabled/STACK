@@ -23,9 +23,9 @@ const DepartmentForm = () => {
     <div className="flex flex-col m-6">
       <Formik
         initialValues={{
-          name: "Fernando",
-          description: "User",
-          telephone: "634579874",
+          name: "",
+          description: "",
+          telephone: "",
         }}
         validationSchema={validationSchema}
         onSubmit={(data, { setSubmitting }) => {

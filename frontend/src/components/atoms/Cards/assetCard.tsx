@@ -98,10 +98,7 @@ const AssetCard = ({asset}: {asset: AssetEdited|Asset}) => {
 
   const deleteAsset = () => {
     console.log("Eliminando asset");
-    CallDeleteAsset(Number(window.sessionStorage.getItem("detailId"))).then(
-      () => {
-      }
-    );
+    CallDeleteAsset(Number(window.sessionStorage.getItem("detailId")));
     navigate("/assets");
   };
 
