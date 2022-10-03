@@ -1,7 +1,10 @@
-Inventory platform running in blockchain
+The project is aimed to study and develop a tool that provides users with an asset management system using blockchain technology. 
+To achieve this statement a single page application has been made with React, that will be able to perform transactions to various contracts writ-
+ten in Solidity. Those smart contracts will be deployed in an Ethereum testnet, finally obtaining a dApp, decentralized application.
 
-The objective of this project is to have a secure and immutable inventory.
+The full paper can be found here: 
 
+[STACK - Fernando Rabasco Ledesma](https://drive.google.com/file/d/1sIBtxPwQQymZDihbdmti7hUm-McP7396/view?usp=sharing)
 
 ## Deployment
 
