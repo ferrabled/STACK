@@ -22,60 +22,56 @@ const ConnectButton = ({
       console.log(addr);
 
       //Retrieve if user has organization
-      try {
-        CallIsAdministrator(addr)
-          .then((isAdmin) => {
-            if (isAdmin === true) {
-              console.log("User is an administrator");
-              const text =
-                "Inicio de sesión de administrador correcto, redirigiendo...";
-              setNotifyParent({ isOpen: true, message: text, type: "success" });
-              CallGetAdminToOrg(addr).then((response) => {
-                const orgId = Number(ethers.BigNumber.from(response));
-                console.log(orgId);
-                window.localStorage.setItem("orgId", String(orgId));
-                window.localStorage.setItem("userAddress", String(addr));
-                window.localStorage.setItem("isAdmin", "true");
-                setTimeout(function () {
-                  navigate("/home");
-                }, 2000);
-              });
-            } else {
-              console.log("user not admin");
-              CallIsUser(addr).then((isIndeed) => {
-                if (isIndeed === true) {
-                  CallGetUserFromAddr(addr).then((r) => {
-                    console.log("user is not an administrator");
-                    const orgId = Number(r.orgId);
-                    window.localStorage.setItem("orgId", String(orgId));
-                    window.localStorage.setItem("userAddress", String(addr));
-                    window.localStorage.setItem("isAdmin", "false");
-                    const text =
-                      "Inicio de sesión de usuario correcto, redirigiendo...";
-                    setNotifyParent({
-                      isOpen: true,
-                      message: text,
-                      type: "success",
-                    });
-                    setTimeout(function () {
-                      navigate("/home");
-                    }, 2000);
-                  });
-                } else {
+      CallIsAdministrator(addr)
+        .then((isAdmin) => {
+          if (isAdmin === true) {
+            console.log("User is an administrator");
+            const text =
+              "Inicio de sesión de administrador correcto, redirigiendo...";
+            setNotifyParent({ isOpen: true, message: text, type: "success" });
+            CallGetAdminToOrg(addr).then((response) => {
+              const orgId = Number(ethers.BigNumber.from(response));
+              console.log(orgId);
+              window.localStorage.setItem("orgId", String(orgId));
+              window.localStorage.setItem("userAddress", String(addr));
+              window.localStorage.setItem("isAdmin", "true");
+              setTimeout(function () {
+                navigate("/home");
+              }, 2000);
+            });
+          } else {
+            console.log("user not admin");
+            CallIsUser(addr).then((isIndeed) => {
+              if (isIndeed === true) {
+                CallGetUserFromAddr(addr).then((r) => {
+                  console.log("user is not an administrator");
+                  const orgId = Number(r.orgId);
+                  window.localStorage.setItem("orgId", String(orgId));
+                  window.localStorage.setItem("userAddress", String(addr));
+                  window.localStorage.setItem("isAdmin", "false");
                   const text =
-                    "Esta billetera no pertenece a ningún usuario registrado";
+                    "Inicio de sesión de usuario correcto, redirigiendo...";
                   setNotifyParent({
                     isOpen: true,
                     message: text,
-                    type: "error",
+                    type: "success",
                   });
-                }
-              });
-            }
-          });
-      } catch {
-        //Could not connect / User reverted
-      }
+                  setTimeout(function () {
+                    navigate("/home");
+                  }, 2000);
+                });
+              } else {
+                const text =
+                  "Esta billetera no pertenece a ningún usuario registrado";
+                setNotifyParent({
+                  isOpen: true,
+                  message: text,
+                  type: "error",
+                });
+              }
+            });
+          }
+        }).catch((e) => {});
     });
   };
 

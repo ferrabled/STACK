@@ -17,10 +17,6 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
-/* const infuraKey = "7a202c9027ca4574947c829bb6fa0ed4";
-
-const fs = require('fs');
-const mnemonic = fs.readFileSync(".secret").toString().trim(); */
 
 module.exports = {
   /**
@@ -57,27 +53,9 @@ module.exports = {
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
     ropsten: {
-      /* provider: () => new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/${infuraKey}`),
-      network_id: 3,       // Ropsten's id
-      gas: 8000000,        // Ropsten has a lower block limit than mainnet
-      confirmations: 2,    // # of confs to wait between deployments. (default: 0)
-      timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
-      skipDryRun: true     // Skip dry run before migrations? (default: false for public nets ) */
       },
 
       kovan: {
-        /* provider: function() {
-          const endpointUrl = 'https://kovan.infura.io/v3/7a202c9027ca4574947c829bb6fa0ed4';
-          return new HDWalletProvider(
-            //private keys array
-            mnemonic,
-            //url to ethereum node
-            endpointUrl
-          )
-        },
-        gas: 12500000,
-        gasPrice: 25000000000,
-        network_id: 42 */
       }
     // Useful for private networks
     // private: {
@@ -106,25 +84,4 @@ module.exports = {
       // }
     }
   },
-
-  // Truffle DB is currently disabled by default; to enable it, change enabled:
-  // false to enabled: true. The default storage location can also be
-  // overridden by specifying the adapter settings, as shown in the commented code below.
-  //
-  // NOTE: It is not possible to migrate your contracts to truffle DB and you should
-  // make a backup of your artifacts to a safe location before enabling this feature.
-  //
-  // After you backed up your artifacts you can utilize db by running migrate as follows: 
-  // $ truffle migrate --reset --compile-all
-  //
-  // db: {
-    // enabled: false,
-    // host: "127.0.0.1",
-    // adapter: {
-    //   name: "sqlite",
-    //   settings: {
-    //     directory: ".db"
-    //   }
-    // }
-  // }
 };

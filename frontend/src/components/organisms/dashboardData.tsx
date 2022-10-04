@@ -12,6 +12,7 @@ const DashboardData = ({ values }: { values: number[] }) => {
       <a
         className="cursor-pointer hover:shadow-xl"
         onClick={() => navigate("/assets")}
+        onKeyDown={() => navigate("/assets")}
       >
         <DataBox
           title="Activos"
@@ -24,6 +25,7 @@ const DashboardData = ({ values }: { values: number[] }) => {
       <a
         className="cursor-pointer hover:shadow-xl"
         onClick={() => navigate("/users")}
+        onKeyDown={() => navigate("/users")}
       >
         <DataBox
           title="Usuarios"
@@ -36,6 +38,7 @@ const DashboardData = ({ values }: { values: number[] }) => {
       <a
         className="cursor-pointer hover:shadow-xl"
         onClick={() => navigate("/departments")}
+        onKeyDown={() => navigate("/departments")}
       >
         <DataBox
           title="Departamentos"
@@ -48,6 +51,7 @@ const DashboardData = ({ values }: { values: number[] }) => {
       <a
         className="cursor-pointer hover:shadow-xl"
         onClick={() => navigate("/assets")}
+        onKeyDown={() => navigate("/assets")}
       >
         <DataBox
           title="Activos Editados"
@@ -67,6 +71,7 @@ const DashboardData = ({ values }: { values: number[] }) => {
       <a
         className="cursor-pointer hover:shadow-xl"
         onClick={() => navigate("/assets/deleted")}
+        onKeyDown={() => navigate("/assets/deleted")}
       >
         <DataBox
           title="Activos Eliminados"

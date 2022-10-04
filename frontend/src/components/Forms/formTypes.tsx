@@ -50,9 +50,9 @@ import * as Yup from "yup";
 
 const urlReg =
   // eslint-disable-next-line no-useless-escape
-  /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+(\/)?.([\w\?[a-zA-Z-_%\/@?]+)*([^\/\w\?[a-zA-Z0-9_-]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?|(^http:\/\/\w+(\.\w+)*(:[0-9]+)?\/?(\/[.\w]*)*)$/;
+  /^(?:(?:http|https):\/\/)?(?:www\.)?(?!.*(?:http|https|www\.))[a-zA-Z0-9_-]+(?:\.[a-zA-Z]+)+(?:\/)?(?:[\w\?[a-zA-Z-_%\/@?]+)*(?:[^\/\w\?[a-zA-Z0-9_-]+=\w+(?:&[a-zA-Z0-9_]+=\w+)*)?|(?:^http:\/\/\w+(?:\.\w+)*(?::[0-9]+)?\/?(?:[\/.\w]*)*)$/;
 
-const validationSchemaSoft = Yup.object({
+  const validationSchemaSoft = Yup.object({
   //Software
   version: Yup.string().required("La versión es obligatoria").max(40),
   provider: Yup.string().required("El proveedor es obligatorio").max(40),

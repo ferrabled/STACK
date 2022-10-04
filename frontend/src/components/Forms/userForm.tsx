@@ -38,14 +38,10 @@ export default function UserForm({ orgId }: { orgId: number }) {
           console.log(orgId);
           setSubmitting(true);
           console.log(data);
-          try {
-            CallInsertUser(data).then((n) => {
-              console.log(n);
-              setToast(n);
-            });
-          } catch (e) {
-            console.log(e);
-          }
+          CallInsertUser(data).then((n) => {
+            console.log(n);
+            setToast(n);
+          }).catch((e) => {console.log(e)});
           WaitForInsertUser(data);
         }}
       >
